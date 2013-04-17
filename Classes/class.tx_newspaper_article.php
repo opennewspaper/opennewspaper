@@ -32,6 +32,38 @@ require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_smarty.p
  */
 class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper_ArticleIface, tx_newspaper_WritesLog {
 
+
+    // @todo: Remove these 2 functions, see #2068
+    public function getTazAutor() {
+      $author = tx_newspaper_DB::getInstance()->selectRows(
+          '*',
+          'tx_newspapertaz_tazid',
+          'article_uid=' . $this->getUid(),
+          '',
+          'sorting'
+      );
+      $authorString = '';
+      for ($i = 0; $i < sizeof($author); $i++) {
+        $authorString .= $author[$i]['name'];
+        if ($i < (sizeof($author) - 2)) {
+            $authorString .= ', ';
+        } elseif ($i == (sizeof($author) - 2)) {
+            $authorString .= ' und ';
+        }
+      }
+      return $authorString;
+    }
+    public  function getTazAutorArray() {
+        return tx_newspaper_DB::getInstance()->selectRows(
+            '*',
+            'tx_newspapertaz_tazid',
+            'article_uid=' . $this->getUid(),
+            '',
+            'sorting'
+        );
+    }
+
+
     const article_related_table = 'tx_newspaper_article_related_mm';
 
     public static function createFromArray(array $data) {
