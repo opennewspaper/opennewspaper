@@ -21,25 +21,15 @@ class tx_newspaper_module2_QueryBuilder {
 //t3lib_div::devlog('query prepared', 'newspaper', 0, array('input' => $input, 'tables' => $this->tables, 'where' => $this->where));
     }
 
-    public function getTable() {
-        return implode(', ', $this->tables);
-    }
 
-    public function getWhere() {
-        return implode("\n AND ", $this->where);
-    }
-
-    /** Create where part of sql statement for current filter setting
-     *  Creates arrays $this->tables and $this->where
+    /** Create where part of sql statement for current filter setting and sets basic db tables needed
      *  @return void
      */
     private function prepareQuery() {
 //t3lib_div::devlog('prepareQuery()', 'newspaper', 0, array('_request' => $_REQUEST, 'input' => $this->input));
-        $this->where = array(
-            'is_template=0',
-            'pid=' . tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_Article())
-        );
-        $this->tables = array('tx_newspaper_article');
+        $this->addWhere('tx_newspaper_article.is_template=0');
+        $this->addWhere('tx_newspaper_article.pid=' . tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_Article()));
+        $this->addTable('tx_newspaper_article');
 
         // Start with text filter: May contain #[uid], so the article with that uid should be returned ONLY
         if ($this->useFilter('text')) {
@@ -68,6 +58,42 @@ class tx_newspaper_module2_QueryBuilder {
 
     }
 
+
+    /**
+     * Add table to array of tables needed for query
+     * @param $table Table name
+     */
+    public function addTable($table) {
+        $this->tables[] = $table;
+    }
+
+    /**
+     * Get list of tables needed for query
+     * @return string Comma-separated list of tables needed for this query
+     */
+    public function getTables() {
+        return implode(', ', $this->tables);
+    }
+
+    /**
+     * Add where condition for query
+     * @param $table Where statement
+     */
+
+    public function addWhere($where) {
+        $this->where[] = $where;
+    }
+
+    /**
+     * Get collected where condition as string
+     * @return string Where condition; conditions are concatenated with "AND"
+     */
+    public function getWhere() {
+        return implode("\n AND ", $this->where);
+    }
+
+
+
     /**
      * Checks if the filter for given $key should be used (Depending on key on given value in $this->input)
      * @param $key String Filter to be checked
@@ -87,8 +113,11 @@ class tx_newspaper_module2_QueryBuilder {
     }
 
 
+    /**
+     * Add where condition for date range
+     */
     private function addConditionForRange() {
-        $this->where[] = 'tstamp>=' . tx_newspaper_UtilMod::calculateTimestamp($this->input['range']);
+        $this->where[] = 'tx_newspaper_article.tstamp>=' . tx_newspaper_UtilMod::calculateTimestamp($this->input['range']);
     }
 
     /**
@@ -114,6 +143,9 @@ class tx_newspaper_module2_QueryBuilder {
         return true;
     }
 
+    /**
+     * Add where conditions for an article's publish state
+     */
     private function addConditionForHidden() {
         switch($this->input['hidden']) {
             case 'on':
@@ -125,6 +157,9 @@ class tx_newspaper_module2_QueryBuilder {
         }
     }
 
+    /**
+     * Add where condition for newspaper role (if set)
+     */
     private function addConditionForRole() {
         switch(intval($this->input['role'])) {
             case NP_ACTIVE_ROLE_EDITORIAL_STAFF:
@@ -137,10 +172,33 @@ class tx_newspaper_module2_QueryBuilder {
         }
     }
 
+
+    /**
+     * Get condition for author (if set)
+     * The condition can be extended with a hook.
+     * Hook: $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['newspaper']['getExtendedAuthorCondition'][] = [class name];
+     */
     private function addConditionForAuthor() {
-        $this->where[] = 'author LIKE "%' . addslashes(trim($this->input['author'])) . '%"';
+        if (!trim($this->input['author'])) {
+            return; // No author ...
+        }
+
+        $where = 'author LIKE "%' . addslashes(trim($this->input['author'])) . '%"';
+
+        // Extend condition in (registered) hooks
+        if (is_array($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['newspaper']['getExtendedAuthorConditionHook'])) {
+            foreach ($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['newspaper']['getExtendedAuthorConditionHook'] as $class) {
+                $where = $class::getExtendedAuthorConditionHook($this, $this->input['author'], $where);
+            }
+        }
+
+        $this->addWhere($where); // Add where condition to query build
+
     }
 
+    /**
+     * Add where condition for be_user (if set)
+     */
     private function addConditionForBe_user() {
         $this->where[] = 'modification_user IN (
         SELECT uid FROM be_users
@@ -149,6 +207,10 @@ class tx_newspaper_module2_QueryBuilder {
         )';
     }
 
+    /**
+     * Add where condition for text (if set)
+     * @return int Either self::TEXT_SEARCH_FOR_UID or self::TEXT_SEARCH_FOR_TEXT
+     */
     private function addConditionForText() {
         if (substr(trim($this->input['text']), 0, 1) == '#') {
      	    // looking for an article uid?

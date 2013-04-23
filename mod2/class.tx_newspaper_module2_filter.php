@@ -20,19 +20,19 @@ class tx_newspaper_module2_Filter {
     }
 
     public function getCount() {
-        return tx_newspaper_DB::getInstance()->countRows($this->query_builder->getTable(), $this->query_builder->getWhere());
+        return tx_newspaper_DB::getInstance()->countRows($this->query_builder->getTables(), $this->query_builder->getWhere());
     }
 
     public function getArticleRecords() {
         $records = tx_newspaper::selectRows(
         	'DISTINCT tx_newspaper_article.*', // Make sure articles are list once only, even if assigned to multiple sections
-        	$this->query_builder->getTable(),
+        	$this->query_builder->getTables(),
         	$this->query_builder->getWhere(),
         	'',
         	'tstamp DESC',
         	intval($this->filter_values['startPage']) * intval($this->filter_values['step']) . ', ' . (intval($this->filter_values['step']))
        	);
-//tx_newspaper::devlog('Filter ProdList/Article browser', array('table' => $this->query_builder->getTable(), 'where' => $this->query_builder->getWhere()));
+//tx_newspaper::devlog('Filter ProdList/Article browser', array('table' => $this->query_builder->getTables(), 'where' => $this->query_builder->getWhere()));
         return $records;
     }
 

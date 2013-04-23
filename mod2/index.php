@@ -167,17 +167,45 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 	 */
 	function moduleContent() {
 
-		$content = $this->renderBackendSmarty($this->filter->getArticleRecords(), $this->filter->getCount());
+        $articles = $this->filter->getArticleRecords();
+        $this->processArticlesInHooks($articles);
+		$content = $this->renderBackendSmarty($articles, $this->filter->getCount());
 
 		$this->content .= $this->doc->section('', $content, 0, 1);
 //t3lib_div::devlog('mod2', 'newspaper', 0, array('content' => htmlspecialchars($content), 'this->content' => htmlspecialchars($this->content)));
 	}
 
 
+    /**
+     * Process author data
+     * The array keys "author_processed", "author_bgcolor" and "author_flag" might be modified in a hook.
+     * Hook: $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['newspaper']['getProcessedAuthorHook'][] = [class name];
+     * @param array $articles Array with tx_newspaper_article's
+     */
+    private function processArticlesInHooks(&$articles) {
+
+        // Prepare new fields
+        for ($i = 0; $i < sizeof($articles); $i++) {
+            $articles[$i]['author_processed'] = $articles[$i]['author']; // This field is used in backend
+            $articles[$i]['author_bgcolor'] = 'none'; // No background color set initially
+            $articles[$i]['author_flag'] = ''; // Mouse over flag is empty
+        }
+
+        // Modify/extend author
+        if (is_array($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['newspaper']['getProcessedAuthorHook'])) {
+            foreach ($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['newspaper']['getProcessedAuthorHook'] as $class) {
+                $class::getProcessedAuthorHook($articles);
+            }
+        }
+
+    }
+
+
+
 	/**
-	 * \param $row article to be rendered
-	 * \param $count total number of article found for current filter settings
-	 * \return HTML code, rendered backend
+	 * @param array $row article to be rendered
+	 * @param int $count total number of article found for current filter settings
+	 * @return string HTML code, rendered backend
 	 */
 	function renderBackendSmarty(array $article_records, $count) {
 
@@ -221,7 +249,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		return $smarty->fetch($this->getSmartyTemplate());
 	}
 
-   	/// \return Array with icons for the backend
+   	/// @return Array with icons for the backend
 	private function getIcons() {
 		return array(
 			'hide' => tx_newspaper_BE::renderIcon('gfx/button_hide.gif', '', $this->LL['label_hide']),
@@ -277,9 +305,9 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
     /**
    	 * Calculate the last page number for $count record with $step records per page
-   	 * \param $count Total number of records
-   	 * \param $step  Number of records per page
-   	 * \return Number of last page in browse sequence
+   	 * @param int $count Total number of records
+   	 * @param int $step  Number of records per page
+   	 * @return int Number of last page in browse sequence
    	 */
    	private function calculateMaxPage($count, $step) {
    		return intval($count / $step);
@@ -302,7 +330,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
     /**
      * Get section data array for given $articleUid
-     * @param $articleUid int Article uid
+     * @param int $articleUid Article uid
      * @return array array('sectionTitle', 'sectionPath')
      */
     private function getSectionData($articleUid) {
@@ -343,9 +371,9 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
     /**
      * Replace ###STARTTIME### and ###ENDTIME### in $string with given $startTime and $endTime time stamp
-     * @param $string Label that may contain ###STARTTIME### and /or ###ENDTIME###
-     * @param $startTime Start time time stamp
-     * @param $endTime End time time stamp
+     * @param string Label that may contain ###STARTTIME### and /or ###ENDTIME###
+     * @param startTime Start time time stamp
+     * @param endTime End time time stamp
      * @return String Label with start time and end time inserted
      */
     private static function insertStartEndTime($string, $startTime, $endTime) {
@@ -357,8 +385,8 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
 	/**
 	 * Format timestamp for production list output (skips year if year is current year)
-	 * @param $tstamp Timestamp
-	 * @return Formatted publish date
+	 * @param string tstamp Timestamp
+	 * @return string Formatted publish date
 	 */
 	private function getFormattedPublishDate($tstamp) {
 		$tstamp = intval($tstamp);
@@ -371,7 +399,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 	/// \return true if an article browser is rendered, false if production list is rendered
 	private function isArticleBrowser() {
 		// form_table -> article browser for Typo3 fields
-		// ab4al article browser for articlelists
+		// ab4al article browser for article lists
 		return t3lib_div::_GP('form_table') || t3lib_div::_GP('ab4al');
 	}
 

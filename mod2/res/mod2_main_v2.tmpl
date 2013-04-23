@@ -125,7 +125,7 @@
 			<h1>{$DATA[i].title}</h1>
 			<div class="titelinfo">{* year is shown only if tstamp year does NOT equal the current year *}
 				<p>
-					{if $DATA[i].author}{$LL.label_by_part} {$DATA[i].author}<br />{/if}
+					{if $DATA[i].author_processed}<span style="background-color:{$DATA[i].author_bgcolor}" title="{$DATA[i].author_flag}">{$LL.label_by_part} {$DATA[i].author_processed}</span><br />{/if}
 					{if $DATA[i].publish_date}
 						{$LL.label_published}:
 						<strong>{$DATA[i].formattedPublishdate}</strong>&nbsp;{$DATA[i].publish_date|date_format:"%H:%M:%S"}

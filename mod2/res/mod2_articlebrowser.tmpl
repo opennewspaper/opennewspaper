@@ -167,7 +167,7 @@ function focusOpenerAndClose(close)	{
 
 
   {* add ab4al, if set: article browser for article lists *}
-  {* add form_tanle etc. for article browser in list module type backend *}
+  {* add form_table etc. for article browser in list module type backend *}
 
   {*
   {if $URL_PREV != ''}
@@ -247,14 +247,14 @@ function focusOpenerAndClose(close)	{
 		</td>
 
 		{* author *}
-		<td> {$DATA[i].author} </td>
+		<td>{$DATA[i].author_processed}</td>
 
 		{* tstamp *}
 		<td> {if $DATA[i].tstamp}{$DATA[i].tstamp|date_format:"%d.%m.%Y %H:%I:%S"}{/if} </td>
 
 		{* hidden status *}
 		<td align="center">
-			{* article browser, just display visiblity status, but do NOT link the icon *}
+			{* article browser, just display visibility status, but do NOT link the icon *}
 			{if !$DATA[i].hidden}
 			{$ICON.published}
 			{/if}
