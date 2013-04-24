@@ -756,7 +756,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 
 
     private function selectWhere() {
-        $where = $this->getAttribute('filter_sql_where');
+        $where = stripslashes($this->getAttribute('filter_sql_where'));
         if (!$where) $where = '1';
         if (strpos($where, '$') !== false) $where = self::expandGETParameter($where);
         $where .= tx_newspaper::enableFields('tx_newspaper_article', (TYPO3_MODE == 'BE'));
