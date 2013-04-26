@@ -237,6 +237,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface, tx_newspap
 
     private function setSmartyContext() {
         $pagezone = $this->getPageZone();
+tx_newspaper::devlog('page zone for extra ' . $this->getUid(), $pagezone);
         if ($pagezone instanceof tx_newspaper_PageZone) {
 
             $this->smarty->setPageZoneType($pagezone);
@@ -252,32 +253,6 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface, tx_newspap
         }
     }
 
-    /**
-     *  If the current Extra is contained in another Extra, return that Extra. Otherwise, null.
-     *  @return tx_newspaper_Extra
-     */
-    private function getContainerExtra() {
-
-        foreach (self::getContainerExtraClasses() as $container_class) {
-            $container_extra = $container_class::getExtraWhichContains($this);
-            if (!is_null($container_extra)) return $container_extra;
-        }
-
-        return null;
-    }
-
-    private static $container_extra_classes = null;
-    private static function getContainerExtraClasses() {
-        if (is_null(self::$container_extra_classes)) {
-            self::$container_extra_classes = array_filter(
-                get_declared_classes(),
-                function ($class) {
-                    return in_array('tx_newspaper_ContainerExtra', class_implements($class));
-                }
-            );
-        }
-        return self::$container_extra_classes;
-    }
 
     /// Check whether to use a specific template set.
     private function setTemplateSet($template_set) {
@@ -540,7 +515,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface, tx_newspap
         $uids = tx_newspaper::selectRowsDirect(
             'uid',
             $table,
-            $this->getSeachWhere($search_term, $hidden),
+            $this->getSearchWhere($search_term, $hidden),
             '',
             $order_by,
             "$offset, $number"
@@ -564,7 +539,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface, tx_newspap
         $row = tx_newspaper::selectRowsDirect(
             'COUNT(*) AS c',
             $this->getTable(),
-            $this->getSeachWhere($search_term, $hidden)
+            $this->getSearchWhere($search_term, $hidden)
         );
         return $row[0]['c'];
     }
@@ -575,7 +550,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface, tx_newspap
      *                 (they are if set to true)
      *  \return Part to be used a WHERE part in an SQL statement
      */
-    private function getSeachWhere($search_term='', $hidden=false) {
+    private function getSearchWhere($search_term='', $hidden=false) {
 
         if ($search_term && $search_where_parts = $this->getSearchFields()) {
             foreach ($search_where_parts as $key => $field) {
@@ -918,6 +893,32 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface, tx_newspap
         return null;
     }
 
+    /**
+     *  If the current Extra is contained in another Extra, return that Extra. Otherwise, null.
+     *  @return tx_newspaper_Extra
+     */
+    private function getContainerExtra() {
+
+        foreach (self::getContainerExtraClasses() as $container_class) {
+            $container_extra = $container_class::getExtraWhichContains($this);
+            if (!is_null($container_extra)) return $container_extra;
+        }
+
+        return null;
+    }
+
+    private static $container_extra_classes = null;
+    private static function getContainerExtraClasses() {
+        if (is_null(self::$container_extra_classes)) {
+            self::$container_extra_classes = array_filter(
+                get_declared_classes(),
+                function ($class) {
+                    return in_array('tx_newspaper_ContainerExtra', class_implements($class));
+                }
+            );
+        }
+        return self::$container_extra_classes;
+    }
 
     /// save hook functions
 

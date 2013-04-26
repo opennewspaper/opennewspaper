@@ -100,7 +100,7 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra implements tx
     public static function getExtraWhichContains(tx_newspaper_Extra $extra) {
 
         $tag_zones = tx_newspaper_DB::getInstance()->selectRows(
-            'tag_zone, tag_type', self::controltag_to_extra_table, 'extra = ' . $extra->getUid()
+            'tag_zone, tag_type', self::controltag_to_extra_table, 'extra = ' . $extra->getExtraUid()
         );
         if (empty($tag_zones)) return null;
 
@@ -113,7 +113,7 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra implements tx
             if ($uid) return new tx_newspaper_Extra_ControlTagZone($uid);
         }
 
-        return new tx_newspaper_Extra_Container($uid);
+        return null;
     }
 
     public static function getModuleName() {

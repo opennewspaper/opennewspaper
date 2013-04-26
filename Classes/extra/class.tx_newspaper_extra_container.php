@@ -62,7 +62,7 @@ class tx_newspaper_Extra_Container extends tx_newspaper_Extra implements tx_news
 
     public static function getExtraWhichContains(tx_newspaper_Extra $extra) {
         $uids = tx_newspaper_DB::getInstance()->selectZeroOrOneRows(
-            'uid', 'tx_newspaper_extra_container', 'extras LIKE "%' . $extra->getUid() .'%"'
+            'uid', 'tx_newspaper_extra_container', 'extras LIKE "%' . $extra->getExtraUid() .'%"'
         );
         $uid = intval($uids['uid']);
         if ($uid == 0) return null;
