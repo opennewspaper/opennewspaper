@@ -237,7 +237,6 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface, tx_newspap
 
     private function setSmartyContext() {
         $pagezone = $this->getPageZone();
-tx_newspaper::devlog('page zone for extra ' . $this->getUid(), $pagezone);
         if ($pagezone instanceof tx_newspaper_PageZone) {
 
             $this->smarty->setPageZoneType($pagezone);
@@ -411,8 +410,6 @@ tx_newspaper::devlog('page zone for extra ' . $this->getUid(), $pagezone);
         t3lib_div::loadTCA($this->getTable()); // make sure TCA for this extra is available
 
         foreach($GLOBALS['TCA'][$this->getTable()]['columns'] as $fieldName => $fieldData) {
-//t3lib_div::devlog('setDefaultValues()', 'newspaper', 0, array('fieldName' => $fieldName, 'fieldData' => $fieldData));
-
             switch($fieldData['config']['type']) {
                 case 'check':
                     if ($fieldData['config']['default'] == 1) {
@@ -928,9 +925,7 @@ tx_newspaper::devlog('page zone for extra ' . $this->getUid(), $pagezone);
         // check if a concrete extra can be deleted (and delete all associated records if yes)
         // tx_newspaper_article implements the extra interface but shouldn't be regarded as an extra when it comes to deleting
         if ($table != 'tx_newspaper_article' && tx_newspaper::classImplementsInterface($table, 'tx_newspaper_ExtraIface')) {
-//t3lib_div::devlog('delete extra', 'newspaper', 0, array('table' => $table, 'id' => $id));
             $e = new $table(intval($id));
-//t3lib_div::devlog('delete extra count ref', 'newspaper', 0, array($e->getReferenceCount()));
             if ($e->getReferenceCount() <= 1) {
                 // just one (or none?) abstract extra for this concrete extra
                 $e->deleteIncludingReferences();
