@@ -20,13 +20,13 @@ class tx_newspaper_module2_Filter {
     }
 
     public function getCount() {
-        return tx_newspaper_DB::getInstance()->countRows($this->query_builder->getTables(), $this->query_builder->getWhere());
+        return tx_newspaper_DB::getInstance()->countRows($this->query_builder->getTableReferences(), $this->query_builder->getWhere());
     }
 
     public function getArticleRecords() {
         $records = tx_newspaper::selectRows(
         	'DISTINCT tx_newspaper_article.*', // Make sure articles are list once only, even if assigned to multiple sections
-        	$this->query_builder->getTables(),
+        	$this->query_builder->getTableReferences(),
         	$this->query_builder->getWhere(),
         	'',
         	'tstamp DESC',
