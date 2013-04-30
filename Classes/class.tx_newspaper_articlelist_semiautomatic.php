@@ -107,6 +107,10 @@ class tx_newspaper_Articlelist_Operation {
     const NUM_RAW_UIDS = 10;
 }
 
+class tx_newspaper_EmptyParametrizedArticlelistException extends tx_newspaper_Exception {
+    public function __construct() { }
+}
+
 /// A list of tx_newspaper_Article s dynamically filled and optionally reordered by the user.
 /** The Articles contained in the list are automatically determined by the
  *  filter attributes. If the user doesn't interact, these Articles are
@@ -133,11 +137,8 @@ class tx_newspaper_Articlelist_Operation {
  *  sticky, or moving them off the end of the list.
  *
  *  \todo indexOfArticle(), isSectionList(), insertArticleAtPosition()
- *  \todo I'm not certain if the number of articles in the list is correct when
- *         articles have been dropped from the list.
- *  \todo There is no BE which allows reordering articles - currently it's all
- *         done with PHPMyAdmin. This would require either some AJAX magic or a
- *         function in the save hook (tx_newspaper_Typo3Hook), or both.
+ *  \todo I'm not certain if the number of articles in the list is correct when articles have been dropped from the list.
+ *  \todo There is no BE which allows reordering articles - currently it's all  done with PHPMyAdmin. This would require either some AJAX magic or a  function in the save hook (tx_newspaper_Typo3Hook), or both.
  */
 class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 
@@ -174,22 +175,21 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 
 
     /// Returns a number of tx_newspaper_Article s from the list
-    /** \param $number Number of Articles to return
-     *  \param $start Index of first Article to return (starts with 0)
-     *  \return The \p $number Articles starting with \p $start
+    /** @param int $number Number of Articles to return
+     *  @param int $start Index of first Article to return (starts with 0)
+     *  @return tx_newspaper_Article[] The \p $number Articles starting with \p $start
      */
     public function getArticles($number, $start = 0) {
 
         $timer = tx_newspaper_ExecutionTimer::create("Automatic ArticleList(" . $this->getUid() . ")::getArticles($number)");
 
-        $articles_sorted = $this->getSortedArticles($number, $start);
-
-        $articles = array();
-        foreach ($articles_sorted as $i => $article) {
-            $articles[] = $article['article'];
+        try {
+            $articles_sorted = $this->getSortedArticles($number, $start);
+        } catch (tx_newspaper_EmptyParametrizedArticlelistException $e) {
+            return array();
         }
 
-        return $articles;
+        return array_map(function($record) { return $record['article']; }, $articles_sorted);
     }
 
     /// Makes a persistent article list from an array of UIDs with their respective offsets.
@@ -607,7 +607,6 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
         return $num_articles;
     }
 
-
     /// Get the articles sorted by their offsets, including offset values
     /** \param $number Number of articles to return
      *  \param $start Index of first article sought
@@ -658,6 +657,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
         
         return $articles;
     }
+
     /// Get the UIDs of articles found by the conditions defining the list
     /** \param $number Number of articles to return
      *  \param $start Index of first article sought
@@ -675,7 +675,9 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
         /// \todo: Implement \p filter_articlelist_exclude. This must be done separately from the SQL query.
 
         try {
+
             $dont_spam_devlog = new tx_newspaper_ExceptionSilencer();
+
             $results = tx_newspaper_DB::getInstance()->selectRowsDirect(
                 $this->select_method_strategy->selectFields(),
                 $this->selectTable(),
@@ -684,6 +686,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
                 $this->selectOrderBy(),
                 $this->selectLimit($start, $number)
             );
+
         } catch (tx_newspaper_DBException $e) {
             //  Guard against article lists using GET variables, which are not set in the BE
             if (TYPO3_MODE != 'BE') {
@@ -740,8 +743,8 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
             $table .= ' JOIN tx_newspaper_article_tags_mm' .
                       '   ON tx_newspaper_article.uid = tx_newspaper_article_tags_mm.uid_local';
         }
-        if ($this->getAttribute('filter_tags_exclude')) {
 
+        if ($this->getAttribute('filter_tags_exclude')) {
             $table .= ' JOIN tx_newspaper_article_tags_mm' .
                       '   ON tx_newspaper_article.uid = tx_newspaper_article_tags_mm.uid_local';
         }
@@ -756,9 +759,13 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 
 
     private function selectWhere() {
+
         $where = stripslashes($this->getAttribute('filter_sql_where'));
+
         if (!$where) $where = '1';
+
         if (strpos($where, '$') !== false) $where = self::expandGETParameter($where);
+
         $where .= tx_newspaper::enableFields('tx_newspaper_article', (TYPO3_MODE == 'BE'));
 
         if ($this->getAttribute('filter_tags_include')) {
@@ -772,41 +779,42 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
         }
 
         if ($this->getAttribute('filter_sections')) {
-            $sections = array();
-            foreach (explode(',', $this->getAttribute('filter_sections')) as $section_uid) {
-                $sections[] = $section_uid;
-                if (self::include_articles_from_subsections) {
-                    //    add subsections to search clause
-                    $section = new tx_newspaper_Section($section_uid);
-                    $child_sections = $section->getChildSections(true);
-                    if ($child_sections) {
-                        foreach ($child_sections as $child_section) {
-                            $sections[] = $child_section->getUid();
-                        }
-                    }
-                }
-            }
-            $where .= ' AND tx_newspaper_article_sections_mm.uid_foreign IN (' .
-                            implode(', ', $sections) . ')';
+            $where .= ' AND ' . $this->filterSectionsWhereCondition();
         }
 
         return $where;
     }
 
+    private function filterSectionsWhereCondition() {
+        $sections = array();
+        foreach (explode(',', $this->getAttribute('filter_sections')) as $section_uid) {
+            $sections[] = $section_uid;
+            if (self::include_articles_from_subsections) {
+                //    add subsections to search clause
+                $section = new tx_newspaper_Section($section_uid);
+                $child_sections = $section->getChildSections(true);
+                if ($child_sections) {
+                    foreach ($child_sections as $child_section) {
+                        $sections[] = $child_section->getUid();
+                    }
+                }
+            }
+        }
+        return 'tx_newspaper_article_sections_mm.uid_foreign IN (' . implode(', ', $sections) . ')';
+    }
+
     private function selectOrderBy() {
         if ($this->getAttribute('filter_sql_order_by')) {
-            $order_by = $this->getAttribute('filter_sql_order_by');
-        } else {
-            $order_by = '
-CASE
-  WHEN tx_newspaper_article.publish_date = \'0\'
-  THEN tx_newspaper_article.tstamp
-  ELSE tx_newspaper_article.publish_date
-END
-DESC';
+            return $this->getAttribute('filter_sql_order_by');
         }
 
-        return $order_by;
+        return '
+    CASE
+        WHEN tx_newspaper_article.publish_date = \'0\'
+        THEN tx_newspaper_article.tstamp
+        ELSE tx_newspaper_article.publish_date
+    END
+DESC';
     }
 
     private function selectLimit($start, $number) {
@@ -848,23 +856,26 @@ DESC';
 
 
     /// Replace a substring denoted as a variable with the corresponding GET parameter
-    /** For example, all occurrences of \c $art are replaced with
-     *  \c $_GET['art']. If \c $_GET['art'] is not set, the variable is
-     *  unchanged.
+    /**
+     *  For example, all occurrences of \c $art are replaced with \c $_GET['art'].
+     *  If \c $_GET['art'] is not set, an exception is thrown and getArticles() returns an
+     *  empty list.
      *
-     *  \param $string The string to be expanded.
-     *  \return The expanded string.
+     *  @param string $string The string to be expanded.
+     *  @return string \p $string with all occurrences of GET-parameters replaced by their respective values.
      */
     private static function expandGETParameter($string) {
-        $matches = array();
 
+        $matches = array();
         if (!preg_match_all('/\$(.*)\w/', $string, $matches)) return $string;
 
-        //    full matches are in $matches[0], partial ones in $matches[1] and so on
+        //  full matches are in $matches[0], partial ones in $matches[1] and so on
         foreach ($matches[0] as $match) {
             $var = substr($match, 1);    //  lose the '$'
             if ($_GET[$var]) {
                 $string = str_replace($match, $GLOBALS['TYPO3_DB']->fullQuoteStr($_GET[$var], self::$table),  $string);
+            } else {
+                throw new tx_newspaper_EmptyParametrizedArticlelistException();
             }
         }
 
