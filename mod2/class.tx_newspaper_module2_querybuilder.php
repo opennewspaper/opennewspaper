@@ -177,20 +177,23 @@ class tx_newspaper_module2_QueryBuilder {
     private function addConditionForAuthor() {
         $author = trim($this->input['author']);
         if (!$author) return;
-        $this->addWhere('author LIKE "%' . addslashes($author) . '%"');
+
         $this->addExtendedAuthorConditionHooks($author, 'author LIKE "%' . addslashes($author) . '%"');
 
     }
 
     /// Extend condition in (registered) hooks
     private function addExtendedAuthorConditionHooks($author, $where) {
+        $hook_called = false;
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['newspaper']['getExtendedAuthorConditionHook'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['newspaper']['getExtendedAuthorConditionHook'] as $class) {
                 if (method_exists($class, 'getExtendedAuthorConditionHook')) {
                     $class::getExtendedAuthorConditionHook($this, $author, $where);
+                    $hook_called = true;
                 }
             }
         }
+        if (!$hook_called) $this->addWhere($where);
     }
 
     /**
