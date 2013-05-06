@@ -123,7 +123,7 @@ class tx_newspaper_Extra_PHPInclude extends tx_newspaper_Extra {
                 array_push($files, $dir . $path);
             }
             if ($recursive && $path != '.' && $path != '..' && is_dir($dir . $path)) {
-                $files += self::getAllFiles($dir . $path . '/', $recursive);
+                $files = array_merge($files, self::getAllFiles($dir . $path . '/', $recursive));
             }
         }
         return $files;
