@@ -71,7 +71,7 @@ class tx_newspaper_module2_QueryBuilder {
      * @return string Table references (single table or JOIN) needed for query
      */
     public function getTableReferences() {
-        return implode(' JOIN ', $this->table_references);
+        return implode(' ', $this->table_references);
     }
 
     /**
@@ -133,7 +133,7 @@ class tx_newspaper_module2_QueryBuilder {
             return false; // No matching section found, so no article in search result
          }
 
-        $this->addTableReference('tx_newspaper_article_sections_mm ON tx_newspaper_article.uid = tx_newspaper_article_sections_mm.uid_local');
+        $this->addTableReference('JOIN tx_newspaper_article_sections_mm ON tx_newspaper_article.uid = tx_newspaper_article_sections_mm.uid_local');
         $this->addWhere('tx_newspaper_article_sections_mm.uid_foreign IN (' . implode(',', $whereSectionUids) . ')');
 
         return true;
@@ -247,7 +247,7 @@ class tx_newspaper_module2_QueryBuilder {
         if (!intval($this->input['controltag'])) {
             return;
         }
-        $this->addTableReference('tx_newspaper_article_tags_mm ON tx_newspaper_article.uid = tx_newspaper_article_tags_mm.uid_local');
+        $this->addTableReference('JOIN tx_newspaper_article_tags_mm ON tx_newspaper_article.uid = tx_newspaper_article_tags_mm.uid_local');
         $this->addWhere('tx_newspaper_article_tags_mm.uid_foreign = ' . intval($this->input['controltag']));
     }
 
