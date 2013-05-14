@@ -40,14 +40,14 @@ class tx_newspaper_module2_Filter {
 
         $smarty->setTemplateSearchPath(array(self::template_path));
 
-        $smarty->assign('LL', $this->localized_labels); // localized labels
-        $smarty->assign('FILTER', $this->filter_values); // add filter settings (for setting selected values in select boxes and text fields)
-        $smarty->assign('RANGE', $this->getRangeArray()); // add data for range dropdown
-        $smarty->assign('HIDDEN', $this->getHiddenArray()); // add data for "hidden" dropdown
+        $smarty->assign('LL', $this->localized_labels); // Localized labels
+        $smarty->assign('FILTER', $this->filter_values); // Add filter settings (for setting selected values in select boxes and text fields)
+        $smarty->assign('RANGE', $this->getRangeArray()); // Add data for range dropdown
+        $smarty->assign('HIDDEN', $this->getHiddenArray()); // Add data for "hidden" dropdown
         $smarty->assign('ROLE_FILTER_EQUALS_USER_ROLE', $this->isRoleFilterEqualToUserRole());
-        $smarty->assign('ROLE', $this->getRoleArray()); // add data for role dropdown
+        $smarty->assign('ROLE', $this->getRoleArray()); // Add data for role dropdown
         $smarty->assign('CONTROLTAGS', $this->getControltags());
-        $smarty->assign('STEPS', array(10, 20, 30, 50, 100)); // add data for step dropdown (for page browser)
+        $smarty->assign('STEPS', $this->getStepsArray()); // Add data for step dropdown (for page browser)
 
         return $smarty->fetch($this->is_article_browser? self::article_browser_template: self::production_list_template);
     }
@@ -88,10 +88,10 @@ class tx_newspaper_module2_Filter {
         self::addDefaultFilterValue($settings, 'be_user', '', false);
         self::addDefaultFilterValue($settings, 'text', '', false);
         self::addDefaultFilterValue($settings, 'controltag', 0, true);
-        self::addDefaultFilterValue($settings, 'step', 10, true);
+        self::addDefaultFilterValue($settings, 'step', $this->getDefaultValueItemsPerPage(), true);
         self::addDefaultFilterValue($settings, 'startPage', 0, true);
-        self::addDefaultFilterValue($settings, 'hidden', 'all', true);
-        self::addDefaultFilterValue($settings, 'role', ($this->is_article_browser? '-1': tx_newspaper_workflow::getRole()), false);
+        self::addDefaultFilterValue($settings, 'hidden', $this->getDefaultHiddenStatusFilter(), true);
+        self::addDefaultFilterValue($settings, 'role', $this->getDefaultRoleFilter(), false);
         self::addDefaultFilterValue($settings, 'range', $this->getDefaultRange(), true);
         self::addDefaultFilterValue($settings, 'section', ($this->is_article_browser && $_REQUEST['s'])? $_REQUEST['s']: $this->getDefaultSection(), false);
 
@@ -104,6 +104,77 @@ class tx_newspaper_module2_Filter {
         if (self::$force_reset || !array_key_exists($key, $settings) || ($checkEmptyValue && !$settings[$key])) {
       		$settings[$key] = $value;
       	}
+    }
+
+
+    /**
+     * Get default filter value for role
+     * Either current role (editor or duty editor) of TSConfig setting:
+     * newspaper.productionList.defaultFilterRole = all|editor|dutyeditor|pool|none
+     * newspaper.articleBrowser.defaultFilterRole = all|editor|dutyeditor|pool|none
+     * @return int Role dropdown default value
+     */
+    private function getDefaultRoleFilter() {
+        if (isset($GLOBALS['BE_USER'])) {
+            if (!$this->is_article_browser) {
+                $tsc = 'newspaper.productionList.defaultFilterRole'; // Production list
+            } else {
+                $tsc = 'newspaper.articleBrowser.defaultFilterRole'; // Article browser
+            }
+            if ($role = strtolower(trim($GLOBALS['BE_USER']->getTSConfigVal($tsc)))) {
+                switch($role) {
+                    case 'all':
+                        return -1;
+                        break;
+                    case 'editor':
+                        return 0;
+                        break;
+                    case 'dutyeditor':
+                        return 1;
+                        break;
+                    case 'pool':
+                        return 2;
+                        break;
+                    case 'none':
+                        return 1000;
+                        break;
+                }
+            }
+        }
+        return ($this->is_article_browser? '-1': tx_newspaper_workflow::getRole()); // Just return hard-coded default value
+    }
+
+
+
+    /**
+     * Get default filter value for publish state
+     * Either 'all' of TSConfig setting:
+     * newspaper.productionList.defaultFilterShowArticles = all|hidden|published
+     * newspaper.articleBrowser.defaultFilterShowArticles = all|hidden|published
+     * @return string Publish state dropdown default value
+     */
+    private function getDefaultHiddenStatusFilter() {
+        if (isset($GLOBALS['BE_USER'])) {
+            if (!$this->is_article_browser) {
+                $tsc = 'newspaper.productionList.defaultFilterRole'; // Production list
+            } else {
+                $tsc = 'newspaper.articleBrowser.defaultFilterRole'; // Article browser
+            }
+            if ($status = strtolower(trim($GLOBALS['BE_USER']->getTSConfigVal($tsc)))) {
+                switch($status) {
+                    case 'all':
+                        return 'all';
+                        break;
+                    case 'hidden':
+                        return 'on';
+                        break;
+                    case 'published':
+                        return 'off';
+                        break;
+                }
+            }
+        }
+        return 'all'; // Just return hard-coded default value
     }
 
     /**
@@ -122,25 +193,36 @@ class tx_newspaper_module2_Filter {
                 $tsc = 'newspaper.articleBrowser.defaultRange'; // Article browser
             }
             if ($range = trim($GLOBALS['BE_USER']->getTSConfigVal($tsc))) {
-                if ($this->isValidRange($range)) {
+                if (array_key_exists($range, $this->getRangeArray())) {
                     return $range;
                 }
             }
         }
-
-        // Just return hard-coded default values
-        return ($this->is_article_browser ? 'day_180' : 'day_7');
+        return ($this->is_article_browser ? 'day_180' : 'day_7'); // Just return hard-coded default value
     }
 
     /**
-     * Checks if given $range is an available filter option
-     * @param $range String (Examples: 'today', 'day_1', 'day_2', ......., 'days_360', 'no_limit', see getRangeArray() for details
-     * @return bool true if the $range is an available option
+     * Get default step (items per page)
+     * Either 10 as or a TSConfig setting:
+     * newspaper.productionList.defaultFilterItemsPerPage = 10|20|30|50|100
+     * newspaper.articleBrowser.defaultFilterItemsPerPage = 10|20|30|50|100
+     * @return int Step
      */
-    private function isValidRange($range) {
-        return array_key_exists($range, $this->getRangeArray());
+    private function getDefaultValueItemsPerPage() {
+        if (isset($GLOBALS['BE_USER'])) {
+            if (!$this->is_article_browser) {
+                $tsc = 'newspaper.productionList.defaultFilterItemsPerPage'; // Production list
+            } else {
+                $tsc = 'newspaper.articleBrowser.defaultFilterItemsPerPage'; // Article browser
+            }
+            if ($step = intval($GLOBALS['BE_USER']->getTSConfigVal($tsc))) {
+                if (in_array($step, $this->getStepsArray())) {
+                    return $step;
+                }
+            }
+        }
+        return 10; // Just return hard-coded default value
     }
-
 
     /**
      * Get default value for section filter
@@ -188,6 +270,14 @@ class tx_newspaper_module2_Filter {
             'no_limit' => $this->localized_labels['option_range_no_limit']
         );
 	}
+
+    /**
+     * Get available steps (items per page)
+     * @return array Steps
+     */
+    private function getStepsArray() {
+        return array(10, 20, 30, 50, 100);
+    }
 
 	/// \return Array with options for publish state dropdown
 	private function getHiddenArray() {
