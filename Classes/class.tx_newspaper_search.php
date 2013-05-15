@@ -141,6 +141,8 @@ class tx_newspaper_Search {
 	 */
     public function searchArticles($search_term, $start = 0, $number = 0) {
 
+        $search_term = $GLOBALS['TYPO3_DB']->quoteStr($search_term, self::article_table);
+
         $table = self::article_table;
         $where = '1';
         $fields = self::getFieldsSQL($search_term);
@@ -163,6 +165,8 @@ class tx_newspaper_Search {
         if ($number) $limit = intval($start) . ',' . intval($number);
         elseif ($start) $limit = intval($start);
 
+        $this->callSearchHooks($search_term, $table, $where, $limit);
+
         $articles = $this->getSearchResultsForClass($fields, $table, $where, $limit);
 
         if (!self::enable_quick_hack) {
@@ -174,6 +178,19 @@ class tx_newspaper_Search {
         $this->logSearch($search_term, $return);
 
         return $return;
+    }
+
+    private static $search_hooks = array();
+    public static function registerSearchHook($callback) {
+        if (is_callable($callback)) {
+            self::$search_hooks[] = $callback;
+        }
+    }
+
+    private function callSearchHooks($search_term, &$table, &$where, &$limit) {
+        foreach (self::$search_hooks as $hook) {
+            $hook($search_term, $table, $where, $limit);
+        }
     }
 
     public function getNumArticles() { return $this->num_results; }
