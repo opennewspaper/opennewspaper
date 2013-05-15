@@ -872,7 +872,7 @@ DESC';
         //  full matches are in $matches[0], partial ones (the part in brackets) in $matches[1]
         foreach ($matches[1] as $match) {
             if ($_GET[$match]) {
-                $string = str_replace('$' . $match, $GLOBALS['TYPO3_DB']->fullQuoteStr($_GET[$match], self::$table),  $string);
+                $string = str_replace('$' . $match, $GLOBALS['TYPO3_DB']->quoteStr($_GET[$match], self::$table),  $string);
             } else {
                 throw new tx_newspaper_EmptyParametrizedArticlelistException();
             }
