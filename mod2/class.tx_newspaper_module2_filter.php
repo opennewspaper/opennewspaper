@@ -156,9 +156,9 @@ class tx_newspaper_module2_Filter {
     private function getDefaultHiddenStatusFilter() {
         if (isset($GLOBALS['BE_USER'])) {
             if (!$this->is_article_browser) {
-                $tsc = 'newspaper.productionList.defaultFilterRole'; // Production list
+                $tsc = 'newspaper.productionList.defaultFilterShowArticles'; // Production list
             } else {
-                $tsc = 'newspaper.articleBrowser.defaultFilterRole'; // Article browser
+                $tsc = 'newspaper.articleBrowser.defaultFilterShowArticles'; // Article browser
             }
             if ($status = strtolower(trim($GLOBALS['BE_USER']->getTSConfigVal($tsc)))) {
                 switch($status) {
