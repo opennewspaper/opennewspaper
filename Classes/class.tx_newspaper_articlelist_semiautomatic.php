@@ -867,13 +867,12 @@ DESC';
     private static function expandGETParameter($string) {
 
         $matches = array();
-        if (!preg_match_all('/\$(.*)\w/', $string, $matches)) return $string;
+        if (!preg_match_all('/\$(\w+?)\W/', $string, $matches)) return $string;
 
-        //  full matches are in $matches[0], partial ones in $matches[1] and so on
-        foreach ($matches[0] as $match) {
-            $var = substr($match, 1);    //  lose the '$'
-            if ($_GET[$var]) {
-                $string = str_replace($match, $GLOBALS['TYPO3_DB']->fullQuoteStr($_GET[$var], self::$table),  $string);
+        //  full matches are in $matches[0], partial ones (the part in brackets) in $matches[1]
+        foreach ($matches[1] as $match) {
+            if ($_GET[$match]) {
+                $string = str_replace('$' . $match, $GLOBALS['TYPO3_DB']->fullQuoteStr($_GET[$match], self::$table),  $string);
             } else {
                 throw new tx_newspaper_EmptyParametrizedArticlelistException();
             }
