@@ -411,6 +411,21 @@ class tx_newspaper  {
         return $LANG->sL("LLL:EXT:$extension/$translation_file:$key", false);
     }
 
+
+    /**
+     * Cleans HTML string (using tidy, if available)
+     * @param string $text HTML string to be cleaned
+     * @return string Cleaned HTML string
+     */
+    public static function tidyHtmlString($text) {
+        if (class_exists('tidy')) {
+            $tidy = new tidy();
+            $text = $tidy->repairString($text, array('show-body-only' => true));
+        }
+        return $text;
+   	}
+
+
     /**
      * Basic url encoding: encodes '?', '=' and '&' only
      * @param string $url URL to be encoded

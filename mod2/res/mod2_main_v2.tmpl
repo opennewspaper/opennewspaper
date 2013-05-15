@@ -18,7 +18,7 @@
 <input type="hidden" name="tx_newspaper_mod2[startPage]" id="tx_newspaper_mod2[startPage]" value="{$START_PAGE}" />
 
 
-<div id="wizards"><a href="#" onclick="newArticle('{$MODULE5_PATH}');" return false;">{$ICON.wizard} {$LL.label_new_article}</a><br /></div>
+<div id="wizards"><a href="#" onclick="newArticle('{$MODULE5_PATH}'); return false;">{$ICON.wizard} {$LL.label_new_article}</a><br /></div>
 
 {$FILTER_BOX}
 
@@ -140,7 +140,7 @@
 
 				{* sections *}
 				{foreach from=$DATA[i].sections item=section name=sections}
-                    <span title="{$section.sectionPath}">{$section.sectionTitle}<span>{if !$smarty.foreach.sections.last}, {/if}
+                    <span title="{$section.sectionPath}">{$section.sectionTitle}</span>{if !$smarty.foreach.sections.last}, {/if}
 				{/foreach}
 
 				</p>

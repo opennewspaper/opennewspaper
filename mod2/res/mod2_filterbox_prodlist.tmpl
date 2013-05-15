@@ -64,7 +64,7 @@
     {* control tags *}
     {if $CONTROLTAGS}
         <label>{$LL.label_controltag}</label>
-        <select name="tx_newspaper_mod2[controltag]" onchange=submitFilter('reset_startpage');>
+        <select name="tx_newspaper_mod2[controltag]" onchange="submitFilter('reset_startpage');">
       		{foreach from=$CONTROLTAGS key=key item=value}
       			{if $key == $FILTER.controltag}
       				<option selected="selected" value="{$key}">{$value}</option>
@@ -78,7 +78,7 @@
 
 	{* stop / items per page *}
 	<label>{$LL.label_step_items_per_page}</label>
-		<select name="tx_newspaper_mod2[step]" onchange=submitFilter('reset_startpage');>
+		<select name="tx_newspaper_mod2[step]" onchange="submitFilter('reset_startpage');">
 			{foreach from=$STEPS item=value}
 			{if $value == $FILTER.step}
 				<option selected="selected" value="{$value}">{$value}</option>

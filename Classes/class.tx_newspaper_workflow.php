@@ -318,7 +318,7 @@ function changeWorkflowStatus(role, hidden_status) {
             $where .= ' AND tx_newspaper_log.operation IN (' . implode(', ', self::$operations_in_loglevel[$log_level]) . ')';
         }
 
-        return tx_newspaper::selectRows(
+        $row = tx_newspaper::selectRows(
 			"FROM_UNIXTIME(tx_newspaper_log.crdate, '%d.%m.%Y %H:%i') as created, tx_newspaper_log.crdate,
 			    tx_newspaper_log.be_user, tx_newspaper_log.operation, tx_newspaper_log.comment, tx_newspaper_log.details,
                 IF(be_users.realname != '', be_users.realname, be_users.username) AS username",
@@ -328,6 +328,12 @@ function changeWorkflowStatus(role, hidden_status) {
 			'tx_newspaper_log.crdate desc',
 			($limit > 0) ? $limit : ''
 		);
+
+        for($i = 0; $i < sizeof($row); $i++) {
+            $row[$i]['details'] = tx_newspaper::tidyHtmlString($row[$i]['details']);
+        }
+        return $row;
+
     }
 
     /**
