@@ -7,11 +7,11 @@ require_once('private/class.tx_newspaper_file.php');
 
 class tx_newspaper_Search {
 
-	////////////////////////////////////////////////////////////////////////////
-	//
-	//	Configuration parameters
-	//
-	////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    //
+    //    Configuration parameters
+    //
+    ////////////////////////////////////////////////////////////////////////////
 
     /// dirty solution for speeding up the search while sacrificing flexibility
     /**
@@ -20,71 +20,62 @@ class tx_newspaper_Search {
      */
     const enable_quick_hack = true;
 
-	///	Table storing tx_newspaper_Article
-	const article_table = 'tx_newspaper_article';
+    ///    Table storing tx_newspaper_Article
+    const article_table = 'tx_newspaper_article';
 
-	///	Table storing M-M relations between tx_newspaper_Article and tx_newspaper_Section
-	const article_section_mm = 'tx_newspaper_article_sections_mm';
+    ///    Table storing M-M relations between tx_newspaper_Article and tx_newspaper_Section
+    const article_section_mm = 'tx_newspaper_article_sections_mm';
 
-	///	Table storing M-M relations between tx_newspaper_Article and tx_newspaper_Tag
-	const article_tag_mm = 'tx_newspaper_article_tags_mm';
+    ///    Table storing M-M relations between tx_newspaper_Article and tx_newspaper_Tag
+    const article_tag_mm = 'tx_newspaper_article_tags_mm';
 
-	///	Table storing M-M relations between tx_newspaper_Article and tx_newspaper_Extra
+    ///    Table storing M-M relations between tx_newspaper_Article and tx_newspaper_Extra
     const article_extra_mm = 'tx_newspaper_article_extras_mm';
     const extra_table = 'tx_newspaper_extra';
 
-	/// Above which score a match is considered as good enough
-	const score_limit = 0.1;
-	///	How much higher matches on title fields are rated.
-	const title_score_weight = 2.0;
-	///	How much higher (or lower) matches on Extra fields are rated.
-	const extra_score_weight = 0.5;
+    /// Above which score a match is considered as good enough
+    const score_limit = 0.1;
+    ///    How much higher matches on title fields are rated.
+    const title_score_weight = 2.0;
+    ///    How much higher (or lower) matches on Extra fields are rated.
+    const extra_score_weight = 0.5;
 
 
-	/// Article attributes counted as title (higher score when searching).
-	/** A \c FULLTEXT index must be configured for these fields.
-	 *  \see ext_tables_addon.sql
-	 */
-	private static $title_fields = array('title', 'kicker', 'title_list', 'kicker_list');
+    /// Article attributes counted as title (higher score when searching).
+    /** A \c FULLTEXT index must be configured for these fields.
+     *  \see ext_tables_addon.sql
+     */
+    private static $title_fields = array('title', 'kicker', 'title_list', 'kicker_list');
 
-	///	Article attributes also searched for the search term (in addition to \p $title_fields).
-	/** A \c FULLTEXT index must be configured for these fields.
-	 *  \see ext_tables_addon.sql
-	 */
-	private static $text_fields = array('teaser', 'teaser_list', 'bodytext', 'author');
+    ///    Article attributes also searched for the search term (in addition to \p $title_fields).
+    /** A \c FULLTEXT index must be configured for these fields.
+     *  \see ext_tables_addon.sql
+     */
+    private static $text_fields = array('teaser', 'teaser_list', 'bodytext', 'author');
 
-	/// Extra tables and their fields also searched for the search term.
-	/** A \c FULLTEXT index must be configured for each of these tables/fields.
-	 *  \see ext_tables_addon.sql
-	 */
-	private static $extra_fields = array(
-#		'tx_newspaper_extra_textbox' => array('title', 'bodytext'),
-#		'tx_newspaper_extra_image' => array('title', 'kicker', 'caption'),
-#		'tx_newspaper_extra_bio' => array('author_name', 'bio_text'),
-	);
+    /// Extra tables and their fields also searched for the search term.
+    /** A \c FULLTEXT index must be configured for each of these tables/fields.
+     *  \see ext_tables_addon.sql
+     */
+    private static $extra_fields = array(
+#        'tx_newspaper_extra_textbox' => array('title', 'bodytext'),
+#        'tx_newspaper_extra_image' => array('title', 'kicker', 'caption'),
+#        'tx_newspaper_extra_bio' => array('author_name', 'bio_text'),
+    );
 
-	/// Whether to log search terms
-	private static $log_searches = false;
-
-	/// Whether to log search results
-	private static $log_results = true;
-
-	/// Path to log file
-	private static $log_file = '/www/onlinetaz/logs/search.log';
-
-	/// Words which are excluded from searches
-	/** \todo this is just a by-pass until the mysql stopword problem is solved
-	 */
-	const globally_excluded_words = ",aber,als,am,an,auch,auf,aus,bei,
-			das,dass,dem,den,der,des,die,doch,dpa,ein,eine,einem,einer,er,es,im,
-			in,ist,man,mit,nach,nicht,oder,sein,sich,sie,sind,so,und,von,vor,wenn,
-			wie,wird,zu,zum,zur";
+    /// Words which are excluded from searches
+    /** \todo this is just a by-pass until the mysql stopword problem is solved
+     */
+    const globally_excluded_words = ",aber,als,am,an,auch,auf,aus,bei,
+            das,dass,dem,den,der,des,die,doch,dpa,ein,eine,einem,einer,er,es,im,
+            in,ist,man,mit,nach,nicht,oder,sein,sich,sie,sind,so,und,von,vor,wenn,
+            wie,wird,zu,zum,zur";
 
 
-	/// Definition of umlauts which MySQL cannot \c MATCH case-insensitively
-	private static $umlauts = array (
-		'ä' => 'Ä', 'ö' => 'Ö', 'ü' => 'Ü', 'Ä' => 'ä', 'Ö' => 'ö', 'Ü' => 'ü'
-	);
+    /// Definition of umlauts which MySQL cannot \c MATCH case-insensitively
+    private static $umlauts = array (
+        'ä' => 'Ä', 'ö' => 'Ö', 'ü' => 'Ü', 'Ä' => 'ä', 'Ö' => 'ö', 'Ü' => 'ü'
+    );
 
     private static $sort_methods = array('compareArticlesByScore', 'compareArticlesByDate');
 
@@ -99,46 +90,46 @@ class tx_newspaper_Search {
      *  Performs the search on all articles.
      *
      *  Also searches the configured Extras (as in \c self::$extra_fields) for
-	 *  the term. The search ist executed once for every configured Extra table
-	 *  and the found results are then sorted in PHP.
-	 *
-	 *  That implies that all search results must be read from DB (at least
-	 *  their UIDs), so that the sorting of results where the Extras differ can
-	 *  be inserted into the list of results and sorted.
-	 *
-	 *  The following attributes, member variables and GET variables are
-	 *  referenced, directly or indirectly, in this function:
-	 *  - evaluated in getSections():
-	 *    - attribute 'sections'	(set in BE)
-	 *    - $this->section		(GET parameter, read in constructor)
-	 *  - attribute 'tags'		(set in BE)
-	 *  - evaluated in searchWhereClause():
-	 *    - $this->search_lifetime
-	 *    - $this->start_day, $this->start_month, $this->start_year
-	 *    - $this->end_day, $this->end_month, $this->end_year
-	 *    - evaluated in isExcludedWord():
-	 *      - $this->excluded_words
-	 *      - self::$globally_excluded_words
-	 *    - evaluated in umlautCaseInsensitiveMatch():
-	 *      - self::$umlauts
-	 *      - self::score_limit
-	 *  - self::max_search_results
-	 *  - getNumResultsPerPage()
-	 *  - evaluated in compareArticles():
-	 *    - \b Todo: check whether to sort by date or relevance
-	 *    - evaluated in totalScore():
-	 *      - self::title_score_factor
+     *  the term. The search ist executed once for every configured Extra table
+     *  and the found results are then sorted in PHP.
+     *
+     *  That implies that all search results must be read from DB (at least
+     *  their UIDs), so that the sorting of results where the Extras differ can
+     *  be inserted into the list of results and sorted.
+     *
+     *  The following attributes, member variables and GET variables are
+     *  referenced, directly or indirectly, in this function:
+     *  - evaluated in getSections():
+     *    - attribute 'sections'    (set in BE)
+     *    - $this->section        (GET parameter, read in constructor)
+     *  - attribute 'tags'        (set in BE)
+     *  - evaluated in searchWhereClause():
+     *    - $this->search_lifetime
+     *    - $this->start_day, $this->start_month, $this->start_year
+     *    - $this->end_day, $this->end_month, $this->end_year
+     *    - evaluated in isExcludedWord():
+     *      - $this->excluded_words
+     *      - self::$globally_excluded_words
+     *    - evaluated in umlautCaseInsensitiveMatch():
+     *      - self::$umlauts
+     *      - self::score_limit
+     *  - self::max_search_results
+     *  - getNumResultsPerPage()
+     *  - evaluated in compareArticles():
+     *    - \b Todo: check whether to sort by date or relevance
+     *    - evaluated in totalScore():
+     *      - self::title_score_factor
      *      - self::extra_score_factor
-	 *  - evaluated in logSearch():
-	 *    - self::$log_searches
-	 *    - self::$logfile
-	 *    - self::$log_results
-	 *
-	 *  @param string $search_term The word(s) for which the search is performed
+     *  - evaluated in logSearch():
+     *    - self::$log_searches
+     *    - self::$logfile
+     *    - self::$log_results
+     *
+     *  @param string $search_term The word(s) for which the search is performed
      *  @param int $start Index of first article, for paging
      *  @param int $number Number of returned articles (default: all), for paging
-	 *  @return tx_newspaper_Article[] articles found
-	 */
+     *  @return tx_newspaper_Article[] articles found
+     */
     public function searchArticles($search_term, $start = 0, $number = 0) {
 
         $search_term = $GLOBALS['TYPO3_DB']->quoteStr($search_term, self::article_table);
@@ -161,9 +152,7 @@ class tx_newspaper_Search {
                       '   ON ' . self::extra_table . '.uid = ' . self::article_extra_mm . '.uid_foreign';
         }
 
-        $limit = '';
-        if ($number) $limit = intval($start) . ',' . intval($number);
-        elseif ($start) $limit = intval($start);
+        $limit = $this->getLimitString($number, $start);
 
         $this->callSearchHooks($search_term, $table, $where, $limit);
 
@@ -180,18 +169,19 @@ class tx_newspaper_Search {
         return $return;
     }
 
-    private static $search_hooks = array();
+    /**
+     *  A hook to change table definitions, conditions, or the LIMIT string.
+     *  The registered functions must take the form
+     *  \c function($search_term, &$table, &$where, &$limit)
+     *
+     *  @param callback $callback The registered function
+     */
     public static function registerSearchHook($callback) {
         if (is_callable($callback)) {
             self::$search_hooks[] = $callback;
         }
     }
-
-    private function callSearchHooks($search_term, &$table, &$where, &$limit) {
-        foreach (self::$search_hooks as $hook) {
-            $hook($search_term, $table, $where, $limit);
-        }
-    }
+    private static $search_hooks = array();
 
     public function getNumArticles() { return $this->num_results; }
 
@@ -228,11 +218,11 @@ class tx_newspaper_Search {
     }
 
     /// Gets sections the search is restricted to
-	/** \return UIDs of the sections as comma separated list usable in an SQL statement
-	 */
-	private function getSections() {
-		return $this->sections;
-	}
+    /** \return UIDs of the sections as comma separated list usable in an SQL statement
+     */
+    private function getSections() {
+        return $this->sections;
+    }
 
     private static function getFieldsSQL($search_term) {
         return self::article_table . '.uid, ' .
@@ -244,7 +234,6 @@ class tx_newspaper_Search {
     }
 
     private function addSectionSQL(&$table, &$where) {
-        tx_newspaper::devlog("addSectionSQL", $this->getSections());
         if (!$this->hasSectionRestriction()) return;
 
         $table .= ' JOIN ' . self::article_section_mm .
@@ -267,6 +256,18 @@ class tx_newspaper_Search {
                 '   ON ' . self::article_table . '.uid = ' . self::article_tag_mm . '.uid_local';
 
         $where .= ' AND ' . self::article_tag_mm . '.uid_foreign IN (' . $this->tags . ')';
+    }
+
+    private function getLimitString($number, $start) {
+        if ($number) return intval($start) . ',' . intval($number);
+        elseif ($start) return intval($start);
+        return '';
+    }
+
+    private function callSearchHooks($search_term, &$table, &$where, &$limit) {
+        foreach (self::$search_hooks as $hook) {
+            $hook($search_term, $table, $where, $limit);
+        }
     }
 
     private function searchInExtras($table, $search_term, $where) {
@@ -318,13 +319,13 @@ class tx_newspaper_Search {
         return $return;
     }
 
-    ///	Assembles a SQL \c WHERE - clause to search for the supplied search term
-	/** \param $term the search term to look for.
-	 *  \param $field_list The fields in which to search.
-	 *
-	 *  \return \c WHERE - clause as string.
-	 */
-	private function searchWhereClause($term, array $field_list) {
+    ///    Assembles a SQL \c WHERE - clause to search for the supplied search term
+    /** \param $term the search term to look for.
+     *  \param $field_list The fields in which to search.
+     *
+     *  \return \c WHERE - clause as string.
+     */
+    private function searchWhereClause($term, array $field_list) {
 
         $where = $this->getTimeClauseForSearch();
 
@@ -346,12 +347,12 @@ class tx_newspaper_Search {
         return $this->relatedSearchWhereClause('AND', $term, $field_list) . '1';
     }
 
-    ///	Assemble conditions on search terms
+    ///    Assemble conditions on search terms
     private function relatedSearchWhereClause($relation, $term, $field_list) {
         $where = '';
         foreach (explode(' ', $term) as $current_term) {
             if (!$current_term) continue;
-            //	don't search for excluded words
+            //    don't search for excluded words
             if (!$this->isExcludedWord($current_term)) {
                 $where .= $this->umlautCaseInsensitiveMatch($current_term, $field_list) . " $relation ";
             }
@@ -398,7 +399,7 @@ class tx_newspaper_Search {
         return $articles;
     }
 
-    ///	Write the requested search term and the search results to a log file.
+    ///    Write the requested search term and the search results to a log file.
     /** The behavior of this function is controlled by self::$log_searches and
      *  self::$log_results. If self::$log_results is \c false, the search
      *  results are not logged. If self::$log_searches is \c false, nothing is
@@ -408,38 +409,8 @@ class tx_newspaper_Search {
      *  \param $results Found articles
      */
     protected function logSearch($search, array $results = array()) {
-
-		if (!self::$log_searches) return;
-
-		$log = new tx_newspaper_File(self::$log_file, 'a');
-
-	    $log->write('Search term: ' . $search . "\n");
-
-        $this->logResults($log, $results);
-	}
-
-    private function logResults(tx_newspaper_File $log, $results) {
-
-        if (!self::$log_results) return;
-
-        $log->write('Results:' . "\n");
-        if ($results) {
-            foreach ($results as $result) {
-                $this->logResult($log, $result);
-            }
-        } else {
-            $log->write('    None!' . "\n");
-        }
-    }
-
-    private function logResult(tx_newspaper_File $log, $result) {
-        if (!($result instanceof tx_newspaper_ArticleIface)) {
-            $log->write('    Not an Article: ' . $result . "\n");
-        } else {
-            $log->write(
-                '    Article ' . $result->getUid() . ': ' . $result->getAttribute('title') . "\n"
-            );
-        }
+        $logger = new tx_newspaper_SearchLogger();
+        $logger->log($search, $results);
     }
 
     private function getTimeClauseForSearch() {
@@ -458,32 +429,32 @@ class tx_newspaper_Search {
         return $where;
     }
 
-	///	Generates a \c MATCH - clause recognizing umlauts regardless of their case
-	/** Because umlauts are not in the latin1-charset, MySQL does not know their
-	 *  respective upper- and lowercase versions. Because we want a case-
-	 *  insensitive search, we must assemble the matches agains upper or lower
-	 *  case separately and match against both.
-	 *
-	 *  \param $search_term The term which is to be matched case-insensitively.
-	 *  \param $field_list The fields in which to search.
-	 *
-	 *  \return SQL clause matching \p $field_list against \p $search_term.
-	 */
-	private function umlautCaseInsensitiveMatch($search_term, array $field_list) {
-		$ret = '(';
-		foreach (array_keys(self::$umlauts) as $replacableChar) {
-			if (strpos($search_term, $replacableChar) !== false) {
-				$ret .= self::matchPhrase(
+    ///    Generates a \c MATCH - clause recognizing umlauts regardless of their case
+    /** Because umlauts are not in the latin1-charset, MySQL does not know their
+     *  respective upper- and lowercase versions. Because we want a case-
+     *  insensitive search, we must assemble the matches agains upper or lower
+     *  case separately and match against both.
+     *
+     *  \param $search_term The term which is to be matched case-insensitively.
+     *  \param $field_list The fields in which to search.
+     *
+     *  \return SQL clause matching \p $field_list against \p $search_term.
+     */
+    private function umlautCaseInsensitiveMatch($search_term, array $field_list) {
+        $ret = '(';
+        foreach (array_keys(self::$umlauts) as $replacableChar) {
+            if (strpos($search_term, $replacableChar) !== false) {
+                $ret .= self::matchPhrase(
                             self::searchTermWithReplacedUmlaut($replacableChar, $search_term),
                             $field_list
                         ) . ' OR ';
-			}
-		}
-		$ret .= self::matchPhrase(mysql_real_escape_string(trim($search_term)), $field_list);
-		$ret .=')';
+            }
+        }
+        $ret .= self::matchPhrase(mysql_real_escape_string(trim($search_term)), $field_list);
+        $ret .=')';
 
-		return $ret;
-	}
+        return $ret;
+    }
 
     private static function matchPhraseWithUTF8FuckupWorkedAround($match_against, array $field_list) {
         return self::matchPhrase($match_against, $field_list) . ' OR ' .
@@ -492,7 +463,7 @@ class tx_newspaper_Search {
 
     private static function matchPhrase($match_against, array $field_list) {
         return 'MATCH (' . implode(', ', $field_list) . ')' .
-	           ' AGAINST (\'' . $match_against . '\') > ' . self::getScoreLimit();
+               ' AGAINST (\'' . $match_against . '\') > ' . self::getScoreLimit();
     }
 
     private static function getScoreLimit() {
@@ -512,50 +483,49 @@ class tx_newspaper_Search {
     }
 
 
-    ///	Checks whether the word is excluded from search terms.
-	/** Excluded words are silently dropped from the search words.
-	 *
-	 *  \param $term Word to check
-	 *  \return \c true if \p $term is a word that shouldn't be searched for
-	 *
-	 *  \todo check a SQL table for excluded words (do that in __construct())
-	 */
-	private function isExcludedWord($term) {
-		$excluded = self::globally_excluded_words;
+    ///    Checks whether the word is excluded from search terms.
+    /** Excluded words are silently dropped from the search words.
+     *
+     *  \param $term Word to check
+     *  \return \c true if \p $term is a word that shouldn't be searched for
+     *
+     *  \todo check a SQL table for excluded words (do that in __construct())
+     */
+    private function isExcludedWord($term) {
+        $excluded = self::globally_excluded_words;
 
         foreach (explode(',', $excluded) as $word) {
             if (strtoupper(trim($word)) == strtoupper(trim($term))) {
                 return true;
             }
-		}
+        }
 
-		return false;
-	}
+        return false;
+    }
 
- 	/// Determine which tx_newspaper_Article comes first in search results.
- 	/** Supplied as parameter to \c usort() in searchArticles().
- 	 *  This function may be overridden or reimplemented to reflect changing
- 	 *  requirements for the sorting of articles.
- 	 *
- 	 *  @param $art1 first tx_newspaper_Article to compare in the form \code
- 	 * 		array(
- 	 * 			'uid' => tx_newspaper_Article UID
- 	 * 			'title_score' => MATCH score on self::$title_fields
- 	 * 			'text_score' => MATCH score on self::$text_fields
- 	 * 			'extra_score' => MATCH score on self::$extra_fields
- 	 * 		) \endcode
- 	 *  @param $art2 second tx_newspaper_Article to compare, same format as
- 	 *  	\p $art1.
- 	 *  @return int < 0 if \p $art1 comes before \p $art2, > 0 if it comes after,
- 	 * 			== 0 if their position is the same.
- 	 *
- 	 *  \todo take into account the possibility to sort by publishing date.
- 	 */
-	private static function compareArticles(array $art1, array $art2) {
-
+     /// Determine which tx_newspaper_Article comes first in search results.
+     /** Supplied as parameter to \c usort() in searchArticles().
+      *  This function may be overridden or reimplemented to reflect changing
+      *  requirements for the sorting of articles.
+      *
+      *  @param $art1 first tx_newspaper_Article to compare in the form \code
+      *         array(
+      *             'uid' => tx_newspaper_Article UID
+      *             'title_score' => MATCH score on self::$title_fields
+      *             'text_score' => MATCH score on self::$text_fields
+      *             'extra_score' => MATCH score on self::$extra_fields
+      *         ) \endcode
+      *  @param $art2 second tx_newspaper_Article to compare, same format as
+      *      \p $art1.
+      *  @return int < 0 if \p $art1 comes before \p $art2, > 0 if it comes after,
+      *             == 0 if their position is the same.
+      *
+      *  \todo take into account the possibility to sort by publishing date.
+      */
+    private static function compareArticles(array $art1, array $art2) {
         $method = self::$sort_method;
         return self::$method($art1, $art2);
-	}
+    }
 
     private static function compareArticlesByScore(array $art1, array $art2) {
         return self::totalScore($art2)-self::totalScore($art1);
@@ -573,22 +543,22 @@ class tx_newspaper_Search {
         return true;
     }
 
-	///	Calculates the cumulative score on SQL \c MATCH for title, text and extras
-	/** \param $article Article to evaluate in the form \code
- 	 * 		array(
- 	 * 			'uid' => tx_newspaper_Article UID
- 	 * 			'title_score' => MATCH score on self::$title_fields
- 	 * 			'text_score' => MATCH score on self::$text_fields
- 	 * 			'extra_score' => MATCH score on self::$extra_fields
- 	 * 		) \endcode
- 	 * \return Total score adjusted for the relevance weights on title and
- 	 * 		Extras
- 	 */
-	private static function totalScore(array $article) {
-		return self::title_score_weight*$article['title_score'] +
-				$article['text_score'] +
-				self::extra_score_weight*$article['extra_score'];
-	}
+    ///    Calculates the cumulative score on SQL \c MATCH for title, text and extras
+    /** \param $article Article to evaluate in the form \code
+      *         array(
+      *             'uid' => tx_newspaper_Article UID
+      *             'title_score' => MATCH score on self::$title_fields
+      *             'text_score' => MATCH score on self::$text_fields
+      *             'extra_score' => MATCH score on self::$extra_fields
+      *         ) \endcode
+      * \return Total score adjusted for the relevance weights on title and
+      *         Extras
+      */
+    private static function totalScore(array $article) {
+        return self::title_score_weight*$article['title_score'] +
+                $article['text_score'] +
+                self::extra_score_weight*$article['extra_score'];
+    }
 
 
     /// Assemble conditions for publishing date
@@ -604,8 +574,8 @@ class tx_newspaper_Search {
         return $this->end_date->getTimestamp();
     }
 
-	/// Articles older than this are excluded globally
-	private $search_lifetime = 0;
+    /// Articles older than this are excluded globally
+    private $search_lifetime = 0;
 
     private $start_date = null;
     private $end_date = null;
@@ -617,8 +587,59 @@ class tx_newspaper_Search {
 
     private static $sort_method = 'compareArticlesByScore';
 
-	///	Number of results returned by the search
-	private $num_results = 0;
+    ///    Number of results returned by the search
+    private $num_results = 0;
 
+}
+
+class tx_newspaper_SearchLogger {
+
+    /// Whether to log search terms
+    private static $log_searches = false;
+
+    /// Whether to log search results
+    private static $log_results = true;
+
+    /// Path to log file
+    private static $log_file = '/www/onlinetaz/logs/search.log';
+
+    public function __construct() {
+        if (!self::$log_searches) return;
+        $this->log = new tx_newspaper_File(self::$log_file, 'a');
+    }
+
+    public function log($search, array $results) {
+        if (is_null($this->log)) return;
+        $this->log->write('Search term: ' . $search . "\n");
+        $this->logResults($results);
+    }
+
+    private function logResults($results) {
+
+        if (!self::$log_results || is_null($this->log)) return;
+
+        $this->log->write('Results:' . "\n");
+        if ($results) {
+            foreach ($results as $result) {
+                $this->logResult($result);
+            }
+        } else {
+            $this->log->write('    None!' . "\n");
+        }
+    }
+
+    private function logResult($result) {
+        if (is_null($this->log)) return;
+        if (!($result instanceof tx_newspaper_ArticleIface)) {
+            $this->log->write('    Not an Article: ' . $result . "\n");
+        } else {
+            $this->log->write(
+                '    Article ' . $result->getUid() . ': ' . $result->getAttribute('title') . "\n"
+            );
+        }
+    }
+
+    /** @var tx_newspaper_File */
+    private $log = null;
 
 }
