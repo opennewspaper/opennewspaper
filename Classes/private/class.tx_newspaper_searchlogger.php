@@ -1,6 +1,6 @@
 <?php
 
-require_once('private/class.tx_newspaper_file.php');
+require_once('class.tx_newspaper_file.php');
 
 /**
  * @author Lene Preuss <lene.preuss@gmail.com>
