@@ -24,15 +24,15 @@ class tx_newspaper_module2_Filter {
     }
 
     public function getArticleRecords() {
+//tx_newspaper::devlog('Filter ProdList/Article browser', array('table refs' => $this->query_builder->getTableReferences(), 'where' => $this->query_builder->getWhere()));
         $records = tx_newspaper::selectRows(
         	'DISTINCT tx_newspaper_article.*', // Make sure articles are list once only, even if assigned to multiple sections
         	$this->query_builder->getTableReferences(),
         	$this->query_builder->getWhere(),
         	'',
-        	'tstamp DESC',
+        	'tx_newspaper_article.tstamp DESC',
         	intval($this->filter_values['startPage']) * intval($this->filter_values['step']) . ', ' . (intval($this->filter_values['step']))
        	);
-//tx_newspaper::devlog('Filter ProdList/Article browser', array('table' => $this->query_builder->getTables(), 'where' => $this->query_builder->getWhere()));
         return $records;
     }
 

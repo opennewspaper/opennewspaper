@@ -67,6 +67,7 @@ CREATE TABLE tx_newspaper_article (
     FULLTEXT KEY title (title,kicker,title_list,kicker_list),
     FULLTEXT KEY text (teaser,teaser_list,bodytext,author),
     KEY articletype_id (articletype_id),
+    FULLTEXT KEY author_text (author),
     INDEX author (author(64))
 );
 

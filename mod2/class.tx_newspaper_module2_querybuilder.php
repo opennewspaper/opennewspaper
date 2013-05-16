@@ -178,7 +178,8 @@ class tx_newspaper_module2_QueryBuilder {
         $author = trim($this->input['author']);
         if (!$author) return;
 
-        $this->addExtendedAuthorConditionHooks($author, 'author LIKE "%' . addslashes($author) . '%"');
+        $condition = 'MATCH(tx_newspaper_article.author) AGAINST (\'' . addslashes($author) .'\' IN BOOLEAN MODE)';
+        $this->addExtendedAuthorConditionHooks($author, $condition);
 
     }
 
