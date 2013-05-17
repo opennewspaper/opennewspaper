@@ -155,6 +155,8 @@ class tx_newspaper_Search {
 
         $this->callSearchHooks($search_term, $table, $where, $limit);
 
+        $where = "( $where )";
+
         $articles = $this->getSearchResultsForClass($fields, $table, $where, $limit);
 
         if (!self::enable_quick_hack) {
