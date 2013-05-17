@@ -420,7 +420,7 @@ class tx_newspaper  {
     public static function tidyHtmlString($text) {
         if (class_exists('tidy')) {
             $tidy = new tidy();
-            $text = $tidy->repairString($text, array('show-body-only' => true));
+            $text = $tidy->repairString($text, array('show-body-only' => true, 'input-encoding' => 'utf8', 'output-encoding' => 'utf8'));
         }
         return $text;
    	}
