@@ -586,7 +586,7 @@ class tx_newspaper  {
                 '<p><strong>' . substr(strip_tags($title), 0, self::description_length-strlen($description)) . '</strong></p>';
         }
         return ($description?  "<p>$description</p>": '') .
-            '<p><strong>' . $title . '</strong>' .
+            '<p><strong>' . $title . '</strong> ' .
             substr(strip_tags($text), 0, self::description_length-strlen($description)-strlen($title)) . '</p>';
     }
 
