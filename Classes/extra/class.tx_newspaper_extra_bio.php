@@ -52,13 +52,11 @@ class tx_newspaper_extra_Bio extends tx_newspaper_Extra {
 
     /// A description to identify the bio box in the BE. Shows the author's name and the start of the text.
 	public function getDescription() {
-		return substr(
-			($this->getAttribute('short_description')? $this->getAttribute('short_description') . '<br />' : '') .
-			'<strong>' . $this->getAttribute('author_name') . '</strong> ' .
-				strip_tags($this->getAttribute('bio_text')),
-			0, self::description_length+2*strlen('<strong>')+1) .
-			(strlen($this->getAttribute('author_name') . ' ' . strip_tags($this->getAttribute('bio_text'))) > self::description_length?
-				'...': '');
+        return tx_newspaper::formatDescription(
+            $this->getAttribute('author_name'),
+            $this->getAttribute('bio_text'),
+            $this->getAttribute('short_description')
+        );
 	}
 
 	public function getSearchFields() {

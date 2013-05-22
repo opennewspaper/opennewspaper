@@ -76,7 +76,7 @@ class tx_newspaper_Extra_ComboLinkBox extends tx_newspaper_Extra {
 
     /// Displays the Tag Zone operating on.
     public function getDescription() {
-        return "<p><strong>" . $this->getAttribute('title') . "</strong></p>" . "<p>" . $this->getAttribute('short_description') . "</p>";
+        return tx_newspaper::formatDescription($this->getAttribute('title'), '', $this->getAttribute('short_description'));
     }
 
     public static function getModuleName() {

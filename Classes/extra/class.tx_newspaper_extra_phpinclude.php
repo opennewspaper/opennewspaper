@@ -21,8 +21,6 @@ class tx_newspaper_IncludePathStack {
  */
 class tx_newspaper_Extra_PHPInclude extends tx_newspaper_Extra {
 
-    const description_length = 50;
-
     public function __construct($uid = 0) { if ($uid) parent::__construct($uid); }
 
     public function __toString() {
@@ -58,10 +56,7 @@ class tx_newspaper_Extra_PHPInclude extends tx_newspaper_Extra {
 
 
     public function getDescription() {
-        return substr(
-            $this->getAttribute('short_description'),
-            0, self::description_length + 2*strlen('<strong>') + 1
-        );
+        return substr($this->getAttribute('short_description'), 0, tx_newspaper::description_length);
     }
 
     /// Title for module

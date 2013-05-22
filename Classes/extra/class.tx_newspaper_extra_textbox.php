@@ -14,7 +14,6 @@ require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_extra.ph
  */
 class tx_newspaper_Extra_Textbox extends tx_newspaper_Extra {
 
-    const description_length = 50;
     /// The field which carries the image file
     const image_file_field = 'image_file';
 
@@ -59,19 +58,7 @@ class tx_newspaper_Extra_Textbox extends tx_newspaper_Extra {
     /** Displays the title and the beginning of the text.
      */
     public function getDescription() {
-        return substr(
-            $this->getAttribute('short_description') .
-            ($this->getAttribute('short_description')? '<br />' : '') .
-            '<strong>' . $this->getAttribute('title') . '</strong> ' . strip_tags($this->getAttribute('bodytext')),
-            0, self::description_length+2*strlen('<strong>')+1);
-    }
-
-    public static function description($title, $text, $description) {
-        if (strlen($description) >= self::description_length) return substr($description, 0, self::description_length);
-        if (strlen($description) + strlen($title) >= self::description_length) {
-            return $description . ($description? '<br />': '') . '<strong>' . substr($title, 0, self::description_length-strlen($description)) . '</strong>';
-        }
-        return $description . ($description? '<br />': '') . '<strong>' . $title . '</strong>' . substr($text, 0, self::description_length-strlen($description)-strlen($title));
+        return tx_newspaper::formatDescription($this->getAttribute('title'), $this->getAttribute('bodytext'), $this->getAttribute('short_description'));
     }
 
     /// title for module

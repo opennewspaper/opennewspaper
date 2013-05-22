@@ -39,6 +39,9 @@ class tx_newspaper  {
     const toLower = 'toLower';
     const toUpper = 'toUpper';
 
+    /// length of the description for extras in the BE
+    const description_length = 50;
+
     ////////////////////////////////////////////////////////////////////////////
     //      DB functions
     ////////////////////////////////////////////////////////////////////////////
@@ -555,6 +558,37 @@ class tx_newspaper  {
    		return $removeXSS->RemoveXSS($string);
    	}
 
+    /**
+     * Let Typo3 convert links in RTE data
+     * @param string $text unconverted RTE data
+     * @return string Converted RTE data
+     */
+    public static function convertRteField($text) {
+      require_once(PATH_tslib . 'class.tslib_pibase.php');
+
+      // prepare some Typo3 frontend object
+      tx_newspaper::buildTSFE();
+
+      /** @var $pibase tslib_pibase */
+      $pibase = t3lib_div::makeInstance('tslib_pibase');
+      $pibase->cObj = $GLOBALS['TSFE']->cObj;
+
+      return $pibase->pi_RTEcssText($text);
+    }
+
+    /**
+     *  Safely format an Extra's description for display in the BE, generating HTML that is always™ valid.
+     */
+    public static function formatDescription($title, $text, $description) {
+        if (strlen($description) >= self::description_length) return substr($description, 0, self::description_length);
+        if (strlen($description) + strlen($title) >= self::description_length) {
+            return ($description?  "<p>$description</p>": '') .
+                '<p><strong>' . substr(strip_tags($title), 0, self::description_length-strlen($description)) . '</strong></p>';
+        }
+        return ($description?  "<p>$description</p>": '') .
+            '<p><strong>' . $title . '</strong>' .
+            substr(strip_tags($text), 0, self::description_length-strlen($description)-strlen($title)) . '</p>';
+    }
 
     /**
      * Returns an integer from a three part version number, eg '4.12.3' -> 4012003
@@ -764,24 +798,6 @@ class tx_newspaper  {
     $link = self::typolink('', $params, $conf);
     return $link['href'];
   }
-
-    /**
-     * Let Typo3 convert links in RTE data
-     * @param string $text unconverted RTE data
-     * @return string Converted RTE data
-     */
-    public static function convertRteField($text) {
-      require_once(PATH_tslib . 'class.tslib_pibase.php');
-
-      // prepare some Typo3 frontend object
-      tx_newspaper::buildTSFE();
-
-      /** @var $pibase tslib_pibase */
-      $pibase = t3lib_div::makeInstance('tslib_pibase');
-      $pibase->cObj = $GLOBALS['TSFE']->cObj;
-
-      return $pibase->pi_RTEcssText($text);
-    }
 
     ////////////////////////////////////////////////////////////////////////////
 

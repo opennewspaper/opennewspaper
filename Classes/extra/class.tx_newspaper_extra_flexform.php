@@ -8,8 +8,6 @@ require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_extra.ph
 
 class tx_newspaper_Extra_Flexform extends tx_newspaper_Extra {
 
-	const description_length = 50;
-
     // Flexform folder types
     const FF_TYPE_ALL = 1;
     const FF_TYPE_ACTIVE = 2;
@@ -86,12 +84,11 @@ class tx_newspaper_Extra_Flexform extends tx_newspaper_Extra {
 
 
     public function getDescription() {
-		if ($desc = $this->getAttribute('short_description')) {
-		} elseif ($desc = $this->getAttribute('notes')) {
-		} else {
-            $desc =  self::extractDsFileTitle($this->getAttribute('ds_file'));// Show file name only (cut off xml file extension)
-		}
-		return substr($desc, 0, self::description_length + 2*strlen('<strong>') + 1);
+        return tx_newspaper::formatDescription(
+            $this->getAttribute('notes'),
+            self::extractDsFileTitle($this->getAttribute('ds_file')),
+            $this->getAttribute('short_description')
+        );
 	}
 
 		/// title for module

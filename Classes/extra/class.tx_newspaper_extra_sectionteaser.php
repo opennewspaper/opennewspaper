@@ -8,8 +8,6 @@ require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_extra.ph
 
 class tx_newspaper_Extra_Sectionteaser extends tx_newspaper_Extra {
 
-	const description_length = 50;
-
 	/// Constructor
 	public function __construct($uid = 0) {
 		if ($uid) {
@@ -80,9 +78,7 @@ class tx_newspaper_Extra_Sectionteaser extends tx_newspaper_Extra {
 		} else {
 			return '';
 		}
-		return substr(
-			$desc,
-			0, self::description_length+2*strlen('<strong>')+1);
+		return substr($desc,0, tx_newspaper::description_length);
 	}
 
     private function messageInvalidSection() {

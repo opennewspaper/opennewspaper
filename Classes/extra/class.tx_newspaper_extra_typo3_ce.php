@@ -142,8 +142,8 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
 	public function getDescription() {
 		try {
 			$row = tx_newspaper::selectOneRow('*', 'tt_content', 'uid = ' . $this->getAttribute('content_elements'));
-			if ($row['header']) return $row['header'];
-			if ($row['titleText']) return $row['titleText'];
+			if ($row['header']) return tx_newspaper::formatDescription($row['header'], '', $this->getAttribute('short_description'));
+			if ($row['titleText']) return tx_newspaper::formatDescription($row['titleText'], '', $this->getAttribute('short_description'));
 		} catch (tx_newspaper_DBException $e) { }
 
 		return $this->getAttribute('short_description');
