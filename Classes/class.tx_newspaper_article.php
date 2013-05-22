@@ -14,7 +14,7 @@ require_once(PATH_typo3conf . 'ext/newspaper/Classes/private/class.tx_newspaper_
 require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_extra.php');
 require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_tag.php');
 require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_smarty.php');
-
+require_once('private/class.tx_newspaper_articletextparagraphs.php');
 
 /// An article for the online newspaper
 
@@ -33,7 +33,7 @@ require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_smarty.p
 class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper_ArticleIface, tx_newspaper_WritesLog {
 
 
-    // @todo: Remove these 2 functions, see #2068
+    // @todo: Remove these 2 functions, see #2069
     public function getTazAutor() {
       $author = tx_newspaper_DB::getInstance()->selectRows(
           '*',
@@ -270,7 +270,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         /// Default articles should never contain text that is displayed.
         if ($this->getAttribute('is_template')) return '';
 
-        tx_newspaper_ExecutionTimer::start();
+        $timer = tx_newspaper_ExecutionTimer::create();
 
         $this->prepare_render($template_set);
 
@@ -278,18 +278,12 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         $text_paragraphs = self::splitIntoParagraphs($bodytext);
         $paragraphs = $this->getTextParagraphsWithSpacing($text_paragraphs);
 
-        $this->addExtrasWithBadParagraphNumbers($paragraphs, sizeof($text_paragraphs));
-
-        $this->assignSmartyVariables($paragraphs);
+        $this->assignSmartyVariables($paragraphs->toArray());
 
         // Add array for redirecting URL (if article is of type "Article as URL")
         $this->smarty->assign('redirectURL', tx_newspaper::getTypo3UrlArray($this->getAttribute('url')));
 
-        $ret = $this->smarty->fetch($this);
-
-        tx_newspaper_ExecutionTimer::logExecutionTime();
-
-        return $ret;
+        return $this->smarty->fetch($this);
     }
 
     protected function prepare_render(&$template_set = '') {
@@ -365,10 +359,12 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     //
     ////////////////////////////////////////////////////////////////////////////
 
-    /// Get the list of tx_newspaper_Extra associated with this Article in sorted order
     /**
-     *  The Extras are sorted by attribute \c paragraph first and
-     *  \c position second.
+     *  Get the list of tx_newspaper_Extra associated with this Article in sorted order.
+     *
+     *  The Extras are sorted by attribute \c paragraph first and \c position second.
+     *
+     *  @return tx_newspaper_Extra[] list of extras associated with this Article in sorted order
      */
     public function getExtras() {
         if (!$this->extras) {
@@ -1271,16 +1267,11 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     }
 
     private function getTextParagraphsWithSpacing($text_paragraphs) {
-        $converted_paragraphs = array();
-        foreach ($text_paragraphs as $paragraph) {
-            $converted_paragraphs[] = self::convertRTELinks($paragraph);
-        }
-        $paragraphs = $this->assembleTextParagraphs($converted_paragraphs);
-        return $paragraphs;
+        return new tx_newspaper_ArticleTextParagraphs($text_paragraphs, $this);
     }
 
     /// Remove the rest of the \c "<p>" - tag from every line.
-    private static function trimPTags($paragraph) {
+    public static function trimPTags($paragraph) {
         $paragraph = self::trimLeadingKet($paragraph);
 
         /** Each paragraph now should end with a \c "</p>". If it doesn't, the
@@ -1305,16 +1296,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
     private function startsWithHTMLAttribute($paragraph) {
         return preg_match('/^\w+="\w+">/', trim($paragraph));
-    }
-
-    /**
-     *  convertRteField wraps paragraphs in <p></p> again. This function removes
-     *  the p's while keeping the link conversion.
-     */
-    private static function convertRTELinks($paragraph) {
-        $paragraph = tx_newspaper::convertRteField($paragraph);
-        if (substr($paragraph, 0, 3) != '<p>' && substr($paragraph, 0, 3) != '<p ') return $paragraph;
-        return self::trimPTags(substr($paragraph, 2));
     }
 
     /// Get the index of the provided tx_newspaper_Extra in the Extra array
@@ -1418,58 +1399,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         if ($template_set) {
             $this->smarty->setTemplateSet($template_set);
         }
-    }
-
-    /** Assemble the text paragraphs and extras in an array of the form:
-     *  \code
-     *  array(
-     *      $paragraph_number => array(
-     *          "text" => $text_of_paragraph,
-     *          "spacing" => {0, 1, 2, ...},             // for empty paragraphs after text
-     *          "extras" => array(
-     *              $position => array(
-     *                  "extra_name" => get_class(),
-     *                  "content" => $rendered_extra
-     *              ),
-     *              ...
-     *          )
-     *      ),
-     *      ...
-     *  )
-     *  \endcode
-     */
-    private function assembleTextParagraphs(array $text_paragraphs) {
-        $paragraphs = array();
-        $spacing = 0;
-        foreach ($text_paragraphs as $index => $text_paragraph) {
-
-            $paragraph = array();
-            if (trim($text_paragraph)) {
-                $paragraph['text'] = $text_paragraph;
-                $paragraph['spacing'] = intval($spacing);
-                $spacing = 0;
-                foreach ($this->getExtras() as $extra) {
-                    if ($extra->getAttribute('paragraph') == $index ||
-                            sizeof($text_paragraphs) + $extra->getAttribute('paragraph') == $index) {
-                        $paragraph['extras'][$extra->getAttribute('position')] =
-                            self::makeParagraphRepresentationFromExtra($extra);
-                    }
-                }
-                /*  Braindead PHP does not sort arrays automatically, even if
-                 *  the keys are integers. So if you, e.g., insert first $a[4]
-                 *  and then $a[2], $a == array ( 4 => ..., 2 => ...).
-                 *  Thus, you must call ksort.
-                 */
-                if ($paragraph['extras'])
-                    ksort($paragraph['extras']);
-                $paragraphs[] = $paragraph;
-            } else {
-                //  empty paragraph, increase spacing value to next paragraph
-                $spacing++;
-            }
-        }
-
-        return $paragraphs;
     }
 
     /** Make sure all extras are rendered, even those whose \c paragraph
