@@ -35,13 +35,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
     // @todo: Remove these 2 functions, see #2069
     public function getTazAutor() {
-      $author = tx_newspaper_DB::getInstance()->selectRows(
-          '*',
-          'tx_newspapertaz_tazid',
-          'article_uid=' . $this->getUid(),
-          '',
-          'sorting'
-      );
+      $author = $this->getTazAutorArray();
       $authorString = '';
       for ($i = 0; $i < sizeof($author); $i++) {
         $authorString .= $author[$i]['name'];
@@ -274,7 +268,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
         $this->prepare_render($template_set);
 
-        $paragraphs = new tx_newspaper_ArticleTextParagraphs($this->getAttribute('bodytext'), $this->getExtras());
+        $paragraphs = new tx_newspaper_ArticleTextParagraphs($this);
 
         $this->assignSmartyVariables($paragraphs->toArray());
 

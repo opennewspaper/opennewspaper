@@ -8,14 +8,16 @@
  */
 class tx_newspaper_ArticleTextParagraphs {
 
-    public function __construct($text, array $extras) {
-        $this->extras = $extras;
+    /**
+     * @param tx_newspaper_Article $article The article whose text is represented
+     */
+    public function __construct(tx_newspaper_Article $article) {
 
-        foreach (self::splitIntoParagraphs(self::filterUnprintableCharacters($text)) as $paragraph) {
-            $this->text_paragraphs[] = self::convertRTELinks($paragraph);
-        }
+        $this->extras = $article->getExtras();
 
-        $this->assembleTextParagraphs();
+        $this->populateTextParagraphs($article);
+
+        $this->assembleParagraphs();
 
         $this->addExtrasWithBadParagraphNumbers();
     }
@@ -24,11 +26,18 @@ class tx_newspaper_ArticleTextParagraphs {
 
     ////////////////////////////////////////////////////////////////////////////
 
-    private function assembleTextParagraphs() {
+    private function populateTextParagraphs(tx_newspaper_Article $article) {
+        $text = self::filterUnprintableCharacters($article->getAttribute('bodytext'));
+        foreach (self::splitIntoParagraphs($text) as $paragraph) {
+            $this->text_paragraphs[] = self::convertRTELinks($paragraph);
+        }
+    }
+
+    private function assembleParagraphs() {
         foreach ($this->text_paragraphs as $text_paragraph) {
 
             if (trim($text_paragraph)) {
-                $this->paragraphs[] = $this->assembleTextParagraph($text_paragraph);
+                $this->paragraphs[] = $this->assembleParagraph($text_paragraph);
             } else {
                 //  empty paragraph, increase spacing value to next paragraph
                 $this->spacing++;
@@ -36,7 +45,7 @@ class tx_newspaper_ArticleTextParagraphs {
         }
     }
 
-    private function assembleTextParagraph($text_paragraph) {
+    private function assembleParagraph($text_paragraph) {
         $paragraph = array(
             'text' => $text_paragraph,
             'spacing' => intval($this->spacing)
@@ -159,9 +168,10 @@ class tx_newspaper_ArticleTextParagraphs {
     }
 
     private $paragraphs = array();
+
     private $spacing = 0;
     /** @var tx_newspaper_Extra[] */
-    private $extras = null;
+    private $extras = array();
     private $text_paragraphs = array();
 
 }
