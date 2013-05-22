@@ -274,9 +274,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
         $this->prepare_render($template_set);
 
-        $bodytext = self::filterUnprintableCharacters($this->getAttribute('bodytext'));
-        $text_paragraphs = self::splitIntoParagraphs($bodytext);
-        $paragraphs = $this->getTextParagraphsWithSpacing($text_paragraphs);
+        $paragraphs = new tx_newspaper_ArticleTextParagraphs($this->getAttribute('bodytext'), $this->getExtras());
 
         $this->assignSmartyVariables($paragraphs->toArray());
 
@@ -1230,74 +1228,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         return new tx_newspaper_Page($section, $pagetype);
     }
 
-    private static function filterUnprintableCharacters($text) {
-        return preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/u', '', $text);
-    }
-
-    /// Split the article's text into an array, one entry for each paragraph
-    /**
-     *  tx_newspaper_Extra are inserted before or after paragraphs. This function splits
-     *  the article text so the position of a tx_newspaper_Extra can be found.
-     *
-     *  The functionality of this function depends on the way the RTE stores line breaks.
-     *  Currently it breaks the text at \c "<p>/</p>" -pairs and also at line breaks \c ("\n").
-     *
-     *  @attention If the format of line breaks changes, this function must be altered.
-     */
-    protected static function splitIntoParagraphs($text) {
-        /** A text usually starts with a \c "<p>", in that case the first paragraph must be
-         *  removed. It may not be the case though, if so, the first paragraph is meaningful
-         *  and must be kept.
-         */
-        $temp_paragraphs = preg_split('/<p[\s>]/', $text);
-        $paragraphs = array();
-        foreach ($temp_paragraphs as $paragraph) {
-
-            $paragraph = self::trimPTags($paragraph);
-
-            /// Split the paragraph at line breaks.
-            $sub_paragraphs = explode("\n", $paragraph);
-
-            /// Store the pieces in one flat array.
-            foreach ($sub_paragraphs as $sub_paragraph)
-                $paragraphs[] = $sub_paragraph;
-        }
-
-        return $paragraphs;
-    }
-
-    private function getTextParagraphsWithSpacing($text_paragraphs) {
-        return new tx_newspaper_ArticleTextParagraphs($text_paragraphs, $this);
-    }
-
-    /// Remove the rest of the \c "<p>" - tag from every line.
-    public static function trimPTags($paragraph) {
-        $paragraph = self::trimLeadingKet($paragraph);
-
-        /** Each paragraph now should end with a \c "</p>". If it doesn't, the
-         *  text is not well-formed. In any case, we must remove the \c "</p>".
-         */
-        $paragraph = str_replace('</p>', '', $paragraph);
-
-        return $paragraph;
-    }
-    
-    private static function trimLeadingKet($paragraph) {
-        $paragraph_start = strpos($paragraph, '>');
-        if ($paragraph_start !== false) {
-            if ($paragraph_start <= 1 || self::startsWithHTMLAttribute($paragraph)) {
-                $paragraph = substr($paragraph, $paragraph_start + 1);
-            }
-        }
-        $paragraph = trim($paragraph);
-
-        return $paragraph;
-    }
-
-    private function startsWithHTMLAttribute($paragraph) {
-        return preg_match('/^\w+="\w+">/', trim($paragraph));
-    }
-
     /// Get the index of the provided tx_newspaper_Extra in the Extra array
     /** Binary search for an Extra, assuming that \c $this->extras is ordered by
      *  paragraph first and position second.
@@ -1399,29 +1329,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         if ($template_set) {
             $this->smarty->setTemplateSet($template_set);
         }
-    }
-
-    /** Make sure all extras are rendered, even those whose \c paragraph
-     *  attribute is greater than the number of text paragraphs or less
-     *  than its negative.
-     */
-    private function addExtrasWithBadParagraphNumbers(array &$paragraphs, $number_of_text_paragraphs) {
-        foreach ($this->getExtras() as $extra) {
-            if ($extra->getAttribute('paragraph') + $number_of_text_paragraphs < 0) {
-                $paragraphs[0]['extras'][intval($extra->getAttribute('position'))] =
-                    self::makeParagraphRepresentationFromExtra($extra);
-            } else if ($extra->getAttribute('paragraph') >= $number_of_text_paragraphs) {
-                $paragraphs[sizeof($paragraphs)]['extras'][intval($extra->getAttribute('position'))] =
-                    self::makeParagraphRepresentationFromExtra($extra);
-            }
-        }
-    }
-
-    private static function makeParagraphRepresentationFromExtra(tx_newspaper_Extra $extra) {
-        return array(
-            'extra_name' => $extra->getTable(),
-            'content' => $extra->render()
-        );
     }
 
     private function assignSmartyVariables(array $paragraphs) {

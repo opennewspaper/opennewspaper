@@ -8,9 +8,10 @@
  */
 class tx_newspaper_ArticleTextParagraphs {
 
-    public function __construct(array $text_paragraphs, tx_newspaper_Article $article) {
-        $this->article = $article;
-        foreach ($text_paragraphs as $paragraph) {
+    public function __construct($text, array $extras) {
+        $this->extras = $extras;
+
+        foreach (self::splitIntoParagraphs(self::filterUnprintableCharacters($text)) as $paragraph) {
             $this->text_paragraphs[] = self::convertRTELinks($paragraph);
         }
 
@@ -42,7 +43,7 @@ class tx_newspaper_ArticleTextParagraphs {
         );
         $this->spacing = 0;
 
-        foreach ($this->article->getExtras() as $extra) {
+        foreach ($this->extras as $extra) {
             if ($extra->getAttribute('paragraph') == sizeof($this->paragraphs) ||
                 sizeof($this->text_paragraphs) + $extra->getAttribute('paragraph') == sizeof($this->paragraphs)
             ) {
@@ -64,7 +65,7 @@ class tx_newspaper_ArticleTextParagraphs {
      */
     private function addExtrasWithBadParagraphNumbers() {
         $number_of_text_paragraphs = sizeof($this->text_paragraphs);
-        foreach ($this->article->getExtras() as $extra) {
+        foreach ($this->extras as $extra) {
             if ($extra->getAttribute('paragraph') + $number_of_text_paragraphs < 0) {
                 $this->paragraphs[0]['extras'][intval($extra->getAttribute('position'))] =
                     self::makeParagraphRepresentationFromExtra($extra);
@@ -75,6 +76,43 @@ class tx_newspaper_ArticleTextParagraphs {
         }
     }
 
+    private static function filterUnprintableCharacters($text) {
+        return preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/u', '', $text);
+    }
+
+
+    /// Split the article's text into an array, one entry for each paragraph
+    /**
+     *  tx_newspaper_Extra are inserted before or after paragraphs. This function splits
+     *  the article text so the position of a tx_newspaper_Extra can be found.
+     *
+     *  The functionality of this function depends on the way the RTE stores line breaks.
+     *  Currently it breaks the text at \c "<p>/</p>" -pairs and also at line breaks \c ("\n").
+     *
+     *  @attention If the format of line breaks changes, this function must be altered.
+     */
+    private static function splitIntoParagraphs($text) {
+        /** A text usually starts with a \c "<p>", in that case the first paragraph must be
+         *  removed. It may not be the case though, if so, the first paragraph is meaningful
+         *  and must be kept.
+         */
+        $temp_paragraphs = preg_split('/<p[\s>]/', $text);
+        $paragraphs = array();
+        foreach ($temp_paragraphs as $paragraph) {
+
+            $paragraph = self::trimPTags($paragraph);
+
+            /// Split the paragraph at line breaks.
+            $sub_paragraphs = explode("\n", $paragraph);
+
+            /// Store the pieces in one flat array.
+            foreach ($sub_paragraphs as $sub_paragraph)
+                $paragraphs[] = $sub_paragraph;
+        }
+
+        return $paragraphs;
+    }
+
     /**
      *  convertRteField wraps paragraphs in <p></p> again. This function removes
      *  the p's while keeping the link conversion.
@@ -82,7 +120,35 @@ class tx_newspaper_ArticleTextParagraphs {
     private static function convertRTELinks($paragraph) {
         $paragraph = tx_newspaper::convertRteField($paragraph);
         if (substr($paragraph, 0, 3) != '<p>' && substr($paragraph, 0, 3) != '<p ') return $paragraph;
-        return tx_newspaper_Article::trimPTags(substr($paragraph, 2));
+        return self::trimPTags(substr($paragraph, 2));
+    }
+
+    /// Remove the rest of the \c "<p>" - tag from every line.
+    private static function trimPTags($paragraph) {
+        $paragraph = self::trimLeadingKet($paragraph);
+
+        /** Each paragraph now should end with a \c "</p>". If it doesn't, the
+         *  text is not well-formed. In any case, we must remove the \c "</p>".
+         */
+        $paragraph = str_replace('</p>', '', $paragraph);
+
+        return $paragraph;
+    }
+
+    private static function trimLeadingKet($paragraph) {
+        $paragraph_start = strpos($paragraph, '>');
+        if ($paragraph_start !== false) {
+            if ($paragraph_start <= 1 || self::startsWithHTMLAttribute($paragraph)) {
+                $paragraph = substr($paragraph, $paragraph_start + 1);
+            }
+        }
+        $paragraph = trim($paragraph);
+
+        return $paragraph;
+    }
+
+    private function startsWithHTMLAttribute($paragraph) {
+        return preg_match('/^\w+="\w+">/', trim($paragraph));
     }
 
     private static function makeParagraphRepresentationFromExtra(tx_newspaper_Extra $extra) {
@@ -94,8 +160,8 @@ class tx_newspaper_ArticleTextParagraphs {
 
     private $paragraphs = array();
     private $spacing = 0;
-    /** @var tx_newspaper_Article */
-    private $article = null;
+    /** @var tx_newspaper_Extra[] */
+    private $extras = null;
     private $text_paragraphs = array();
 
 }
