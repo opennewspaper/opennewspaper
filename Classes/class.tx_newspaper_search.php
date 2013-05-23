@@ -396,19 +396,7 @@ class tx_newspaper_Search {
     private function getNumResultsForClass($current_fields, $current_table, $current_where) {
 
         $timer = tx_newspaper_ExecutionTimer::create();
-/*
-        $sub_select = tx_newspaper_DB::getInstance()->assembleSelectQuery(
-            "DISTINCT $current_fields",
-            $current_table,
-            $current_where,
-            '',
-            'publish_date DESC'
-        );
-        $results = tx_newspaper_DB::getInstance()->selectRowsDirect(
-            'COUNT(*)', "($sub_select) AS t"
-        );
-        return intval($results[0]['COUNT(*)']);
-*/
+
         $results = tx_newspaper_DB::getInstance()->selectRowsDirect(
             "COUNT(DISTINCT tx_newspaper_article.uid) AS num_results, $current_fields", $current_table, $current_where
         );
