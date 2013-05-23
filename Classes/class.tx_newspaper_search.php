@@ -366,7 +366,7 @@ class tx_newspaper_Search {
 
         $timer = tx_newspaper_ExecutionTimer::create();
 
-        $this->num_results += $this->getNumResultsForClass($current_fields, $current_table, $current_where);
+        $this->num_results += self::getNumResultsForClass($current_fields, $current_table, $current_where);
 
         $results = tx_newspaper_DB::getInstance()->selectRows(
             "DISTINCT $current_fields",
@@ -376,24 +376,11 @@ class tx_newspaper_Search {
             'publish_date DESC',
             $limit
         );
-        $articles = array();
-        foreach ($results as $result) {
-            if (!self::enable_quick_hack) {
-                foreach ($articles as $article) {
-                    if (intval($article['uid']) == intval($result['uid'])) {
-                        $article['extra_score'] += $result['extra_score'];
-                        continue 2;                     //  continue outer loop
-                    }
-                }
-            }
-            $articles[] = $result;
 
-        }
-
-        return $articles;
+        return self::aggregateExtraScores($results);
     }
 
-    private function getNumResultsForClass($current_fields, $current_table, $current_where) {
+    private static function getNumResultsForClass($current_fields, $current_table, $current_where) {
 
         $timer = tx_newspaper_ExecutionTimer::create();
 
@@ -401,6 +388,25 @@ class tx_newspaper_Search {
             "COUNT(DISTINCT tx_newspaper_article.uid) AS num_results, $current_fields", $current_table, $current_where
         );
         return intval($results[0]['num_results']);
+    }
+
+    private static function aggregateExtraScores(array $results) {
+        $articles = array();
+        foreach ($results as $result) {
+            if (!self::enable_quick_hack && $index = self::indexOfResultInArticles($result, $articles)) {
+                $articles[$index]['extra_score'] += $result['extra_score'];
+            } else {
+                $articles[] = $result;
+            }
+        }
+        return $articles;
+    }
+
+    private static function indexOfResultInArticles(array $result, array $articles) {
+        foreach ($articles as $i => $article) {
+            if (intval($article['uid']) == intval($result['uid'])) return $i;
+        }
+        return 0;
     }
 
     ///    Write the requested search term and the search results to a log file.
