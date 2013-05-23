@@ -175,7 +175,8 @@ class tx_newspaper_Search {
      *  The registered functions must take the form
      *  \c function($search_term, &$table, &$where, &$limit)
      *
-     *  @param callback $callback The registered function
+     *  @param callback $callback The registered function. It must be callable as
+     *         \code $callback($search_term, &$table, &$where, &$limit) \endcode
      */
     public static function registerSearchHook($callback) {
         if (is_callable($callback)) {
@@ -362,18 +363,10 @@ class tx_newspaper_Search {
     }
 
     private function getSearchResultsForClass($current_fields, $current_table, $current_where, $limit) {
-        $sub_select = tx_newspaper_DB::getInstance()->assembleSelectQuery(
-            "DISTINCT $current_fields",
-            $current_table,
-            $current_where,
-            '',
-            'publish_date DESC'
-        );
-        $results = tx_newspaper_DB::getInstance()->selectRowsDirect(
-            'COUNT(*)', "($sub_select) AS t"
-        );
 
-        $this->num_results += $results[0]['COUNT(*)'];
+        $timer = tx_newspaper_ExecutionTimer::create();
+
+        $this->num_results += $this->getNumResultsForClass($current_fields, $current_table, $current_where);
 
         $results = tx_newspaper_DB::getInstance()->selectRows(
             "DISTINCT $current_fields",
@@ -398,6 +391,24 @@ class tx_newspaper_Search {
         }
 
         return $articles;
+    }
+
+    private function getNumResultsForClass($current_fields, $current_table, $current_where) {
+
+        $timer = tx_newspaper_ExecutionTimer::create();
+
+        $sub_select = tx_newspaper_DB::getInstance()->assembleSelectQuery(
+            "DISTINCT $current_fields",
+            $current_table,
+            $current_where,
+            '',
+            'publish_date DESC'
+        );
+        $results = tx_newspaper_DB::getInstance()->selectRowsDirect(
+            'COUNT(*)', "($sub_select) AS t"
+        );
+
+        return intval($results[0]['COUNT(*)']);
     }
 
     ///    Write the requested search term and the search results to a log file.
