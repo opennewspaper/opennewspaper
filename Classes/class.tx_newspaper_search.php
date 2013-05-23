@@ -410,7 +410,7 @@ class tx_newspaper_Search {
         return intval($results[0]['COUNT(*)']);
 */
         $results = tx_newspaper_DB::getInstance()->selectRowsDirect(
-            "COUNT(DISTINCT $current_fields) AS num_results", $current_table, $current_where
+            "COUNT(DISTINCT tx_newspaper_article.uid) AS num_results, $current_fields", $current_table, $current_where
         );
         return intval($results[0]['num_results']);
     }
