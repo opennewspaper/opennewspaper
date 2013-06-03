@@ -556,23 +556,13 @@ function getSectionsWhoseArticleListContains(tx_newspaper_Article $article) {
 
     $timer = tx_newspaper_ExecutionTimer::create();
 
-    $sections = array();
-    foreach (tx_newspaper_ArticleList_Manual::getArticleListsWhichContain($article) as $list) {
-        if ($list->isSectionList()) $sections[] = $list->getSection();
-    }
-    return $sections;
-
-    $sections = array();
-    foreach (tx_newspaper_Section::getSectionsByCondition('articlelist') as $section) {
-        try {
-            $article_list = $section->getArticleList();
-            $article_list->useOptimizedGetArticles(true);
-            if ($article_list->doesContainArticle($article, tx_newspaper_DependencyTree::limitForArticlesDisplayedOnSectionPage())) {
-                $sections[] = $section;
-            }
-        } catch (tx_newspaper_Exception $e) { }
-    }
-    return $sections;
+    $lists = array_filter(
+        tx_newspaper_ArticleList_Manual::getListsWhichContain($article),
+        function(tx_newspaper_ArticleList $list) { return $list->isSectionList(); }
+    );
+    return array_map(
+        function(tx_newspaper_ArticleList $list) { return $list->getSection(); }, $lists
+    );
 }
 
 function getAllPagesWithSectionListExtra(tx_newspaper_Section $section) {
@@ -581,6 +571,7 @@ function getAllPagesWithSectionListExtra(tx_newspaper_Section $section) {
 
     static $section_list_pages = array();
 
+    // @todo why did i use __toString() and not getUid()?
     if (!isset($section_list_pages[$section->__toString()])) {
         $all_pages = $section->getActivePages();
         $pages = array();

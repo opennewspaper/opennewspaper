@@ -167,11 +167,11 @@ LIMIT 0, 10
      *  @param tx_newspaper_Article $article An article for whicht the corresponding article lists are queried
      *  @return tx_newspaper_Articlelist_Manual[] Manual articlelists which contain \p $article
      */
-    static public function getArticleListsWhichContain(tx_newspaper_Article $article) {
-        $list_uids = tx_newspaper_DB::getInstance()->selectRows(
+    static public function getListsWhichContain(tx_newspaper_Article $article) {
+        $records = tx_newspaper_DB::getInstance()->selectRows(
             'uid_local', 'tx_newspaper_articlelist_manual_articles_mm', 'uid_foreign = ' . $article->getUid()
         );
-        return array_map(function(array $record) { return new tx_newspaper_ArticleList_Manual($record['uid_local']); }, $list_uids);
+        return array_map(function(array $record) { return new tx_newspaper_ArticleList_Manual($record['uid_local']); }, $records);
     }
 
 	static public function getModuleName() { return 'np_al_manual'; }
