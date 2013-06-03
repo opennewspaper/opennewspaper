@@ -556,10 +556,8 @@ function getSectionsWhoseArticleListContains(tx_newspaper_Article $article) {
 
     $timer = tx_newspaper_ExecutionTimer::create();
 
-    $list_uids = tx_newspaper_DB::getInstance()->selectRows('uid_local', 'tx_newspaper_articlelist_manual_articles_mm', 'uid_foreign = ' . $article->getUid());
-    $lists = array_map(function(array $record) { return new tx_newspaper_ArticleList_Manual($record['uid_local']); }, $list_uids);
     $sections = array();
-    foreach ($lists as $list) {
+    foreach (tx_newspaper_ArticleList_Manual::getArticleListsWhichContain($article) as $list) {
         if ($list->isSectionList()) $sections[] = $list->getSection();
     }
     return $sections;
