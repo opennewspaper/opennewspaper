@@ -2,6 +2,10 @@
 
 /// Use objects of this class to wrap database operations into a MySQL transaction.
 /**
+ *  Transactions OBVIOUSLY work only on InnoDB. This might not be obvious to you,
+ *  so I'm telling you here that it is obvious. If you do any operations durinf a
+ *  transaction on MyISAM tables, these can not be rolled back.
+ *
  *  Usage:
  *  \code
  *  try {
