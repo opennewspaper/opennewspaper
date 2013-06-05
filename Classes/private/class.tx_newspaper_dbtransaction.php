@@ -19,10 +19,10 @@
  *  Of course you can also use it as
  *  \code
  *  $transaction = new tx_newspaper_DBTransaction();
- *  $status = bunch_of_db_operations_that_return a status();
+ *  $status = bunch_of_db_operations_that_return_a_status();
  *  if ($status == true) $transaction->commit();
  *  else {
- *    $transaction->rollback();                          // optional
+ *    $transaction->rollback();                          // optional, for clarity
  *    error_message();
  *  }
  *  \endcode
