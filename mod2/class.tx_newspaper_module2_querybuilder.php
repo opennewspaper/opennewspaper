@@ -261,7 +261,7 @@ class tx_newspaper_module2_QueryBuilder {
 		$sectionUids = tx_newspaper::selectRows(
 			'uid',
 			'tx_newspaper_section',
-			'section_name LIKE "%' . addslashes($section) . '%"' . // Search for sections containing the section search string
+			'section_name LIKE "' . addslashes(trim($section)) . '"' . // Search for sections containing the section search string
 				' AND pid=' . tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_section()) // Check current section sysfolder only
 		);
 
