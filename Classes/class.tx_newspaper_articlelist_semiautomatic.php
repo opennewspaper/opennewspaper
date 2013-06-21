@@ -867,9 +867,9 @@ DESC';
     private static function expandGETParameter($string) {
 
         $matches = array();
-        if (!preg_match_all('/\$(\w+?)\W/', $string, $matches)) return $string;
+        if (!preg_match_all('/\$(\w+?)(\W|$)/', $string, $matches)) return $string;
 
-        //  full matches are in $matches[0], partial ones (the part in brackets) in $matches[1]
+        //  full matches are in $matches[0], the first partial ones (first bracketed part) in $matches[1]
         foreach ($matches[1] as $match) {
             if ($_GET[$match]) {
                 $string = str_replace('$' . $match, $GLOBALS['TYPO3_DB']->quoteStr($_GET[$match], self::$table),  $string);
