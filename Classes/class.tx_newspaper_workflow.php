@@ -25,6 +25,8 @@ define('NP_WORKLFOW_LOG_ERRROR', 6);
 define('NP_WORKLFOW_LOG_WARNING', 7);
 define('NP_WORKLFOW_LOG_CHANGE_FIELD', 8);
 define('NP_WORKLFOW_LOG_CHANGE_EXTRA', 9);
+define('NP_WORKLFOW_LOG_NON_NP', 1000); // Log level 0: Logging entries not written by newspaper (probably a specialized newspaper extension)
+define('NP_WORKLFOW_LOG_NON_NP', 1001); // Log level 1: Logging entries not written by newspaper (probably a specialized newspaper extension)
 
 define('NP_WORKLFOW_LOG_PLACEMENT_INSERT_AFTER', 20);
 define('NP_WORKLFOW_LOG_PLACEMENT_MOVE_AFTER', 21);
@@ -304,18 +306,18 @@ function changeWorkflowStatus(role, hidden_status) {
     	';
     }
 
-    private static $operations_in_loglevel = array(
-        // default loglevel shown in production list
-        0 => array( 1, 2, 3, 4, 5, 6),
+    private static $operationsInLogLevel = array(
+        // default log level shown in production list
+        0 => array( 1, 2, 3, 4, 5, 6, 1000),
         // all logged messages shown
-        1 => array( 0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+        1 => array( 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1000, 1001)
     );
 
-    public static function getComments($table, $table_uid, $limit = 0, $log_level = 0) {
+    public static function getComments($table, $tableUid, $limit = 0, $logLevel = 0) {
 
-        $where = "tx_newspaper_log.table_name = '$table' AND tx_newspaper_log.table_uid = $table_uid";
-        if (is_array(self::$operations_in_loglevel[$log_level])) {
-            $where .= ' AND tx_newspaper_log.operation IN (' . implode(', ', self::$operations_in_loglevel[$log_level]) . ')';
+        $where = "tx_newspaper_log.table_name = '$table' AND tx_newspaper_log.table_uid = $tableUid";
+        if (is_array(self::$operationsInLogLevel[$logLevel])) {
+            $where .= ' AND tx_newspaper_log.operation IN (' . implode(', ', self::$operationsInLogLevel[$logLevel]) . ')';
         }
 
         $row = tx_newspaper::selectRows(
