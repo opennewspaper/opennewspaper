@@ -286,6 +286,7 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 		    $tag->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
             $tag->setAttribute('tag_type', $type);
             $tag->setAttribute('tag', $tagValue);
+            $tag->setAttribute('title', $tagValue);
             $uid = $tag->store();
             $result = array('uid' => $uid, 'tag' => $tagValue);
 //t3lib_div::devLog('processTagInsert', 'newspaper' , 0, $result);
