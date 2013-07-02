@@ -30,7 +30,12 @@ class tx_newspaper_module2_Filter {
         	$this->query_builder->getTableReferences(),
         	$this->query_builder->getWhere(),
         	'',
-        	'tx_newspaper_article.tstamp DESC',
+        	$this->is_article_browser? 'CASE
+  WHEN tx_newspaper_article.publish_date=0
+  THEN tx_newspaper_article.tstamp
+  ELSE tx_newspaper_article.publish_date
+END
+DESC' : 'tx_newspaper_article.tstamp DESC',
         	intval($this->filter_values['startPage']) * intval($this->filter_values['step']) . ', ' . (intval($this->filter_values['step']))
        	);
         return $records;

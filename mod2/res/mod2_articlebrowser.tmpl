@@ -256,7 +256,7 @@ function focusOpenerAndClose(close)	{
 		<td align="center">
 			{* article browser, just display visibility status, but do NOT link the icon *}
 			{if !$DATA[i].hidden}
-			{$ICON.published}
+			<span title="{if $DATA[i].publish_date}{$DATA[i].publish_date|date_format:"%d.%m.%Y %H:%I:%S"}{/if}">{$ICON.published}</span>
 			{/if}
 		</td>
 
