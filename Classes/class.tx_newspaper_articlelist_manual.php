@@ -64,7 +64,7 @@ uid_local = ${articlelist_uid} AND hidden = 0
 ORDER BY sorting ASC
 LIMIT 0, 10
  */				
-# tx_newspaper::devlog($this->getSection()->getAttribute('section_name') . "::getArticles($number)");
+
         $timer = tx_newspaper_ExecutionTimer::create("Manual ArticleList(" . $this->getUid() . ")::getArticles($number)");
 
 		$results = tx_newspaper::selectRows(
@@ -78,7 +78,6 @@ LIMIT 0, 10
 				self::mm_table . '.sorting ASC',
 				"$start, $number"
 		);
-# tx_newspaper::devlog($this->getSection()->getAttribute('section_name') . '::getArticles results', $results);
 		
 		$articles = array();
 		foreach ($results as $row) {

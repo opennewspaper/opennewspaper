@@ -92,7 +92,7 @@ class tx_newspaper_DependencyTree {
      *    called "the affected article".
      */
     static public function generateFromArticle(tx_newspaper_Article $article, array $removed_tags = array()) {
-# tx_newspaper::devlog('create deptree', $article->getUid());
+
         $tree = self::create();
         $tree->setArticle($article);
         if (!empty($removed_tags)) {
@@ -193,7 +193,6 @@ class tx_newspaper_DependencyTree {
 
     /// Executes the registered actions on all pages in the tree for which they are registered.
     public function executeActionsOnPages($key = '') {
-# tx_newspaper::devlog("execute($key)", self::$registered_actions);
         if ($key) {
             if (isset(self::$registered_actions[$key])) {
                 $this->executeActionOnPages(self::$registered_actions[$key]);
@@ -203,7 +202,6 @@ class tx_newspaper_DependencyTree {
                 $this->executeActionOnPages($action);
             }
         }
-# tx_newspaper::devlog("execute($key) done");
     }
 
     /// Returns all article pages on which the affected article is shown.
@@ -220,17 +218,14 @@ class tx_newspaper_DependencyTree {
 
     /// Returns all section pages on which the affected article is shown.
     public function getSectionPages() {
-# tx_newspaper::devlog('getSectionPages');
+
         if (!$this->article instanceof tx_newspaper_Article) return $this->section_pages;
 
         $timer = tx_newspaper_ExecutionTimer::create();
         if (!$this->section_pages_filled) {
-# tx_newspaper::devlog('getSectionPages !filled');
             $this->addSectionPages($this->article->getSections());
-# tx_newspaper::devlog('getSectionPages sections', $this->section_pages);
             $this->addSectionPages(getSectionsWhoseArticleListContains($this->article));
         }
-# tx_newspaper::devlog('getSectionPages done');
         return $this->section_pages;
     }
 
@@ -354,7 +349,7 @@ class tx_newspaper_DependencyTree {
     }
 
     private function executeActionOnPages(array $action) {
-# tx_newspaper::devlog("executeAction", $action);
+
         $timer = tx_newspaper_ExecutionTimer::create();
 
         $function = $action['function'];
@@ -559,8 +554,6 @@ function getArticlePage(tx_newspaper_Section $section) {
 
 function getSectionsWhoseArticleListContains(tx_newspaper_Article $article) {
 
-# tx_newspaper::devlog('getSectionsWhoseArticleListContains: all ' , tx_newspaper_Section::getSectionsByCondition('articlelist'));
-
     $timer = tx_newspaper_ExecutionTimer::create();
 
     $lists = array_filter(
@@ -578,16 +571,12 @@ function getAllPagesWithSectionListExtra(tx_newspaper_Section $section) {
 
     static $section_list_pages = array();
 
-    // @todo why did i use __toString() and not getUid()?
+    // @todo why did i use __toString() and not getUid() as index?
     if (!isset($section_list_pages[$section->__toString()])) {
-        $all_pages = $section->getActivePages();
-        $pages = array();
-
-        foreach ($all_pages as $page) {
-            if (doesContainSectionListExtra($page)) $pages[] = $page;
-        }
-
-        $section_list_pages[$section->__toString()] = $pages;
+        $section_list_pages[$section->__toString()] = array_filter(
+            $section->getActivePages(),
+            function(tx_newspaper_Page $page) { return doesContainSectionListExtra($page); }
+        );
     }
 
     return $section_list_pages[$section->__toString()];

@@ -166,7 +166,7 @@ class tx_newspaper_Search {
         $return = $this->generateArticleObjectsFromSearchResults($articles);
 
         $this->logSearch($search_term, $return);
-tx_newspaper::devlog('search', tx_newspaper_DB::getQuery());
+
         return $return;
     }
 
@@ -376,7 +376,6 @@ tx_newspaper::devlog('search', tx_newspaper_DB::getQuery());
             'publish_date DESC',
             $limit
         );
-tx_newspaper::devlog('getSearchResultsForClass', tx_newspaper_DB::getInstance()->getQuery());
 
         return self::aggregateExtraScores($results);
     }
@@ -388,7 +387,6 @@ tx_newspaper::devlog('getSearchResultsForClass', tx_newspaper_DB::getInstance()-
         $results = tx_newspaper_DB::getInstance()->selectRowsDirect(
             "COUNT(DISTINCT tx_newspaper_article.uid) AS num_results, $current_fields", $current_table, $current_where
         );
-tx_newspaper::devlog('getNumResultsForClass', tx_newspaper_DB::getInstance()->getQuery());
         return intval($results[0]['num_results']);
     }
 
