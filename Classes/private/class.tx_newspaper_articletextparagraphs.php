@@ -28,9 +28,12 @@ class tx_newspaper_ArticleTextParagraphs {
 
     private function populateTextParagraphs(tx_newspaper_Article $article) {
         $text = self::filterUnprintableCharacters($article->getAttribute('bodytext'));
+        $this->text_paragraphs = array_map('tx_newspaper_ArticleTextParagraphs::convertRTELinks', self::splitIntoParagraphs($text));
+/*
         foreach (self::splitIntoParagraphs($text) as $paragraph) {
             $this->text_paragraphs[] = self::convertRTELinks($paragraph);
         }
+*/
     }
 
     private function assembleParagraphs() {
