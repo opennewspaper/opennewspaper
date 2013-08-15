@@ -187,21 +187,6 @@ class xtest_DBSource_testcasex extends tx_newspaper_database_testcase {
 		/// \todo actually write an extra and compare the written extra to the original
 	}
 	*/
-
-	////////////////////////////////////////////////////////////////////////////
-	
-	private function checkRequiredAttributes(tx_newspaper_Article $article, array $attrs) {
-		$failed = array();
-		foreach ($attrs as $req) {
-			try {
-				if (!$article->getAttribute($req)) $failed[] = $req;
-			} catch (tx_newspaper_WrongAttributeException $e) {
-				$failed[] = $req;
-			}
-		}
-		return $failed;
-	}
-	
 	private $source = null;				///< the local RedsysSource
 	private $field = null;				///< single article field to read
 	private $fieldList = array();		///< list of article fields to read

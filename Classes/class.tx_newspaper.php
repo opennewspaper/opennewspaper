@@ -1005,7 +1005,6 @@ class tx_newspaper  {
    *  \return array ['text'], ['href']
    */
     private static function typolink($text, array $params = array(), array $conf = array()) {
-
     if (TYPO3_MODE == 'BE') {
       self::buildTSFE();
       if (!is_object($GLOBALS['TSFE']) || !($GLOBALS['TSFE'] instanceof tslib_fe)) {

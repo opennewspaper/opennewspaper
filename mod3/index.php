@@ -233,9 +233,6 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 	 *  \param $extra_uid uid of extra
 	 */
 	private function processExtraMoveAfter($origin_uid, $pz_uid, $extra_uid) {
-
-        tx_newspaper_ExecutionTimer::start();
-
 		$e = tx_newspaper_Extra_Factory::getInstance()->create(intval($extra_uid));
 		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
 		$pz->moveExtraAfter($e, $origin_uid);
@@ -251,8 +248,6 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
         if (!$pz->isConcreteArticle()) {
 	        tx_newspaper_workflow::logPlacement('tx_newspaper_pagezone', $pz_uid, array('origin uid' => $origin_uid, 'extra uid' => $extra_uid), NP_WORKLFOW_LOG_PLACEMENT_MOVE_AFTER);
         }
-
-        tx_newspaper_ExecutionTimer::logExecutionTime();
 
 		die();
 	}
@@ -712,8 +707,6 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 		global $BE_USER;
 		/// \todo: check permissions?
 
-        $timer = tx_newspaper_ExecutionTimer::create();
-
 		$this->show_levels_above = $BE_USER->getModuleData('tx_newspaper/mod3/index.php/show_levels_above'); // read from be user
 		if ($this->show_levels_above !== true) $this->show_levels_above = false; // make sure it's boolean
 
@@ -924,8 +917,6 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 				 */
 				function moduleContent() {
 					global $LANG;
-
-                    $timer = tx_newspaper_ExecutionTimer::create();
 
 					/// check if at least one section page type and page zone type are available. if not, this module is senseless.
 					if (!tx_newspaper_DB::getInstance()->atLeastOneRecord('tx_newspaper_section')) {

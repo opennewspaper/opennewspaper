@@ -29,14 +29,13 @@
  *  \date Apr 28, 2009
  */
 
-/// @todo brief description
-/** @todo long description
+/// \todo brief description
+/** \todo long description
  */
 class tx_newspaper_fixture {
 
 	public function __construct() {
 		$this->createSectionHierarchy();
-        $this->createTypo3Pages();
 		$this->createPages();
 		$this->createPageZones();
 		$this->createArticleList();
@@ -62,7 +61,6 @@ class tx_newspaper_fixture {
 
 	}
 
-    /** @return tx_newspaper_PageZoneType[] */
     public function getPageZoneTypes() {
         $uids = tx_newspaper::selectRows('uid', $this->pagezonetype_table);
         $pagezonetypes = array();
@@ -86,7 +84,6 @@ class tx_newspaper_fixture {
 		return $this->pagezone_page_uids[0];
 	}
 
-    /** @return tx_newspaper_Page[] */
 	public function getPages() {
 		if (!$this->pages) {
 			foreach ($this->page_uids as $uid) {
@@ -95,14 +92,6 @@ class tx_newspaper_fixture {
 		}
 		return $this->pages;
 	}
-
-    /** @return tx_newspaper_PageType[] */
-    public function getPageTypes() {
-        return array_map(
-            function($uid) { return new tx_newspaper_PageType(intval($uid['uid'])); },
-            tx_newspaper::selectRows('uid', $this->pagetype_table)
-        );
-    }
 
 	public function getParentSectionUid() {
 		return $this->section_uids[0];
@@ -128,7 +117,7 @@ class tx_newspaper_fixture {
 		return $this->article_uid;
 	}
 
-	public function getFirstExtraUid() {
+	public function getExtraUid() {
 		return $this->extra_uids[0];
 	}
 
@@ -136,43 +125,13 @@ class tx_newspaper_fixture {
         return $this->extra_uids;
     }
 
-    /** @return tx_newspaper_Extra[] */
-    public function getExtras() {
-        return array_map(
-            function($uid) { return tx_newspaper_Extra_Factory::getInstance()->create($uid); },
-            $this->getExtraUids()
-        );
-    }
-
-    /** @return tx_newspaper_Extra[] */
-    public function getExtrasOf($class) {
-        return array_filter(
-            $this->getExtras(),
-            function($extra) use($class) { return $extra instanceof $class; }
-        );
-    }
-
-    /** @return tx_newspaper_Extra */
-    public function getFirstExtraOf($class) {
-        return array_shift($this->getExtrasOf($class));
-    }
-
 	public function getPageUid() {
 		return $this->page_uids[0];
 	}
 
-    public function getFirstUidOf($table) {
-        $uids = tx_newspaper_DB::getInstance()->selectRows('uid', $table, '1', '', '', '1');
-        return intval($uids[0]['uid']);
-    }
-
 	////////////////////////////////////////////////////////////////////////////
 
     private function createTypo3Pages() {
-        // Create sysfolder (uid 2574) for storing records and other newspaper related pages (like dossier page)
-        foreach($this->typo3_newspaper_pages_data as $page) {
-            tx_newspaper::insertRows($this->typo3_pages_table, $page);
-        }
     }
 
 	private function createSectionHierarchy() {
@@ -271,9 +230,9 @@ class tx_newspaper_fixture {
 	 *  $this->pagezonetype_data) for every page created above.
 	 *  The page zone types are created first.
 	 *
-	 *  @todo Create page zones which explicitly inherit from another page zone
+	 *  \todo Create page zones which explicitly inherit from another page zone
 	 *  	under the same Page
-	 *  @todo Create page zones which don't inherit from another page zone
+	 *  \todo Create page zones which don't inherit from another page zone
 	 */
 	private function createPageZones() {
 		foreach ($this->pagezonetype_data as $pagezonetype) {
@@ -514,19 +473,6 @@ class tx_newspaper_fixture {
             'title' => 'Little Grandchild Section Page',
         ),
     );
-    private $typo3_newspaper_pages_data = array(
-        array(
-            'uid' => 2574,              // Sysfolder for Newspaper records
-            'pid' => '2828',
-            'tstamp' => '1234567890',
-            'crdate' => '1234567890',
-            'cruser_id' => '1',
-            'sorting' => '999',
-            'deleted' => '0',
-            'title' => 'Newspaper',
-            'doktype' => '254',
-        ),
-    );
 
 	private $articlelist_table = 'tx_newspaper_articlelist';
 	private $articlelist_id = null;
@@ -671,7 +617,6 @@ class tx_newspaper_fixture {
             'is_article' => '1',
         ),
 	);
-    private $pagezonetype_uids = array();
 
 	private $pagezone_table = 'tx_newspaper_pagezone';
 	private $pagezone_uids = array();

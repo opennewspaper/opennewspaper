@@ -1,0 +1,149 @@
+{*debug*}
+{* template for single section article list *}
+
+{*
+    $sect       section object
+    $placed_article    article object
+    $article_placed_already
+    $AL_HEIGHT  int
+    $isde       bool
+    $level      int
+    $allowed_placement_level    int
+    $ICON
+    $lang
+*}
+
+
+{* assembling the reverse section path ids in smarty is extremely annoying. suggestions for improvement are welcome. *}
+{assign var="section_path" value=""}
+{assign var="path" value=$sect->getSectionPath()}
+{section name=i loop=$path step=-1}
+    {assign var="uid" value=$path[i]->getUid()}
+    {if $smarty.section.i.first}
+        {assign var="uid2" value="$uid"}
+    {else}
+        {assign var="uid2" value="_$uid"}
+    {/if}
+    {assign var="section_path" value=$section_path$uid2}
+{/section}
+
+{assign var="article_list" value=$sect->getArticleList()}
+
+<table class="articles" cellspacing="0" cellpadding="0" border="0">
+
+    <tr><th scope="col" colspan="3">{$sect->getFormattedRootline()}</th></tr>
+
+    <tr>
+
+        {if $isde || $level >= $allowed_placement_level}
+
+            {* duty editor, article list available, class for article list is known *}
+            <td>
+                {section name=i start=0 step=1 loop=$AL_HEIGHT}
+                    <div class="counter">{$smarty.section.i.iteration}</div>
+                {/section}
+            </td>
+            <td>
+                <select name="tx_newspaper_mod7[placer_{$section_path}][]"
+                        id="placer_{$section_path}"
+                        size="{$AL_HEIGHT}"
+                        class="multiple-select ressort-select placement-select {if  $article_list|get_class|lower == "tx_newspaper_articlelist_manual"}manual-list{/if}">
+                    {foreach from=$article_list->getArticles($AL_HEIGHT) item="art" name="al_loop" key="key"}
+
+<<<<<<< .working
+                        {assign var="kicker" value=$art->getAttribute('kicker')}
+                        {assign var="title" value=$art->getAttribute('title')}
+                        {assign var="text" value="$kicker: $title"}
+
+                        {if $article_list|get_class|lower == "tx_newspaper_articlelist_semiautomatic"}
+                            {assign var="off" value=$article_list->getOffset($art)}
+                            {assign var="sep" value="_"}
+                            {assign var="uid" value=$art->getUid()}
+
+                            {assign var="key" value=$off$sep$uid}
+                            {assign var="text" value="$text ($off)"}
+                        {else}
+                            {assign var="key" value=$art->getUid()}
+                        {/if}
+
+                        <option value="{$key}" label="{$text|escape:"html"}" title="{$text|escape:"html"}">
+                            {$text}
+=======
+                        <option value="{$art->getUid()}"
+                                label="{$art->getAttribute('kicker')|escape:"html"}: {$art->getAttribute('title')|escape:"html"}"
+                                title="{$art->getAttribute('kicker')|escape:"html"}: {$art->getAttribute('title')|escape:"html"}">
+                            {$art->getAttribute('kicker')}: {$art->getAttribute('title')}
+>>>>>>> .merge-right.r12780
+                        </option>
+                    {/foreach}
+
+                </select>
+            </td>
+            <td valign="top" width="16">
+                <a href="#" class="movetotop" rel="placer_{$section_path}">
+                    {$ICON.group_totop}
+                </a>
+                <br />
+                <a href="#" class="moveup" rel="placer_{$section_path}">
+                    {$ICON.up}
+                </a>
+                <br />
+                <a href="#" class="movedown" rel="placer_{$section_path}">
+                    {$ICON.down}
+                </a>
+                <a href="#" class="movetobottom" rel="placer_{$section_path}">
+                    {$ICON.group_tobottom}
+                </a>
+                <br />
+                {if $article_list|get_class|lower == "tx_newspaper_articlelist_manual"}
+                    {if $placed_article}
+                        {* add insert/remove button for article to be placed, remove button for selected article *}
+                        <br />
+                        <a {if ($article_placed_already)}style="display:none;"{/if}
+                           id="addbutton_{$section_path}"
+                           href="#" class="insertarticle"
+                           rel="placer_{$section_path}">
+                            {$ICON.button_left}{* add button *}
+                        </a>
+                        <a {if (!$article_placed_already)}style="display:none;"{/if}
+                           id="delbutton_{$section_path}"
+                           href="#" class="removearticletobeplaced"
+                           rel="placer_{$section_path}">
+                            {$ICON.button_right}{* delete article to be placed button *}
+                        </a>
+                    {else}
+                        <br />
+                        {* add article browser *}
+                        <a href="#"
+                           onclick="setFormValueOpenBrowser_AL('placer_{$section_path}', '{$sect->getAttribute('section_name')|escape:html}'); return false;" >
+                            {$ICON.articlebrowser}
+                        </a>
+                    {/if}
+                    <br />
+                    <a href="#" class="delete" rel="placer_{$section_path}">
+                        {$ICON.group_clear}
+                    </a>
+                {/if}
+            </td>
+
+        {else}
+
+            <td>
+                {if !$isde && $level >= $allowed_placement_level}<i class="noaccess">{$lang.message_no_dutyeditor}</i><br />{/if}
+                {if $level < $allowed_placement_level}<i class="noaccess">{$lang.message_no_access_to_level}</i>{/if}
+            </td>
+
+        {/if}
+
+    </tr>
+
+    {if $buttons}
+        <tr>
+            <td colspan="2">
+                <input type="button" name="tx_newspaper_mod7[refresh]" title="placer_{$sect->getAttribute('uid')}" class="refresh" value="{$lang.refresh}" />
+                <input type="button" name="tx_newspaper_mod7[save]" title="placer_{$sect->getAttribute('uid')}" class="save" value="{$lang.save}" />
+            </td>
+        </tr>
+    {/if}
+
+</table>

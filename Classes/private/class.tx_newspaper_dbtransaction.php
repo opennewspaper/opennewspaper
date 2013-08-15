@@ -1,4 +1,7 @@
 <?php
+/**
+ * @author Lene Preuss <lene.preuss@gmail.com>
+ */
 
 /// Use objects of this class to wrap database operations into a MySQL transaction.
 /**
@@ -7,19 +10,16 @@
  *  transaction on MyISAM tables, these can not be rolled back.
  *
  *  Usage:
- *  \code
+ *
  *  try {
  *    $transaction = new tx_newspaper_DBTransaction();
  *    bunch_of_db_operations_that_throw_when_something_goes_wrong();
  *    $transaction->commit();
- *  catch(tx_newspaper_Exception $e) {
- *    error_message();
- *  }
- *  \endcode
- *  The transaction is rolled back if \c commit() is not called explicitly, as soon as \c $transaction
- *  goes out of scope (more precisely, as soon as the last reference to \c $transaction is deleted.
- *  So don't create additional references to \c $transaction, or strange things may happen.)
+ *  catch(tx_newspaper_Exception $e) { }
  *
+ *  The transaction is rolled back if commit() is not called explicitly, as soon as $transaction
+ *  goes out of scope (more precisely, as soon as the last reference to $transaction is deleted.
+ *  So don't create additional references to $transaction, or strange things may happen.)
  *  Of course you can also use it as
  *  \code
  *  $transaction = new tx_newspaper_DBTransaction();
