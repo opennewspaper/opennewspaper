@@ -236,9 +236,111 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
                 }
                 $this->content .= $this->doc->section('Newspaper: db consistency check', $content, 0, 1);
                 break;
+            case 4:
+                $content .= self::getRepairForm();
+
+                $result = t3lib_div::_GP('tx_newspaper_mod4');
+                if ($result) $content .= self::getRepairResult($result);
+
+                $this->content .=$this->doc->section('Vererbung reparieren', $content, 0, 1);
+                break;
+
 		}
 	}
 
+    private static function getRepairForm() {
+        $mod_post = t3lib_div::_GP('tx_newspaper_mod4');
+        $ret = '
+        <form>
+          <table>
+            <tr>
+              <td>Pagezone ID</td><td><input name="tx_newspaper_mod4[pagezone_id]" value="' . $mod_post['pagezone_id'] .'" /></td>
+               </tr>
+               <tr>
+                 <td>Excluded Extra(s)</td><td><input name="tx_newspaper_mod4[extra_ids]" value="' . $mod_post['extra_ids'] .'" /></td>
+               </tr>
+               <tr>
+                 <td>Replace with Origin Extra</td><td><input name="tx_newspaper_mod4[replace_id]" value="' . $mod_post['replace_id'] .'" /></td>
+               </tr>
+          </table>
+
+          <input type="submit" value=" Go ">
+
+        </form>
+        <hr />
+        ';
+        return $ret;
+    }
+
+    private static function getRepairResult() {
+        $mod_post = t3lib_div::_GP('tx_newspaper_mod4');
+
+        $ret = "";
+        try {
+            if (!intval($mod_post['pagezone_id'])) throw new Exception("pagezone_id not set");
+            $pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($mod_post['pagezone_id']));
+            if (!$pz instanceof tx_newspaper_PageZone_Page) throw new Exception("pagezone " . $mod_post['pagezone_id'] . " is not a pagezone_page: " . print_r($pz, 1));
+
+            $ret = "$pz";
+
+            foreach ($pz->getExtras() as $extra) {
+                if (self::isInList($extra, $mod_post['extra_ids'])) continue;
+
+                $data = tx_newspaper_DB::getInstance()->selectOneRow(
+                    '*', 'tx_newspaper_extra', 'uid = ' . $extra->getExtraUid()
+                );
+                $mm = tx_newspaper_DB::getInstance()->selectOneRow(
+                    '*', 'tx_newspaper_pagezone_page_extras_mm',
+                    'uid_local = ' . $pz->getUid() . ' AND uid_foreign = ' . $extra->getExtraUid()
+                );
+
+                $ret .= '<hr /><p>' . print_r($data, 1) . '</p><p>' . print_r($mm,1) . '</p>';
+
+                unset($data['uid']);
+
+                if (intval($mod_post['replace_id']) && $extra->getOriginUid() == 0) {
+
+                    // we have checks and balances, balances and checks...
+
+                    $origin_extra = tx_newspaper_Extra_Factory::getInstance()->create($mod_post['replace_id']);
+                    if (!$origin_extra instanceof tx_newspaper_Extra || $origin_extra instanceof ErrorExtra) {
+                        throw new Exception("replace origin extra " . $mod_post['replace_id'] . " is not a valid extra uid");
+                    }
+                    $replace_pz = $origin_extra->getPageZone();
+                    $parent_pz = $pz->getParentForPlacement();
+                    if ($replace_pz->getPageZoneUid() != $parent_pz->getPageZoneUid()) {
+                        throw new Exception("replace origin extra " . $mod_post['replace_id'] . " is not on parent of current pagezone (" . $parent_pz->getPageZoneUid() . ") but on ".$replace_pz->getPageZoneUid());
+                    }
+
+                    // phew!
+                    $data['origin_uid'] = $mod_post['replace_id'];
+                }
+
+                $new_extra_id = tx_newspaper_DB::getInstance()->insertRows('tx_newspaper_extra', $data);
+                $ret .= '<hr />' . tx_newspaper_DB::getQuery() . "<br />";
+                tx_newspaper_DB::getInstance()->deleteRows(
+                    'tx_newspaper_pagezone_page_extras_mm',
+                    'uid_local = ' . $mm['uid_local'] . ' AND uid_foreign = ' . $mm['uid_foreign']
+                );
+                $ret .= tx_newspaper_DB::getQuery() . "<br />";
+                $mm['uid_foreign'] = $new_extra_id;
+                tx_newspaper_DB::getInstance()->insertRows('tx_newspaper_pagezone_page_extras_mm', $mm);
+                $ret .= tx_newspaper_DB::getQuery() . "<br />";
+            }
+
+        } catch (Exception $e) {
+            $ret .= "<hr /><span style='color:red' >" . $e->getMessage()."<br />".print_r($mod_post, 1) . "</span>";
+        }
+
+        return $ret;
+    }
+
+    private static function isInList(tx_newspaper_Extra $e, $list) {
+        foreach (explode(',', $list) as $uid) {
+            if (intval($uid) == $e->getExtraUid()) return true;
+        }
+        return false;
+    }
 
     /**
      * Render newspaper details
