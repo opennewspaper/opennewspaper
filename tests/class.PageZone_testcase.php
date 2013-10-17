@@ -581,6 +581,23 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 		}
 	}
 
+    public function test_inheritExtraInheritsExtra() {
+        $this->skipTest("Not yet implemented");
+    }
+
+    public function test_inheritExtraDoesCreateOwnExtraRecord() {
+        $this->skipTest("Not yet implemented");
+    }
+
+    public function test_inheritExtraHasCorrectOriginUid() {
+        $this->skipTest("Not yet implemented");
+    }
+
+    public function test_inheritExtraWorksForInheritingPagezones() {
+        $this->skipTest("Not yet implemented");
+    }
+
+
 	////////////////////////////////////////////////////////////////////////////
 
 	/** Make sure the order is correct. \n

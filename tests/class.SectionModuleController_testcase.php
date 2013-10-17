@@ -17,6 +17,7 @@ class test_SectionModuleController_testcase extends tx_newspaper_database_testca
     }
 
     public function test_changeParent() {
+        $this->skipTest("Not yet implemented");
     }
     
 }
