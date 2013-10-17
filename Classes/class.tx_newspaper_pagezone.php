@@ -481,8 +481,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
     }
 
     /**
-     * Check if horozontal inheritance is switched on
-     * @return Value configured in TSConfig newspaper.horizontal_inheritance_enabled or 0 as default
+     * Check if horizontal inheritance is switched on
+     * @return int Value configured in TSConfig newspaper.horizontal_inheritance_enabled or 0 as default
      */
     public static function isHorizontalInheritanceEnabled() {
         $TSConfig = tx_newspaper::getTSConfig();
@@ -490,9 +490,9 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
     }
 
     /// Get the hierarchy of Page Zones from which the current Zone inherits the placement of its extras
-    /** \param $including_myself If true, add $this to the list
-     *  \param $hierarchy List of already found parents (for recursive calling)
-     *  \return Inheritance hierarchy of Page Zones from which the current Page
+    /** @param bool $including_myself If true, add $this to the list
+     *  @param tx_newspaper_PageZone[] $hierarchy List of already found parents (for recursive calling)
+     *  @return tx_newspaper_PageZone[] Inheritance hierarchy of Page Zones from which the current Page
      *              Zone inherits, ordered upwards
      */
     public function getInheritanceHierarchyUp($including_myself = true,

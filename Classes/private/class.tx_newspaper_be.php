@@ -388,7 +388,7 @@ class tx_newspaper_BE {
 		return $data;
 	}
 
-    private static function populateExtraData(tx_newspaper_Extra $extra, $pz) {
+    private static function populateExtraData(tx_newspaper_Extra $extra, tx_newspaper_PageZone $pz) {
 
         $timer = tx_newspaper_ExecutionTimer::create();
 
