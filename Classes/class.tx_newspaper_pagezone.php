@@ -184,6 +184,10 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 
     ///    Store a newly created page zone
     private function storeFirstTime() {
+        if (!$this->pagezonetype instanceof tx_newspaper_PageZoneType) {
+            throw new tx_newspaper_IllegalUsageException("Tried to store a page zone without a page zone type");
+        }
+
         $this->attributes['pagezonetype_id'] = $this->pagezonetype->getUid();
         /** \todo If the PID is not set manually, $tce->process_datamap()
          *           fails silently.
@@ -799,11 +803,15 @@ if (false && $parent_zone->getParentPage()->getPageType()->getAttribute('type_na
         $this->hideOriginExtras();
 
         $parent_zone = $this->getParentZone($newAbstractParentUid);
+
         if ($parent_zone) {
             $this->inheritExtrasFrom($parent_zone);
+            $concrete_uid = $parent_zone->getUid();
+        } else {
+            $concrete_uid = 0;
         }
 
-        $this->storeWithNewParent($newAbstractParentUid);
+        $this->storeWithNewParent($concrete_uid);
 
         self::$debug_lots_of_crap = false;
     }
@@ -915,8 +923,9 @@ if (false && $parent_zone->getParentPage()->getPageType()->getAttribute('type_na
         );
     }
 
-    private function storeWithNewParent($newAbstractParentUid) {
-        $this->setAttribute('inherits_from', intval($newAbstractParentUid));
+    private function storeWithNewParent($concrete_uid) {
+
+        $this->setAttribute('inherits_from', intval($concrete_uid));
         $this->setAttribute('tstamp', time());
         $this->store();
     }
