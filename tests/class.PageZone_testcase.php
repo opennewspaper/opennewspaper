@@ -581,12 +581,97 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 		}
 	}
 
-    public function test_inheritExtraInheritsExtra() {
-        $this->skipTest("Not yet implemented");
+    public function test_setupInheritanceHierarchy() {
+        $this->makePageZoneHierarchy();
+
+        foreach($this->level1->getInheritanceHierarchyDown() as $page_zone) {
+            $extras = $page_zone->getExtras();
+            $this->assertEquals(1, sizeof($extras), "page zone $page_zone has " . sizeof($extras) . " extras" );
+            $this->assertEquals($this->inherited_extra->getUid(), $extras[0]->getUid());
+        }
+    }
+
+    private function makePageZoneHierarchy() {
+        $this->inherited_extra = $this->createExtraToInherit('tx_newspaper_Extra_Generic');
+
+        $not_inherited_extra = $this->createExtraToInherit('tx_newspaper_Extra_Textbox');
+
+        $this->level1 = $this->createPagezoneForInheriting();
+        $this->level1->addExtra($this->inherited_extra);
+
+        $this->level2 = $this->createPagezoneForInheriting();
+        $this->level2->changeParent($this->level1->getAbstractUid());
+
+        $this->level3_1 = $this->createPagezoneForInheriting();
+        $this->level3_2 = $this->createPagezoneForInheriting();
+        $this->level3_1->changeParent($this->level2->getAbstractUid());
+        $this->level3_2->changeParent($this->level2->getAbstractUid());
+    }
+    /** @var  tx_newspaper_Extra */
+    private $inherited_extra;
+    /** @var tx_newspaper_Pagezone_Page */
+    private $level1;
+    /** @var tx_newspaper_Pagezone_Page */
+    private $level2;
+    /** @var tx_newspaper_Pagezone_Page */
+    private $level3_1;
+    /** @var tx_newspaper_Pagezone_Page */
+    private $level3_2;
+
+    /**
+     * @param $class
+     * @return tx_newspaper_Extra
+     */
+    private function createExtraToInherit($class) {
+        /** @var tx_newspaper_Extra $extra */
+        $extra = new $class();
+        $extra->store();
+        $this->assertGreaterThan(0, intval($extra->getUid()),      "uid is " . $extra->getUid());
+        $this->assertGreaterThan(0, intval($extra->getExtraUid()), "extra uid is " . $extra->getExtraUid());
+
+        return tx_newspaper_Extra_Factory::getInstance()->create($extra->getExtraUid());
+    }
+
+    /**
+     * @param $pagezonetype tx_newspaper_PageZoneType
+     * @return tx_newspaper_PageZone_Page
+     */
+    private function createPagezoneForInheriting() {
+        $pagezonetype = $this->fixture->getPageZoneTypes()[0];
+        $this->assertTrue($pagezonetype instanceof tx_newspaper_PageZoneType, 'no page zone type found');
+
+        $zone = new tx_newspaper_PageZone_Page();
+        $zone->setPageZoneType($pagezonetype);
+        $zone->store();
+
+        $this->assertGreaterThan(0, intval($zone->getUid()), "uid is " . $zone->getUid());
+        $this->assertGreaterThan(0, intval($zone->getAbstractUid()), "uid is " . $zone->getAbstractUid());
+
+        return $zone;
+    }
+
+    private function printPageZones(array $zones, $prefix = "") {
+        if ($prefix) echo "$prefix:<br />\n";
+        array_walk($zones,
+            function (tx_newspaper_PageZone $p) {
+                echo "$p<br />\n";
+                array_walk($p->getExtras(), function (tx_newspaper_Extra $e) {
+                    echo "&nbsp;$e<br />\n";
+                });
+            }
+        );
     }
 
     public function test_inheritExtraDoesCreateOwnExtraRecord() {
-        $this->skipTest("Not yet implemented");
+        $this->makePageZoneHierarchy();
+
+        foreach($this->level1->getInheritanceHierarchyDown(false) as $page_zone) {
+            $extras = $page_zone->getExtras();
+            $this->assertNotEquals(
+                $this->inherited_extra->getExtraUid(), $extras[0]->getExtraUid(),
+                "page zone $page_zone, extra " . $extras[0] . " has same extra uid as inherited"
+            );
+        }
     }
 
     public function test_inheritExtraHasCorrectOriginUid() {
@@ -737,5 +822,8 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 	);
 	
 	private $extra_abstract_uids = array();
+
+
+
 }
 ?>
