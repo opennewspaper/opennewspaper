@@ -637,7 +637,8 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
      * @return tx_newspaper_PageZone_Page
      */
     private function createPagezoneForInheriting() {
-        $pagezonetype = $this->fixture->getPageZoneTypes()[0];
+        $pagezonetypes = $this->fixture->getPageZoneTypes();
+	$pagezonetype = $pagezonetypes[0];
         $this->assertTrue($pagezonetype instanceof tx_newspaper_PageZoneType, 'no page zone type found');
 
         $zone = new tx_newspaper_PageZone_Page();
