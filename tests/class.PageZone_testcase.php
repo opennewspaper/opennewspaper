@@ -6,25 +6,28 @@
  * Author: lene
  */
 
+// TODO relative paths so that the IDE can resolve dependencies
 require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_pagezone.php');
-require_once(PATH_typo3conf . 'ext/newspaper/tests/class.fixture.php');
-require_once(PATH_typo3conf . 'ext/newspaper/tests/class.tx_newspaper_database_testcase.php');
+require_once('class.fixture.php');
+require_once('class.tx_newspaper_database_testcase.php');
 
 /// testsuite for class tx_newspaper_pagezone
 class test_PageZone_testcase extends tx_newspaper_database_testcase {
 
     function setUp() {
+        /** @var t3lib_DB */
+        global $TYPO3_DB;
         parent::setUp();
         $pagezonetypes = $this->fixture->getPageZoneTypes();
         $this->pagezone_page_data['pagezonetype_id'] = $pagezonetypes[0]->getUid();
         if (false) {
             $this->uid = tx_newspaper::insertRows($this->pagezone_page_table, $this->pagezone_page_data);
         } else {
-            $query = $GLOBALS['TYPO3_DB']->INSERTquery($this->pagezone_page_table, $this->pagezone_page_data);
-            $res = $GLOBALS['TYPO3_DB']->sql_query($query);
+            $query = $TYPO3_DB->INSERTquery($this->pagezone_page_table, $this->pagezone_page_data);
+            $res = $TYPO3_DB->sql_query($query);
             if (!$res) die("$query failed!");
             
-            $this->uid = $GLOBALS['TYPO3_DB']->sql_insert_id();
+            $this->uid = $TYPO3_DB->sql_insert_id();
         }
 
         $this->pagezone = new tx_newspaper_PageZone_Page($this->uid);
@@ -151,7 +154,8 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
         $this->assertEquals($this->pagezone->getParentForPlacement(), null);
     }
 
-    /** @todo create a pagezone in the fixture which explicitly does not inherit
+    /**
+     *  @todo create a pagezone in the fixture which explicitly does not inherit
      */
     public function test_getParentForPlacementWithoutInheritance() {
         foreach ($this->fixture->getPageZones() as $pagezone) {
@@ -168,7 +172,8 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
         $this->skipTest("No pagezones without inheritance set up yet");
     }
 
-    /** @todo create a pagezone in the fixture which inherits from a specified pagezone
+    /**
+     *  @todo create a pagezone in the fixture which inherits from a specified pagezone
      */
     public function test_getParentForPlacementExplicitPagezone() {
         foreach ($this->fixture->getPageZones() as $pagezone) {
@@ -205,10 +210,6 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
                                       'Pagezone ' . $pagezone->getUid() . ' has a parent in the same Section (' .
                                       $pagezone->getParentPage()->getParentSection()->getUid() .
                                       '), but should not. ');
-                    if (1) {
-                        t3lib_div::debug($pagezone->__toString() . ': parent is ' .
-                                         $parent->__toString());
-                    }
                 } else {
                     if (0) {
                         t3lib_div::debug($pagezone->__toString() . ': no parent');
@@ -264,7 +265,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
     }
 
 
-    private function checkAllElementsArePagezones($hierarchy) {
+    private function checkAllElementsArePagezones(/** @var tx_newspaper_Pagezone[] $hierarchy */$hierarchy) {
         foreach ($hierarchy as $element) {
             $this->assertTrue($element instanceof tx_newspaper_PageZone,
                               $element->__toString() . ' is not a PageZone');
