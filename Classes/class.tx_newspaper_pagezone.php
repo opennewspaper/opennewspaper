@@ -507,14 +507,12 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
         } else return $hierarchy;
     }
 
-
-    /// Add an extra after the Extra which is on the original page zone as \p $origin_uid
-    /** \param $insert_extra The new, fully instantiated Extra to insert
-     *  \param $origin_uid UID of \p $insert_extra on the PageZone where it was
-     *         originally added.
-     *  \param $recursive If set, pass down the insertion to all inheriting
-     *      PageZones.
-     *  \return \p $insert_extra
+    /**
+     *  Add an extra after the Extra which is on the original page zone as \p $origin_uid
+     *  @param tx_newspaper_Extra $insert_extra The new, fully instantiated Extra to insert
+     *  @param int $origin_uid UID of \p $insert_extra on the PageZone where it was originally added.
+     *  @param bool $recursive  If set, pass down the insertion to all inheriting PageZones.
+     *  @return tx_newspaper_Extra \p $insert_extra
      */
     public function insertExtraAfter(tx_newspaper_Extra $insert_extra,
                                      $origin_uid = 0, $recursive = true) {
@@ -859,24 +857,9 @@ if (false && $parent_zone->getParentPage()->getPageType()->getAttribute('type_na
     }
 
     private function inheritExtra(tx_newspaper_Extra $extra) {
-
-        $this->insertExtraAfter($extra);
-        return;
-
-        if (self::$debug_lots_of_crap) tx_newspaper::devlog('inheritExtra() before copy', $this->getExtraAndPagezone($extra));
-        $copied = $this->copyExtra($extra);
-        tx_newspaper::devlog('inheritExtra() after copy', $this->getExtraAndPagezone($extra));
-
-        $copied->setAttribute('position', $this->getInsertPosition(0));
-        $copied->setAttribute('paragraph', 0);
-        $copied->setAttribute('is_inheritable', 1);
-        $copied->setAttribute('show_extra', 1);
-
-        $copied->store();
-
-        if (self::$debug_lots_of_crap) tx_newspaper::devlog('inheritExtra() after insert', $this->getExtraAndPagezone($extra));
-
-        # $this->insertExtraAfter($copied);
+        $copied = $extra->duplicate(true);
+        $copied->setOriginUid($extra->getOriginUid());
+        return $this->insertExtraAfter($copied);
     }
 
     /** @return tx_newspaper_Extra */
@@ -1055,6 +1038,15 @@ if (false && $parent_zone->getParentPage()->getPageType()->getAttribute('type_na
         $this->parent_page_id = $parent->getUid();
     }
 
+    public function doesContainExtra(tx_newspaper_Extra $extra, $exact_extra = false) {
+        foreach($this->getExtras() as $tested_extra) {
+            if ($tested_extra->getExtraUid() == $extra->getExtraUid()) return true;
+            if (!$exact_extra &&
+                $tested_extra->getAttribute('extra_uid') == $extra->getAttribute('extra_uid') &&
+                $tested_extra->getAttribute('extra_table') == $extra->getAttribute('extra_table')) return true;
+        }
+        return false;
+    }
 
     ////////////////////////////////////////////////////////////////////////////
     //
@@ -1311,6 +1303,10 @@ if (false && $parent_zone->getParentPage()->getPageType()->getAttribute('type_na
         return $this->extras;
     }
 
+    /**
+     * @param string $extra_class desired extra class
+     * @return tx_newspaper_Extra[] All ${extra_class}es on this PageZone
+     */
     public function getExtrasOf($extra_class) {
 
         if ($extra_class instanceof tx_newspaper_Extra) {
