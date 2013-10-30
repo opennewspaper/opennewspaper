@@ -323,6 +323,8 @@ class tx_newspaper_Page
  		}
 		$this->smarty->assign('page_zones', $rendered);
 
+        $this->smarty->assign('typoscript', tx_newspaper::getNewspaperTyposcript());
+
         /// Return the rendered page
         $rendered = $this->smarty->fetch($this);
 
