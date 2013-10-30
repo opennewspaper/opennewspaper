@@ -300,7 +300,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
      *          passed down from tx_newspaper_Page::render() )
      *    \return The rendered page as HTML (or XML, if you insist)
      */
-     public function render($template_set = '') {
+    public function render($template_set = '') {
 
         /// Check whether to use a specific template set
         if ($this->getAttribute('template_set')) {
@@ -318,24 +318,26 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
             $this->smarty->setPageZoneType($this);
         }
 
-         /// Pass global attributes to Smarty
-         $this->smarty->assign('class', get_class($this));
-         $this->smarty->assign('attributes', $this->attributes);
-         $this->smarty->assign('normalized_name', $this->getPageZoneType()->getAttribute('normalized_name'));
+        /// Pass global attributes to Smarty
+        $this->smarty->assign('class', get_class($this));
+        $this->smarty->assign('attributes', $this->attributes);
+        $this->smarty->assign('normalized_name', $this->getPageZoneType()->getAttribute('normalized_name'));
 
         /** Pass the Extras on this page zone, already rendered, to Smarty
          *  \todo blockweise zusammenfuehren von extras gleiches layout (nicht vor taz launch)
          */
-         $temp_extras = array();
-         foreach ($this->getExtras() as $extra) {
-             $temp_extras[] = $extra->render($template_set);
-         }
-         $this->smarty->assign('extras', $temp_extras);
+        $temp_extras = array();
+        foreach ($this->getExtras() as $extra) {
+            $temp_extras[] = $extra->render($template_set);
+        }
+        $this->smarty->assign('extras', $temp_extras);
+
+        $this->smarty->assign('typoscript', tx_newspaper::getNewspaperTyposcript());
 
         $rendered = $this->smarty->fetch($this);
 
         return $rendered;
-     }
+    }
 
 
      /// \todo: oliver: deprecated? probably yes

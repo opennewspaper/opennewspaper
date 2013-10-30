@@ -256,6 +256,9 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface, tx_newspap
         $this->smarty->assign('extra_attributes', $this->extra_attributes);
 
         $this->smarty->assign('extra', $this);
+
+        $this->smarty->assign('typoscript', tx_newspaper::getNewspaperTyposcript());
+
     }
 
     private function configureSmarty($template_set) {
