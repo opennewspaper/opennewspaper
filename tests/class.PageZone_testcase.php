@@ -664,7 +664,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
         // okay, theoretically you could test inheriting page zones as well... but we'll leave that as an exercise for the reader
     }
 
-    public function test_runAllTests() {
+    public function runAllTests() {
         $reflection_class = new ReflectionClass($this);
         /** @var ReflectionMethod[] $valid_methods */
         $valid_methods = array_filter(
