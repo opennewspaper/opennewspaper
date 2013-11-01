@@ -82,6 +82,10 @@ class tx_newspaper_fixture {
         return $this->pagezones;
     }
 
+    public function getPageZoneWithoutInheritance() {
+        return tx_newspaper_PageZone_Factory::getInstance()->create($this->pagezone_without_inheritance_uid);
+    }
+
     public function getPageZonePageUid() {
         return $this->pagezone_page_uids[0];
     }
@@ -281,21 +285,38 @@ class tx_newspaper_fixture {
         }
         foreach ($this->page_uids as $page_uid) {
             foreach ($this->pagezonetype_uids as $pagezonetype_uid) {
-                $this->pagezone_page_data['pagezonetype_id'] = $pagezonetype_uid;
-                $concrete_uid = tx_newspaper::insertRows($this->pagezone_page_table, $this->pagezone_page_data);
-                $this->pagezone_page_uids[] = $concrete_uid;
-                //    the c'tor creates the parent record as well
-                $temp_pagezone = new tx_newspaper_Pagezone_Page($concrete_uid);
-                $abstract_uid = $temp_pagezone->getPageZoneUID();
-                $this->pagezone_uids[] = $abstract_uid;
-                //  connect the abstract record to the page
-                tx_newspaper::updateRows(
-                    $this->pagezone_table,
-                    "uid = $abstract_uid",
-                    array('page_id' => $page_uid)
-                );
+                $this->createPageZone($pagezonetype_uid, $page_uid);
             }
         }
+        $this->createPageZoneWithoutInheritance();
+    }
+
+    /**
+     * @param $pagezonetype_uid
+     * @param $page_uid
+     */
+    private function createPageZone($pagezonetype_uid, $page_uid) {
+        $this->pagezone_page_data['pagezonetype_id'] = $pagezonetype_uid;
+        $concrete_uid = tx_newspaper::insertRows($this->pagezone_page_table, $this->pagezone_page_data);
+        $this->pagezone_page_uids[] = $concrete_uid;
+        //    the c'tor creates the parent record as well
+        $temp_pagezone = new tx_newspaper_Pagezone_Page($concrete_uid);
+        $abstract_uid = $temp_pagezone->getPageZoneUID();
+        $this->pagezone_uids[] = $abstract_uid;
+        //  connect the abstract record to the page
+        tx_newspaper::updateRows(
+            $this->pagezone_table,
+            "uid = $abstract_uid",
+            array('page_id' => $page_uid)
+        );
+    }
+
+    private function createPageZoneWithoutInheritance() {
+        $this->createPageZone(array_pop($this->getPageZoneTypes())->getUid(), 0);
+        $this->pagezone_without_inheritance_uid = $this->pagezone_uids[sizeof($this->pagezone_uids)-1];
+        $pagezone = tx_newspaper_PageZone_Factory::getInstance()->create($this->pagezone_without_inheritance_uid);
+        $pagezone->setAttribute('inherits_from', -1);
+        $pagezone->store();
     }
 
     private function createExtras() {
@@ -690,6 +711,8 @@ class tx_newspaper_fixture {
         'inherits_from' => '0'
     );
 
+    private $pagezone_without_inheritance_uid;
+
     /// The Page Zones in the hierarchy as a flat array of objects
     private $pagezones = array();
 
@@ -851,6 +874,7 @@ class tx_newspaper_fixture {
     private $extra_pos = array(
         1024, 2048, 4096
     );
+
 
 }
 ?>
