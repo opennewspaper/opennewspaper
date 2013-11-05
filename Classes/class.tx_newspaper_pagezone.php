@@ -390,6 +390,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
     /** @return tx_newspaper_Page on which the PageZone lies.
      */
     public function getParentPage() {
+
         if (!$this->parent_page) {
             if (!$this->parent_page_id) {
                 $pagezone_record = tx_newspaper::selectOneRow(
@@ -449,17 +450,20 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
     }
 
 
-    /// The Page Zone from which \c $this inherits the placement of its Extras
-    /** The page zone depends on attribute \c 'inherit_mode' (defined in
+    /**
+     *  The Page Zone from which \c $this inherits the placement of its Extras.
+     *
+     *  The page zone depends on attribute \c 'inherit_mode' (defined in
      *  pagezone_page and article):
      *
-     *  If negative, don't inherit at all; if positive,    inherit from the page
+     *  If negative, don't inherit at all; if positive,    inherit from the pagezone_page
      *  identified by the UID given (parameter misnomer ;-) ; if zero, find the
      *  page zone in the parent page or higher up in the hierarchy with the same
      *  page zone type as \c $this.
      *
-     *  \param $structure_only Ignore the value of \c 'inherit_mode', base the
-     *         return value only on the structure of the tx_newspaper_Section tree.
+     *  @param bool  $structure_only Ignore the value of \c 'inherit_mode', base
+     *         the return value only on the structure of the tx_newspaper_Section
+     *         tree.
      *
      *  @return tx_newspaper_PageZone The object from which to copy the
      *      tx_newspaper_Extra s and their placements.
@@ -795,20 +799,21 @@ if (false && $parent_zone->getParentPage()->getPageType()->getAttribute('type_na
      * Change parent Page Zone
      * Hide Extras placed on this Page Zone. Inherit Extras from new parent.
      * @param   int $newAbstractParentUid Abstract page zone uid OR 0 for same page zone type above in hierarchy
-     *          OR <0 for no inheritance
+     *          OR <0 or NULL for no inheritance
      */
     public function changeParent($newAbstractParentUid) {
 
         $this->removeInheritedExtras();
         $this->hideOriginExtras();
 
+        if (is_null($newAbstractParentUid)) $newAbstractParentUid = -1;
         $parent_zone = $this->getParentZone($newAbstractParentUid);
 
         if ($parent_zone) {
             $this->inheritExtrasFrom($parent_zone);
             $concrete_uid = $parent_zone->getUid();
         } else {
-            $concrete_uid = 0;
+            $concrete_uid = -1;
         }
 
         $this->storeWithNewParent($concrete_uid);
@@ -909,7 +914,6 @@ if (false && $parent_zone->getParentPage()->getPageType()->getAttribute('type_na
     }
 
     private function storeWithNewParent($concrete_uid) {
-
         $this->setAttribute('inherits_from', intval($concrete_uid));
         $this->setAttribute('tstamp', time());
         $this->store();
@@ -1268,6 +1272,7 @@ if (false && $parent_zone->getParentPage()->getPageType()->getAttribute('type_na
         if (isset(self::$parents_cache[$this->getAbstractUid()])) return self::$parents_cache[$this->getAbstractUid()];
 
         $current_page = $this->getParentPage();
+
         while ($current_page) {
 
             $current_page = $current_page->getParentPageOfSameType();
