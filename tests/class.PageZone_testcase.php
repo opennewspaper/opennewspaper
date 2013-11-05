@@ -154,28 +154,23 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
         $this->assertEquals($this->pagezone->getParentForPlacement(), null);
     }
 
-    /**
-     *  @todo create a pagezone in the fixture which explicitly does not inherit
-     */
     public function test_getParentForPlacementWithoutInheritance() {
-        foreach ($this->fixture->getPageZones() as $pagezone) {
-            if ($pagezone->getAttribute('inherits_from') < 0) {
-                $parent = $pagezone->getParentForPlacement();
-                $this->assertEquals(
-                    $parent, null,
-                    'PageZone ' . $pagezone->getUid() .': ' .
-                    'inheritance mode is set to no inheritance, but a parent (' .
-                    print_r($parent, 1) . ') is returned. '
-                );
-            }
-        }
-        $this->skipTest("No pagezones without inheritance set up yet");
+
+        $pagezone = $this->fixture->getPageZoneWithoutInheritance();
+        $parent = $pagezone->getParentForPlacement();
+        $this->assertEquals(
+            $parent, null,
+            'PageZone ' . $pagezone->getUid() .': ' .
+            'inheritance mode is set to no inheritance, but a parent (' .
+            print_r($parent, 1) . ') is returned. '
+        );
     }
 
     /**
      *  @todo create a pagezone in the fixture which inherits from a specified pagezone
      */
     public function test_getParentForPlacementExplicitPagezone() {
+        $this->skipTest("No pagezones with manual inheritance set up yet"); return;
         foreach ($this->fixture->getPageZones() as $pagezone) {
             if ($pagezone->getAttribute('inherits_from') > 0) {
                 $parent = $pagezone->getParentForPlacement();
@@ -191,12 +186,13 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
                 );
             }
         }
-        $this->skipTest("No pagezones with manual inheritance set up yet");
     }
 
     public function test_getParentForPlacementInheritFromSameType() {
+        $tested = $untested = 0;
         foreach ($this->fixture->getPageZones() as $pagezone) {
             if ($pagezone->getAttribute('inherits_from') == 0) {
+                $tested++;
                 $parent = $pagezone->getParentForPlacement();
                 //    Normal inheritance mode: go up in the section tree
                 if ($parent) {
@@ -211,13 +207,15 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
                                       $pagezone->getParentPage()->getParentSection()->getUid() .
                                       '), but should not. ');
                 } else {
+                    $untested++;
                     if (0) {
                         t3lib_div::debug($pagezone->__toString() . ': no parent');
                     }
                 }
             }
         }
-        $this->skipTest("No pagezones with automatic inheritance set up yet");
+
+        if ($tested == 0) $this->fail("No pagezones with automatic inheritance set up yet, $untested untested");
     }
 
 
@@ -627,28 +625,186 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
     }
 
     public function test_changeParentWorksForInheritingPagezones() {
-        $this->makePageZoneHierarchy();
+
+        if ($this->change_parent_collection_running) return;
+
+        if (!tx_newspaper_Pagezone::isHorizontalInheritanceEnabled()) {
+            /*
+             * If horizontal inheritance is not enabled, only changing the parent to
+             * the pagezone one up in the hierarchy and to none will work, i.e. switching
+             * inheritance on and off.
+             */
+            $this->skipTest('Horizontal Inheritance must be enabled for this test'); return;
+        }
+
         $zone = $this->createPagezoneForInheriting();
         $extra = $this->createExtraToInherit('tx_newspaper_Extra_Textbox');
         $zone->addExtra($extra);
         $this->assertEquals(1, sizeof($zone->getExtras()));
 
-        $zone->changeParent($this->level1->getAbstractUid());
+        $parent_section = new tx_newspaper_Section($this->fixture->getParentSectionUid());
+        $parent_zone = $this->getPageZoneForPlacement($parent_section);
 
-        $this->assertEquals(2, sizeof($zone->getExtras()));
-        $this->assertTrue($zone->doesContainExtra($extra), "Extra originally on page zone, $extra, gone after changeParent()");
-        $this->assertTrue($zone->doesContainExtra($this->inherited_extra), "inherited extra, " . $this->inherited_extra . ", not there after changeParent(): " . print_r($zone->getExtras(), 1));
+        $zone->changeParent($parent_zone->getAbstractUid());
+
+        echo "parent zone: ";
+        var_dump($parent_zone);
+
+        echo "record:";
+        var_dump(tx_newspaper_DB::getInstance()->selectOneRow('*', 'tx_newspaper_pagezone_page', 'uid = ' . $zone->getUid()));
+
+        echo "parent for placement:";
+        var_dump($zone->getParentForPlacement());
+
+        $this->assertEquals(
+            $this->level1->getAbstractUid(), $zone->getParentForPlacement()->getAbstractUid(),
+            "Parent page zone should be " . $this->level1->getAbstractUid() . ", is " . $zone->getParentForPlacement()->getAbstractUid()
+        );
+        $this->assertEquals(
+            2, sizeof($zone->getExtras()),
+            "There should be 1 original and 1 inherited extra; actual total is " . sizeof($zone->getExtras())
+        );
+        $this->assertTrue(
+            $zone->doesContainExtra($extra),
+            "Extra originally on page zone, $extra, gone after changeParent()"
+        );
+        $this->assertTrue(
+            $zone->doesContainExtra($this->inherited_extra),
+            "inherited extra, " . $this->inherited_extra . ", not there after changeParent(): " . print_r($zone->getExtras(), 1)
+        );
     }
 
+    public function test_changeParentWithoutParentAndPresentExtras() {
+        // set grandchild section to have no parent
+        $parent_section = new tx_newspaper_Section($this->fixture->getParentSectionUid());
+        $grandchild = array_pop($parent_section->getChildSections(true));
+        $pageZone = $this->getPageZoneForPlacement($grandchild);
+
+        $pageZone->changeParent(-1);
+
+        $this->assertTrue(
+            is_null($pageZone->getParentForPlacement()),
+            "Parent is " . $pageZone->getParentForPlacement()
+        );
+
+       $inherited_extras = array_filter(
+            $pageZone->getExtras(),
+            function(tx_newspaper_Extra $e) { return $e->getOriginUid() != $e->getExtraUid(); }
+        );
+
+        $this->assertEquals(
+            0, sizeof($inherited_extras),
+            sizeof($inherited_extras) . " extras left: " . print_r($inherited_extras, 1)
+        );
+    }
+
+    public function test_changeParentWithoutParentWithoutExtras() {
+
+        // set grandchild section to have no parent
+        $parent_section = new tx_newspaper_Section($this->fixture->getParentSectionUid());
+        $grandchild = array_pop($parent_section->getChildSections(true));
+        $pageZone = $this->getPageZoneForPlacement($grandchild);
+
+        // remove extras on this page zone
+        tx_newspaper_DB::getInstance()->deleteRows(
+            'tx_newspaper_pagezone_page_extras_mm ', 'uid_local = ' . $pageZone->getUid()
+        );
+        $this->assertEquals(0, sizeof($pageZone->getExtras()), sizeof($pageZone->getExtras()) . " Extras left!");
+
+        $pageZone->changeParent(-1);
+
+        $this->assertTrue(
+            is_null($pageZone->getParentForPlacement()),
+            "Parent is " . $pageZone->getParentForPlacement()
+        );
+
+       $inherited_extras = array_filter(
+            $pageZone->getExtras(),
+            function(tx_newspaper_Extra $e) { return $e->getOriginUid() != $e->getExtraUid(); }
+        );
+
+        $this->assertEquals(
+            0, sizeof($inherited_extras),
+            sizeof($inherited_extras) . " extras left: " . print_r($inherited_extras, 1)
+        );
+    }
+
+    public function test_changeParentSwitchInheritanceOffAndOn() {
+
+        if ($this->change_parent_collection_running) return;
+
+        // set up a page zone with both extras on it and inherited extras
+        $parent_section = new tx_newspaper_Section($this->fixture->getParentSectionUid());
+        $parent_zone = $this->getPageZoneForPlacement($parent_section);
+
+        $inherit_extra = $this->createExtraToInherit('tx_newspaper_Extra_Generic');
+        $parent_zone->insertExtraAfter($inherit_extra);
+
+        $this->assertTrue(
+            $parent_zone->doesContainExtra($inherit_extra),
+            "Extra not present on parent zone after insert"
+        );
+
+        $grandchild = array_pop($parent_section->getChildSections(true));
+        $zone = $this->getPageZoneForPlacement($grandchild);
+
+        $original_extras = $zone->getExtras();
+        $original_origin_uid = array_pop($zone->getExtrasOf('tx_newspaper_Extra_Generic'))->getOriginUid();
+
+        $this->assertTrue(
+            $zone->doesContainExtra($inherit_extra),
+            "Extra not present on inheriting zone after insert"
+        );
+
+        // switch inheritance off
+        $zone->changeParent(-1);
+
+        // test that inherited extras are gone
+        $this->assertFalse(
+            $zone->doesContainExtra($inherit_extra),
+            "Extra still present after turning off inheritance"
+        );
+
+        // switch inheritance on
+        $zone->changeParent(0);
+
+        // test that inherited extra is there,
+        $this->assertTrue(
+            $zone->doesContainExtra($inherit_extra),
+            "Extra still present after turning off inheritance"
+        );
+        // ...with the same origin uid as before
+        $actually_inserted_extra = array_pop($zone->getExtrasOf('tx_newspaper_Extra_Generic'));
+        $this->assertEquals(
+            $original_origin_uid, $actually_inserted_extra->getOriginUid(),
+            "origin uid has changed"
+        );
+
+        foreach($original_extras as $extra) {
+            $this->assertTrue(
+                $zone->doesContainExtra($extra),
+                "Extra $extra originally on page zone, not any more"
+            );
+        }
+    }
+
+    private $change_parent_collection_running = false;
     public function test_changeParent() {
-        echo "test_changeParentSetsUpInheritanceHierarchy() ";
+        $this->change_parent_collection_running = true;
+        echo "<p>test_changeParentSetsUpInheritanceHierarchy()</p>";
         $this->test_changeParentSetsUpInheritanceHierarchy();
-        echo "test_changeParentDoesCreateOwnExtraRecord() ";
+        echo "<p>test_changeParentDoesCreateOwnExtraRecord()</p>";
         $this->test_changeParentDoesCreateOwnExtraRecord();
-        echo "test_changeParentCreatesCorrectOriginUid() ";
+        echo "<p>test_changeParentCreatesCorrectOriginUid()</p>";
         $this->test_changeParentCreatesCorrectOriginUid();
-        echo "test_changeParentWorksForInheritingPagezones()";
+        echo "<p>test_changeParentWorksForInheritingPagezones()</p>";
         $this->test_changeParentWorksForInheritingPagezones();
+        echo "<p>test_changeParentWithoutParentAndPresentExtras()</p>";
+        $this->test_changeParentWithoutParentAndPresentExtras();
+        echo "<p>test_changeParentWithoutParentWithoutExtras()</p>";
+        $this->test_changeParentWithoutParentWithoutExtras();
+        echo "<p>test_changeParentSwitchInheritanceOffAndOn()</p>";
+        $this->test_changeParentSwitchInheritanceOffAndOn();
     }
 
     public function test_doesContainExtra() {
@@ -678,6 +834,24 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
     }
 
     ////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * @param $parent_section
+     * @return tx_newspaper_PageZone
+     */
+    private function getPageZoneForPlacement(tx_newspaper_Section $parent_section) {
+        $pagetype = array_pop($this->fixture->getPageTypes());
+        $page = $parent_section->getSubPage($pagetype);
+        $pagezonetype = $this->getPagezoneForInheritance();
+        return $page->getPageZone($pagezonetype);
+    }
+
+    /**
+     * @return tx_newspaper_PageZoneType
+     */
+    private function getPagezoneForInheritance() {
+        return array_shift($this->fixture->getPageZoneTypes());
+    }
 
     /** Make sure the order is correct. \n
      *  Expected order: \n
@@ -886,8 +1060,6 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
     );
     
     private $extra_abstract_uids = array();
-
-
 
 }
 ?>
