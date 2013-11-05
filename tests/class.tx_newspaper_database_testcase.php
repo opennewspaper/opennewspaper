@@ -12,23 +12,23 @@ class tx_newspaper_database_testcase extends tx_phpunit_database_testcase {
 
     const fallback_test_db = 'onlinetaz_2_hel_test';
 
- 	function setUp($createFixture = true) {
- 			
- 		if (self::$skip_setup_because_no_data_have_changed) return;
+     function setUp($createFixture = true) {
+             
+         if (self::$skip_setup_because_no_data_have_changed) return;
 
         $this->testDatabase = $this->getTestDB();
 
- 		$this->createDatabase();
- 		$this->cleanDatabase();
-		$this->useTestDatabase();
- 		$this->importTables(PATH_typo3conf . 'ext/newspaper/tests/typo3.newspaper.basis1.sql');
- 		$this->importExtensions(array('newspaper', 'devlog'));
-// 			$this->importData(PATH_typo3conf . 'ext/newspaper/tests/typo3.newspaper.basis1.inserts.sql');
+         $this->createDatabase();
+         $this->cleanDatabase();
+        $this->useTestDatabase();
+         $this->importTables(PATH_typo3conf . 'ext/newspaper/tests/typo3.newspaper.basis1.sql');
+         $this->importExtensions(array('newspaper', 'devlog'));
+//             $this->importData(PATH_typo3conf . 'ext/newspaper/tests/typo3.newspaper.basis1.inserts.sql');
 
         if($createFixture) {
             $this->fixture = new tx_newspaper_fixture();
         }
- 	}
+     }
 
     private function getTestDB() {
 
@@ -62,69 +62,69 @@ class tx_newspaper_database_testcase extends tx_phpunit_database_testcase {
     }
 
     function tearDown() {
- 		//clearing data in setUp so it can be inspected after running a single test.
- 	}
- 		
- 	public function importTables($filename) {
-		$this->importSQL($filename, ';');
-	}
-		
-	/**
-	 * INSERT-Statement has to be a single line
-	 */
-	private function importData($filename) {
-		$this->importSQL($filename, PHP_EOL);
-	}
-		
-	private function importSQL($filename, $seperator) {
-		$content = file_get_contents($filename);
-//		$content = $this->removeSqlComments($content);
-		$statements = explode($seperator, $content);
-		foreach($statements as $i => $stmt) {
-			if(stristr($stmt, '--') == false && count($stmt) > 0) {
-				$GLOBALS['TYPO3_DB']->admin_query($stmt);
-			}
-		}
-	}
-		
-	private function removeSqlComments($sqlFileContent) {
-		$statements = explode(PHP_EOL, $sqlFileContent);
-		foreach($statements as $i => $stmt) {
-			if(ereg('^(--)|(DROP)', $stmt)) {
-				unset($statements[$i]);
-			}
-		}
-		$content = implode($statements);
-		return $content;
-	}
+         //clearing data in setUp so it can be inspected after running a single test.
+     }
+         
+     public function importTables($filename) {
+        $this->importSQL($filename, ';');
+    }
+        
+    /**
+     * INSERT-Statement has to be a single line
+     */
+    private function importData($filename) {
+        $this->importSQL($filename, PHP_EOL);
+    }
+        
+    private function importSQL($filename, $seperator) {
+        $content = file_get_contents($filename);
+//        $content = $this->removeSqlComments($content);
+        $statements = explode($seperator, $content);
+        foreach($statements as $i => $stmt) {
+            if(stristr($stmt, '--') == false && count($stmt) > 0) {
+                $GLOBALS['TYPO3_DB']->admin_query($stmt);
+            }
+        }
+    }
+        
+    private function removeSqlComments($sqlFileContent) {
+        $statements = explode(PHP_EOL, $sqlFileContent);
+        foreach($statements as $i => $stmt) {
+            if(ereg('^(--)|(DROP)', $stmt)) {
+                unset($statements[$i]);
+            }
+        }
+        $content = implode($statements);
+        return $content;
+    }
 
     /**
-	 * Drops tables in test database
-	 *
-	 * @return void
-	 */
-	protected function clearDatabase() {
-		$db = $GLOBALS['TYPO3_DB'];
-		$databaseNames = $db->admin_get_dbs();
+     * Drops tables in test database
+     *
+     * @return void
+     */
+    protected function clearDatabase() {
+        $db = $GLOBALS['TYPO3_DB'];
+        $databaseNames = $db->admin_get_dbs();
 
-		if (in_array($this->testDatabase, $databaseNames)) {
-			$db->sql_select_db($this->testDatabase);
+        if (in_array($this->testDatabase, $databaseNames)) {
+            $db->sql_select_db($this->testDatabase);
 
-			// drop all tables
-			$tables = $this->getDatabaseTables();
-			foreach ($tables as $tableName) {
-				$db->admin_query('TRUNCATE TABLE '. $tableName);
-			}
-		}
-	}
-		
-	/**
-	 * Because this class lives inside the folder Tests it is listed as a tests by tx_phpunit.
-	 * Tests without testcases generate warnings which a dummy test avoids.
-	 */
-	public function test_dummyTestToAvoidWarningUntilTestsForThisClassAreWritten() {
-		$this->assertTrue(true);
-	}
+            // drop all tables
+            $tables = $this->getDatabaseTables();
+            foreach ($tables as $tableName) {
+                $db->admin_query('TRUNCATE TABLE '. $tableName);
+            }
+        }
+    }
+        
+    /**
+     * Because this class lives inside the folder Tests it is listed as a tests by tx_phpunit.
+     * Tests without testcases generate warnings which a dummy test avoids.
+     */
+    public function test_dummyTestToAvoidWarningUntilTestsForThisClassAreWritten() {
+        $this->assertTrue(true);
+    }
 
 
     protected function skipTest($message) {
@@ -135,15 +135,15 @@ class tx_newspaper_database_testcase extends tx_phpunit_database_testcase {
     protected function doTestContains($string, $word) {
         $this->assertRegExp(
             "/.*$word.*/", $string,
-			"Plugin output (expected $word): $string"
+            "Plugin output (expected $word): $string"
         );
     }
 
     /** @var tx_newspaper_fixture */
- 	protected  $fixture = null ;		//< Testdata
- 		
- 	/// If you want to run setUp() only once per testcase, set this variable in the testcase's setUp().
- 	protected static $skip_setup_because_no_data_have_changed = false;
- 		
+     protected  $fixture = null ;        //< Testdata
+         
+     /// If you want to run setUp() only once per testcase, set this variable in the testcase's setUp().
+     protected static $skip_setup_because_no_data_have_changed = false;
+         
  }
 ?>
