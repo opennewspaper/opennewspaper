@@ -1090,7 +1090,8 @@ class tx_newspaper  {
      * @return array Typoscript array for "newspaper."
      */
     public static function getNewspaperTyposcript() {
-       if (!isset($GLOBALS['TSFE']) || !is_object($GLOBALS['TSFE']) || !($GLOBALS['TSFE'] instanceof tslib_fe)) {
+       if (!isset($GLOBALS['TSFE']) || !is_object($GLOBALS['TSFE']) ||
+           !($GLOBALS['TSFE'] instanceof tslib_fe) || !isset($GLOBALS['TSFE']->tmpl->setup['newspaper.'])) {
            return array(); // Typoscript couldn't be fetched, so return empty array
        }
        return $GLOBALS['TSFE']->tmpl->setup['newspaper.'];
