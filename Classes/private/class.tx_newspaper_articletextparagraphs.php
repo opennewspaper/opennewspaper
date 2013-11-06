@@ -10,8 +10,13 @@ class tx_newspaper_ArticleTextParagraphs {
 
     /**
      * @param tx_newspaper_Article $article The article whose text is represented
+     * @param string $wrap_open opening string for wrapping every paragraph
+     * @param string $wrap_close closing string for wrapping every paragraph
      */
-    public function __construct(tx_newspaper_Article $article) {
+    public function __construct(tx_newspaper_Article $article, $wrap_open = '<p class="bodytext">', $wrap_close = "</p>\n") {
+
+        self::$wrap_open = $wrap_open;
+        self::$wrap_close = $wrap_close;
 
         $this->extras = $article->getExtras();
 
@@ -28,12 +33,10 @@ class tx_newspaper_ArticleTextParagraphs {
 
     private function populateTextParagraphs(tx_newspaper_Article $article) {
         $text = self::filterUnprintableCharacters($article->getAttribute('bodytext'));
-        $this->text_paragraphs = array_map('tx_newspaper_ArticleTextParagraphs::convertRTELinks', self::splitIntoParagraphs($text));
-/*
-        foreach (self::splitIntoParagraphs($text) as $paragraph) {
-            $this->text_paragraphs[] = self::convertRTELinks($paragraph);
-        }
-*/
+        $this->text_paragraphs = array_map(
+            'tx_newspaper_ArticleTextParagraphs::convertRTELinks',
+            self::splitIntoParagraphs($text)
+        );
     }
 
     private function assembleParagraphs() {
@@ -131,8 +134,23 @@ class tx_newspaper_ArticleTextParagraphs {
      */
     private static function convertRTELinks($paragraph) {
         $paragraph = tx_newspaper::convertRteField($paragraph);
-        if (substr($paragraph, 0, 3) != '<p>' && substr($paragraph, 0, 3) != '<p ') return $paragraph;
-        return self::trimPTags(substr($paragraph, 2));
+        if (!(substr($paragraph, 0, 3) != '<p>' && substr($paragraph, 0, 3) != '<p ')) {
+            $paragraph = self::trimPTags(substr($paragraph, 2));
+        }
+        return self::wrapParagraph($paragraph);
+    }
+
+    private static function wrapParagraph($paragraph) {
+        if (self::isHeader($paragraph)) return $paragraph;
+        return self::$wrap_open . $paragraph . self::$wrap_close;
+    }
+
+    /**
+     * @param $paragraph
+     * @return bool
+     */
+    private static function isHeader($paragraph) {
+        return (bool)preg_match('#^<(.*)>(.*)</(.*)>$#', trim($paragraph));
     }
 
     /// Remove the rest of the \c "<p>" - tag from every line.
@@ -176,5 +194,8 @@ class tx_newspaper_ArticleTextParagraphs {
     /** @var tx_newspaper_Extra[] */
     private $extras = array();
     private $text_paragraphs = array();
+
+    private static $wrap_open;
+    private static $wrap_close;
 
 }

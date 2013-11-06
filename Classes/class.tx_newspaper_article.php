@@ -276,6 +276,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         // Add array for redirecting URL (if article is of type "Article as URL")
         $this->smarty->assign('redirectURL', tx_newspaper::getTypo3UrlArray($this->getAttribute('url')));
 
+        $this->smarty->assign('typoscript', tx_newspaper::getNewspaperTyposcript());
+
         return $this->smarty->fetch($this);
     }
 
