@@ -34,7 +34,10 @@
  */
 class tx_newspaper_fixture {
 
-    public function __construct() {
+    public function __construct(tx_phpunit_database_testcase $test) {
+
+        $this->test = $test;
+
         $this->createSectionHierarchy();
         $this->createTypo3Pages();
         $this->createPages();
@@ -70,8 +73,8 @@ class tx_newspaper_fixture {
         /** @var tx_newspaper_Extra $extra */
         $extra = new $class();
         $extra->store();
-#        $this->assertGreaterThan(0, intval($extra->getUid()),      "uid is " . $extra->getUid());
-#        $this->assertGreaterThan(0, intval($extra->getExtraUid()), "extra uid is " . $extra->getExtraUid());
+        $this->test->assertGreaterThan(0, intval($extra->getUid()),      "uid is " . $extra->getUid());
+        $this->test->assertGreaterThan(0, intval($extra->getExtraUid()), "extra uid is " . $extra->getExtraUid());
 
         return tx_newspaper_Extra_Factory::getInstance()->create($extra->getExtraUid());
     }
@@ -915,6 +918,7 @@ class tx_newspaper_fixture {
         1024, 2048, 4096
     );
 
-
+    /** @var tx_phpunit_database_testcase  */
+    private $test;
 }
 ?>

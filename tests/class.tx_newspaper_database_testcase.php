@@ -26,7 +26,7 @@ class tx_newspaper_database_testcase extends tx_phpunit_database_testcase {
 //             $this->importData(PATH_typo3conf . 'ext/newspaper/tests/typo3.newspaper.basis1.inserts.sql');
 
         if($createFixture) {
-            $this->fixture = new tx_newspaper_fixture();
+            $this->fixture = new tx_newspaper_fixture($this);
         }
      }
 
