@@ -20,6 +20,12 @@ class test_SectionModuleController_testcase extends tx_newspaper_database_testca
 
     public function test_changeParent() {
 
+        $parent_section = $this->fixture->getParentSection();
+        $sections = $this->fixture->getAllSections();
+        $grandchild_section = array_pop($sections);
+        $child_section = array_pop($sections);
+
+        $pagezonetypes = $this->fixture->getPageZoneTypes();
         // change parent of grandchild section to parent section, see if extras change and all
 
         // insert extra on child section that must be gone from the grandchild section after changing parent

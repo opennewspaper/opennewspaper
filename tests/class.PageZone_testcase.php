@@ -643,7 +643,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
         $this->assertEquals(1, sizeof($zone->getExtras()));
 
         $parent_section = new tx_newspaper_Section($this->fixture->getParentSectionUid());
-        $parent_zone = $this->getPageZoneForPlacement($parent_section);
+        $parent_zone = $this->fixture->getRandomPageZoneForPlacement($parent_section);
 
         $zone->changeParent($parent_zone->getAbstractUid());
 
@@ -678,7 +678,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
         // set grandchild section to have no parent
         $parent_section = new tx_newspaper_Section($this->fixture->getParentSectionUid());
         $grandchild = array_pop($parent_section->getChildSections(true));
-        $pageZone = $this->getPageZoneForPlacement($grandchild);
+        $pageZone = $this->fixture->getRandomPageZoneForPlacement($grandchild);
 
         $pageZone->changeParent(-1);
 
@@ -701,9 +701,8 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
     public function test_changeParentWithoutParentWithoutExtras() {
 
         // set grandchild section to have no parent
-        $parent_section = new tx_newspaper_Section($this->fixture->getParentSectionUid());
-        $grandchild = array_pop($parent_section->getChildSections(true));
-        $pageZone = $this->getPageZoneForPlacement($grandchild);
+        $grandchild = array_pop($this->fixture->getAllSections());
+        $pageZone = $this->fixture->getRandomPageZoneForPlacement($grandchild);
 
         // remove extras on this page zone
         tx_newspaper_DB::getInstance()->deleteRows(
@@ -734,8 +733,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
         if ($this->change_parent_collection_running) return;
 
         // set up a page zone with both extras on it and inherited extras
-        $parent_section = new tx_newspaper_Section($this->fixture->getParentSectionUid());
-        $parent_zone = $this->getPageZoneForPlacement($parent_section);
+        $parent_zone = $this->fixture->getRandomPageZoneForPlacement($this->fixture->getParentSection());
 
         $inherit_extra = $this->createExtraToInherit('tx_newspaper_Extra_Generic');
         $parent_zone->insertExtraAfter($inherit_extra);
@@ -745,8 +743,8 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
             "Extra not present on parent zone after insert"
         );
 
-        $grandchild = array_pop($parent_section->getChildSections(true));
-        $zone = $this->getPageZoneForPlacement($grandchild);
+        $grandchild = array_pop($this->fixture->getAllSections());
+        $zone = $this->fixture->getRandomPageZoneForPlacement($grandchild);
 
         $original_extras = $zone->getExtras();
         $original_origin_uid = array_pop($zone->getExtrasOf('tx_newspaper_Extra_Generic'))->getOriginUid();
@@ -834,17 +832,6 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
     }
 
     ////////////////////////////////////////////////////////////////////////////
-
-    /**
-     * @param $parent_section
-     * @return tx_newspaper_PageZone
-     */
-    private function getPageZoneForPlacement(tx_newspaper_Section $parent_section) {
-        $pagetype = array_pop($this->fixture->getPageTypes());
-        $page = $parent_section->getSubPage($pagetype);
-        $pagezonetype = $this->getPagezoneForInheritance();
-        return $page->getPageZone($pagezonetype);
-    }
 
     /**
      * @return tx_newspaper_PageZoneType

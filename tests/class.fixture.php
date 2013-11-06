@@ -82,6 +82,23 @@ class tx_newspaper_fixture {
         return $this->pagezones;
     }
 
+    /**
+     * @param $parent_section
+     * @return tx_newspaper_PageZone
+     */
+    private function getRandomPageZoneForPlacement(tx_newspaper_Section $parent_section) {
+        $pagetype = array_pop($this->getPageTypes());
+        $page = $parent_section->getSubPage($pagetype);
+        return $page->getPageZone($this->getRandomPageZoneTypeForInheritance());
+    }
+
+    /**
+     * @return tx_newspaper_PageZoneType
+     */
+    private function getRandomPageZoneTypeForInheritance() {
+        return array_shift($this->getPageZoneTypes());
+    }
+
     public function getPageZoneWithoutInheritance() {
         return tx_newspaper_PageZone_Factory::getInstance()->create($this->pagezone_without_inheritance_uid);
     }
@@ -106,6 +123,14 @@ class tx_newspaper_fixture {
             function($uid) { return new tx_newspaper_PageType(intval($uid['uid'])); },
             tx_newspaper::selectRows('uid', $this->pagetype_table)
         );
+    }
+
+    public function getParentSection() {
+        return new tx_newspaper_Section($this->getParentSectionUid());
+    }
+
+    public function getAllSections() {
+        return $this->getParentSection()->getChildSections(true);
     }
 
     public function getParentSectionUid() {

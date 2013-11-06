@@ -22,7 +22,6 @@ class test_ArticleList_testcase extends tx_newspaper_database_testcase {
         if ($this->dummy_script_created) {
             unlink(self::export_script);
             $this->dummy_script_created = false;
-            $this->dummy_script_created = false;
         }
     }
 
