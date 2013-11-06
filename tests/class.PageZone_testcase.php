@@ -638,7 +638,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
         }
 
         $zone = $this->createPagezoneForInheriting();
-        $extra = $this->createExtraToInherit('tx_newspaper_Extra_Textbox');
+        $extra = $this->fixture->createExtraToInherit('tx_newspaper_Extra_Textbox');
         $zone->addExtra($extra);
         $this->assertEquals(1, sizeof($zone->getExtras()));
 
@@ -735,7 +735,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
         // set up a page zone with both extras on it and inherited extras
         $parent_zone = $this->fixture->getRandomPageZoneForPlacement($this->fixture->getParentSection());
 
-        $inherit_extra = $this->createExtraToInherit('tx_newspaper_Extra_Generic');
+        $inherit_extra = $this->fixture->createExtraToInherit('tx_newspaper_Extra_Generic');
         $parent_zone->insertExtraAfter($inherit_extra);
 
         $this->assertTrue(
@@ -807,12 +807,12 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 
     public function test_doesContainExtra() {
         $zone = $this->createPagezoneForInheriting();
-        $extra = $this->createExtraToInherit('tx_newspaper_Extra_Textbox');
+        $extra = $this->fixture->createExtraToInherit('tx_newspaper_Extra_Textbox');
         $zone->addExtra($extra);
 
         $this->assertTrue($zone->doesContainExtra($extra), "Extra $extra not found by doesContainExtra()");
 
-        $extra = $this->createExtraToInherit('tx_newspaper_Extra_Bio');
+        $extra = $this->fixture->createExtraToInherit('tx_newspaper_Extra_Bio');
         $this->assertFalse($zone->doesContainExtra($extra), "Extra $extra wrongly found by doesContainExtra()");
 
         // okay, theoretically you could test inheriting page zones as well... but we'll leave that as an exercise for the reader
@@ -904,7 +904,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
     }
 
     private function makePageZoneHierarchy() {
-        $this->inherited_extra = $this->createExtraToInherit('tx_newspaper_Extra_Generic');
+        $this->inherited_extra = $this->fixture->createExtraToInherit('tx_newspaper_Extra_Generic');
 
         $this->level1 = $this->createPagezoneForInheriting();
         $this->level1->addExtra($this->inherited_extra);
@@ -927,20 +927,6 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
     private $level3_1;
     /** @var tx_newspaper_Pagezone_Page */
     private $level3_2;
-
-    /**
-     * @param $class
-     * @return tx_newspaper_Extra
-     */
-    private function createExtraToInherit($class) {
-        /** @var tx_newspaper_Extra $extra */
-        $extra = new $class();
-        $extra->store();
-        $this->assertGreaterThan(0, intval($extra->getUid()),      "uid is " . $extra->getUid());
-        $this->assertGreaterThan(0, intval($extra->getExtraUid()), "extra uid is " . $extra->getExtraUid());
-
-        return tx_newspaper_Extra_Factory::getInstance()->create($extra->getExtraUid());
-    }
 
     /**
      * @param $pagezonetype tx_newspaper_PageZoneType

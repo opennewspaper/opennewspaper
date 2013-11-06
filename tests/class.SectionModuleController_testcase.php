@@ -25,7 +25,12 @@ class test_SectionModuleController_testcase extends tx_newspaper_database_testca
         $grandchild_section = array_pop($sections);
         $child_section = array_pop($sections);
 
-        $pagezonetypes = $this->fixture->getPageZoneTypes();
+        $parent_zone = $this->fixture->getRandomPageZoneForPlacement($parent_section);
+        $child_zone =  $this->fixture->getRandomPageZoneForPlacement($child_section);
+        $grandchild_zone =  $this->fixture->getRandomPageZoneForPlacement($grandchild_section);
+
+        $inheriting_extra = $this->fixture->createExtraToInherit('tx_newspaper_Extra_Generic');
+
         // change parent of grandchild section to parent section, see if extras change and all
 
         // insert extra on child section that must be gone from the grandchild section after changing parent

@@ -62,6 +62,21 @@ class tx_newspaper_fixture {
 
     }
 
+    /**
+     * @param $class
+     * @return tx_newspaper_Extra
+     */
+    public function createExtraToInherit($class) {
+        /** @var tx_newspaper_Extra $extra */
+        $extra = new $class();
+        $extra->store();
+#        $this->assertGreaterThan(0, intval($extra->getUid()),      "uid is " . $extra->getUid());
+#        $this->assertGreaterThan(0, intval($extra->getExtraUid()), "extra uid is " . $extra->getExtraUid());
+
+        return tx_newspaper_Extra_Factory::getInstance()->create($extra->getExtraUid());
+    }
+
+
     /** @return tx_newspaper_PageZoneType[] */
     public function getPageZoneTypes() {
         $uids = tx_newspaper::selectRows('uid', $this->pagezonetype_table);
@@ -86,7 +101,7 @@ class tx_newspaper_fixture {
      * @param $parent_section
      * @return tx_newspaper_PageZone
      */
-    private function getRandomPageZoneForPlacement(tx_newspaper_Section $parent_section) {
+    public function getRandomPageZoneForPlacement(tx_newspaper_Section $parent_section) {
         $pagetype = array_pop($this->getPageTypes());
         $page = $parent_section->getSubPage($pagetype);
         return $page->getPageZone($this->getRandomPageZoneTypeForInheritance());
