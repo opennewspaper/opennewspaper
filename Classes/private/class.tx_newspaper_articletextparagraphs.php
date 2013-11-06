@@ -13,7 +13,7 @@ class tx_newspaper_ArticleTextParagraphs {
      * @param string $wrap_open opening string for wrapping every paragraph
      * @param string $wrap_close closing string for wrapping every paragraph
      */
-    public function __construct(tx_newspaper_Article $article, $wrap_open = '<p class="bodytext">', $wrap_close = '</p>') {
+    public function __construct(tx_newspaper_Article $article, $wrap_open = '<p class="bodytext">', $wrap_close = "</p>\n") {
 
         self::$wrap_open = $wrap_open;
         self::$wrap_close = $wrap_close;
@@ -141,8 +141,16 @@ class tx_newspaper_ArticleTextParagraphs {
     }
 
     private static function wrapParagraph($paragraph) {
-        if (preg_match('#^<(.*)>(.*)</(.*)>$#', trim($paragraph))) return $paragraph;
+        if (self::isHeader($paragraph)) return $paragraph;
         return self::$wrap_open . $paragraph . self::$wrap_close;
+    }
+
+    /**
+     * @param $paragraph
+     * @return bool
+     */
+    private static function isHeader($paragraph) {
+        return (bool)preg_match('#^<(.*)>(.*)</(.*)>$#', trim($paragraph));
     }
 
     /// Remove the rest of the \c "<p>" - tag from every line.
