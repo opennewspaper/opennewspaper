@@ -104,7 +104,7 @@ class tx_newspaper_fixture {
      * @param $parent_section
      * @return tx_newspaper_PageZone
      */
-    public function getRandomPageZoneForPlacement(tx_newspaper_Section $parent_section) {
+    public function &getRandomPageZoneForPlacement(tx_newspaper_Section $parent_section) {
         $pagetype = array_pop($this->getPageTypes());
         $page = $parent_section->getSubPage($pagetype);
         return $page->getPageZone($this->getRandomPageZoneTypeForInheritance());
@@ -143,7 +143,7 @@ class tx_newspaper_fixture {
         );
     }
 
-    public function getParentSection() {
+    public function &getParentSection() {
         return new tx_newspaper_Section($this->getParentSectionUid());
     }
 

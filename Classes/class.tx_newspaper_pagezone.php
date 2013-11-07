@@ -79,24 +79,26 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
     /// Convert object to string to make it visible in stack backtraces, devlog etc.
     public function __toString() {
         try {
-            $ret = get_class($this) . ' ' . $this->getUid() . ' (' . "\n";
-
-            $page = $this->getParentPage();
-            if ($page instanceof tx_newspaper_Page) {
-                $section = $page->getParentSection();
-                if ($section instanceof tx_newspaper_Section) {
-                    $ret .= $section->getAttribute('section_name') . '/';
-                }
-                $ret .= $page->getPageType()->getAttribute('type_name'). '/';
-            }
-            $ret .= $this->getPageZoneType()->getAttribute('type_name') .
-                ') ';
-
-            return $ret;
+            return get_class($this) . ' ' . $this->getUid() . " (" . $this->printableName() . ")";
         } catch (tx_newspaper_Exception $e) {
-            return $ret . '... oops, exception thrown: ' . $e;
+            return '... oops, exception thrown: ' . $e;
         }
 
+    }
+
+    public function printableName() {
+        $ret = '';
+        $page = $this->getParentPage();
+        if ($page instanceof tx_newspaper_Page) {
+            $section = $page->getParentSection();
+            if ($section instanceof tx_newspaper_Section) {
+                $ret .= $section->getAttribute('section_name') . '/';
+            }
+            $ret .= $page->getPageType()->getAttribute('type_name') . '/';
+        }
+        $ret .= $this->getPageZoneType()->getAttribute('type_name');
+
+        return $ret;
     }
 
 
@@ -1222,7 +1224,7 @@ if (false && $parent_zone->getParentPage()->getPageType()->getAttribute('type_na
         return $this->binarySearchForExtra($extra, 0, sizeof($this->getExtras())-1);
     }
 
-    private function binarySearchForExtra($extra, $low_index, $high_index) {
+    private function binarySearchForExtra(tx_newspaper_Extra $extra, $low_index, $high_index) {
         while ($high_index >= $low_index) {
             $index_to_check = floor(($high_index + $low_index) / 2);
             $comparison = $this->getExtra($index_to_check)->getAttribute('position') -

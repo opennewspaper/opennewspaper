@@ -376,7 +376,7 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
     private $thumbnail = null;
 
     /// The path to the image storage directory, relative to the Typo3 installation directory
-    private static $basepath = null;
+    private static $basepath = 'uploads/images';
 
     private static $rsync_host = null;
     private static $rsync_path = null;

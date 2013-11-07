@@ -9,6 +9,11 @@
  
 class tx_newspaper_File {
 
+    public static function w($text, $filename = '/tmp/debug.out') {
+        $file = new tx_newspaper_File($filename);
+        $file->write("$text\n");
+    }
+
     public function __construct($filename, $mode = 'a+') {
         $this->filename = $filename;
         $this->handle = @fopen($filename, $mode);

@@ -376,10 +376,12 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
             array('pid' => $new_parent->getTypo3PageID())
         );
 
-        $this->flashMessageContainer->add(
-            $old_parent->getFormattedRootline() . ' -> ' . $new_parent->getFormattedRootline(),
-            $GLOBALS['LANG']->sL('LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.parent_section_changed')
-        );
+        if ($this->flashMessageContainer instanceof Tx_Extbase_MVC_Controller_FlashMessages) {
+            $this->flashMessageContainer->add(
+                $old_parent->getFormattedRootline() . ' -> ' . $new_parent->getFormattedRootline(),
+                $GLOBALS['LANG']->sL('LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.parent_section_changed')
+            );
+        }
     }
 
     private function changeArticleListType(tx_newspaper_Section &$section) {
@@ -402,7 +404,7 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
         $section->setAttribute('default_articletype', intval($this->module_request['default_articletype']));
         $old_type = new tx_newspaper_ArticleType($old_article_type_id);
         $new_type = new tx_newspaper_ArticleType($this->module_request['default_articletype']);
-        $this->flashMessageContainer->add(
+        if ($this->flashMessageContainer) $this->flashMessageContainer->add(
             $old_type->getAttribute('title') . ' -> ' . $new_type->getAttribute('title'),
             $GLOBALS['LANG']->sL('LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.default_type_changed')
         );
