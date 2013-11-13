@@ -722,21 +722,21 @@ class tx_newspaper_BE {
     }
 
     /**
-     * Get pagezonetype uids which should be hidden (f. ex. in placement module)
-     * Usage: User TSConfig
-     * newspaper.placementModule.hidePagezoneTypes = [uid1, ..., uidn]
-     * @todo: Move to pagezone class?
-     * @return array Hidden pagezonetype uids
-     */
-    public  static function getHiddenPageZoneTypeUids() {
-        if (!isset($GLOBALS['BE_USER'])) {
-            return array(); // Doesn't make sense without a backend user ...
+         * Get pagezonetype uids which should be hidden (f. ex. in placement module)
+         * Usage: User TSConfig
+         * newspaper.placementModule.hidePagezoneTypes = [uid1, ..., uidn]
+         * @todo: Move to pagezone class?
+         * @return array Hidden pagezonetype uids
+         */
+        public  static function getHiddenPageZoneTypeUids() {
+            if (!isset($GLOBALS['BE_USER'])) {
+                return array(); // Doesn't make sense without a backend user ...
+            }
+            // Check User TSConfig setting
+            if ($tsc = $GLOBALS['BE_USER']->getTSConfigVal('newspaper.placementModule.hidePagezoneTypes')) {
+                return t3lib_div::trimExplode(',', $tsc); // Return array with hidden pagezonetype uids
+            }
         }
-        // Check User TSConfig setting
-        if ($tsc = $GLOBALS['BE_USER']->getTSConfigVal('newspaper.placementModule.hidePagezoneTypes')) {
-            return t3lib_div::trimExplode(',', $tsc); // Return array with hidden pagezonetype uids
-        }
-    }
 
 
     /**
