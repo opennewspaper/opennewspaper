@@ -1072,6 +1072,31 @@ class tx_newspaper  {
         return $temp_conf;
     }
 
+    /**
+     * Gets plain and unprocessed "Typoscript" for newspaper (so no Typoscript functionality can be used!)
+     * Fetches the Typoscript part that starts with newspaper.
+     *
+     * Example 1:
+     * newspaper.testCss = class123
+     *
+     * Conditions are working!
+     * Example 2:
+     * newspaper.dummy = Some dummy text ...
+     * [globalVar = BE_USER|user|uid = 1]
+     *   newspaper.dummy = Value modified within Typoscript condition
+     * [GLOBAL]
+     *
+     * @return array Typoscript array for "newspaper."
+     */
+    public static function getNewspaperTyposcript() {
+       if (!isset($GLOBALS['TSFE']) || !is_object($GLOBALS['TSFE']) ||
+           !($GLOBALS['TSFE'] instanceof tslib_fe) || !isset($GLOBALS['TSFE']->tmpl->setup['newspaper.'])) {
+           return array(); // Typoscript couldn't be fetched, so return empty array
+       }
+       return $GLOBALS['TSFE']->tmpl->setup['newspaper.'];
+   }
+
+
     /** @var tslib_cObj Used to generate typolinks */
     private static $local_cObj = null;
 

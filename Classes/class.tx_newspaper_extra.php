@@ -166,10 +166,27 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface, tx_newspap
      *  (I don't know whether "deep copy" is the right term for this when
      *  dealing with DBs, but the concept is the same.)
      */
-    public function duplicate() {
+    public function duplicate($abstract_only = false) {
         $this->getAttribute('uid');            /// Read attributes from DB
 
-        /// Copy concrete extra data
+        if (!$abstract_only) {
+            $uid = $this->duplicateConcretePart();
+        } else {
+            $uid = $this->getUid();
+        }
+
+        $extra_uid = $this->duplicateAbstractPart($uid);
+
+        $that = self::createWithNewOriginUid($extra_uid);
+
+        return $that;
+    }
+
+    /**
+     *  Copy concrete extra data
+     *  @return int UID of the concrete Extra record just generated
+     */
+    private function duplicateConcretePart() {
         $temp_attributes = $this->attributes;
 
         //    Make sure the Extra is stored in the correct SysFolder
@@ -179,23 +196,34 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface, tx_newspap
         unset ($temp_attributes['uid']);
 
         //    Write data for concrete Extra
-        $uid = tx_newspaper::insertRows($this->getTable(), $temp_attributes);
+        return tx_newspaper::insertRows($this->getTable(), $temp_attributes);
+    }
 
-        /// Manually copy all extra attributes instead of writing them automatically
+    /**
+     *  Manually copy all extra attributes instead of writing them automatically
+     *  @param int $uid UID of the concrete extra part
+     *  @return int UID of the abstract extra record just generated
+     */
+    private function duplicateAbstractPart($uid) {
         $temp_extra_attributes = $this->extra_attributes;
         $temp_extra_attributes['extra_uid'] = $uid;
         unset ($temp_extra_attributes['uid']);
 
         //    Write data for abstract Extra
-        $extra_uid = tx_newspaper::insertRows(self::$table, $temp_extra_attributes);
+        return tx_newspaper::insertRows(self::$table, $temp_extra_attributes);
+    }
 
+    /**
+     *  set origin uid to extra uid so the duplicated extra can be identified
+     *  as a NEW non-referenced and non-inherited extra
+     *  @param int $extra_uid
+     *  @return tx_newspaper_Extra
+     */
+    private static function createWithNewOriginUid($extra_uid) {
         $that = tx_newspaper_Extra_Factory::getInstance()->create($extra_uid);
 
-        // set origin uid to extra uid so the duplicated extra can be identified
-        // as a NEW non-referenced and non-inherited extra
         $that->setAttribute('origin_uid', $extra_uid);
         $that->store();
-
         return $that;
     }
 
@@ -228,6 +256,9 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface, tx_newspap
         $this->smarty->assign('extra_attributes', $this->extra_attributes);
 
         $this->smarty->assign('extra', $this);
+
+        $this->smarty->assign('typoscript', tx_newspaper::getNewspaperTyposcript());
+
     }
 
     private function configureSmarty($template_set) {

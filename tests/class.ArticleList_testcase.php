@@ -4,14 +4,26 @@ require_once(PATH_typo3conf . 'ext/newspaper/tests/class.tx_newspaper_database_t
 /// testsuite for class tx_newspaper_pagezone
 class test_ArticleList_testcase extends tx_newspaper_database_testcase {
 
+    const export_script = '/tmp/export_html.sh';
     public function setUp() {
         parent::setUp();
         $sectionUid = tx_newspaper::insertRows('tx_newspaper_section', array('section_name' => 'dunmy'));
         $this->dummy_section = new tx_newspaper_Section($sectionUid);
+
+        if (!file_exists(self::export_script)) {
+            touch(self::export_script);
+            chmod(self::export_script, 0755);
+            $this->dummy_script_created = true;
+        }
     }
 
     public function tearDown() {
         $this->clearDatabase();
+        if ($this->dummy_script_created) {
+            unlink(self::export_script);
+            $this->dummy_script_created = false;
+            $this->dummy_script_created = false;
+        }
     }
 
     const note_to_test = 'dummy-section-al';
@@ -133,8 +145,13 @@ class test_ArticleList_testcase extends tx_newspaper_database_testcase {
         return $uids;
     }
 
+    /** @var  tx_newspaper_Section */
     private $dummy_section;
 
+    /** @var bool */
+    private $dummy_script_created = false;
+
+    /** @var  int */
     private static $num_article_lists;
 
 }
