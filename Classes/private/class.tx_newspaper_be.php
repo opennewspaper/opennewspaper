@@ -701,7 +701,7 @@ class tx_newspaper_BE {
 
     /**
      * Get available page zone  types for page zone $pz
-     * Some pagezone might be hidden via User TSConfig, @see getHiddenPageZoneTypeUids()
+     * Some pagezonetypes might be hidden via User TSConfig, @see getHiddenPageZoneTypeUids()
      * @param tx_newspaper_PageZone $pz Page zone
      * @return array ty_tx_newspaper_activatePageZoneType
      * @todo: Move to pagezone class?
@@ -722,11 +722,11 @@ class tx_newspaper_BE {
     }
 
     /**
-     * Get pagezone uids which should be hidden (f. ex. in placement module)
+     * Get pagezonetype uids which should be hidden (f. ex. in placement module)
      * Usage: User TSConfig
      * newspaper.placementModule.hidePagezoneTypes = [uid1, ..., uidn]
      * @todo: Move to pagezone class?
-     * @return array Hidden pagezone uids
+     * @return array Hidden pagezonetype uids
      */
     public  static function getHiddenPageZoneTypeUids() {
         if (!isset($GLOBALS['BE_USER'])) {
@@ -734,12 +734,32 @@ class tx_newspaper_BE {
         }
         // Check User TSConfig setting
         if ($tsc = $GLOBALS['BE_USER']->getTSConfigVal('newspaper.placementModule.hidePagezoneTypes')) {
-            return t3lib_div::trimExplode(',', $tsc); // Return array with hidden pagezone uids
+            return t3lib_div::trimExplode(',', $tsc); // Return array with hidden pagezonetype uids
         }
     }
 
+
+    /**
+     * Get pagezone uids which should be hidden (f. ex. in placement module)
+     * Usage: User TSConfig
+     * newspaper.placementModule.hidePageTypes = [uid1, ..., uidn]
+     * @todo: Move to pagezone class?
+     * @return array Hidden pagetype uids
+     */
+    public  static function getHiddenPageTypeUids() {
+        if (!isset($GLOBALS['BE_USER'])) {
+            return array(); // Doesn't make sense without a backend user ...
+        }
+        // Check User TSConfig setting
+        if ($tsc = $GLOBALS['BE_USER']->getTSConfigVal('newspaper.placementModule.hidePageTypes')) {
+            return t3lib_div::trimExplode(',', $tsc); // Return array with hidden pagetype uids
+        }
+    }
+
+
     /**
      * Get available page types for page zone $pz
+     * Some pagetypes might be hidden via User TSConfig, @see getHiddenPageTypeUids()
      * @param tx_newspaper_PageZone $pz Page zone
      * @return array tx_newspaper_PageType
      * @todo: Move to pagezone class?
@@ -748,8 +768,11 @@ class tx_newspaper_BE {
         $s = $pz->getParentPage()->getParentSection();
         $pages = $s->getSubPages(); // Get activate pages for current section
         $pageTypes = array();
+        $hiddenPages = self::getHiddenPageTypeUids();
         for ($i = 0; $i < sizeof($pages); $i++) {
-            $pageTypes[] = $pages[$i]->getPageType();
+            if (!in_array($pages[$i]->getPageType()->getUid(), $hiddenPages)) {
+                $pageTypes[] = $pages[$i]->getPageType();
+            }
         }
         return $pageTypes;
     }
