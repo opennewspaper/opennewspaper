@@ -701,6 +701,7 @@ class tx_newspaper_BE {
 
     /**
      * Get available page zone  types for page zone $pz
+     * Some pagezone might be hidden via User TSConfig, @see getHiddenPageZoneTypeUids()
      * @param tx_newspaper_PageZone $pz Page zone
      * @return array ty_tx_newspaper_activatePageZoneType
      * @todo: Move to pagezone class?
@@ -708,14 +709,33 @@ class tx_newspaper_BE {
     public static function getPageZoneTypesForPagezone($pz)     {
         $pageZones = $pz->getParentPage()->getPageZones(); // Get activate pages zone for current page
         $pageZoneTypes = array();
+        $hiddenPagezones = self::getHiddenPageZoneTypeUids();
         for ($i = 0; $i < sizeof($pageZones); $i++) {
             // Add all pagezone types except articles
             // \todo: make article exception ts-configurable if default articles are to be used (note: default article features have not implemented yet)
-            if (!$pageZones[$i]->getPageZoneType()->getAttribute('is_article')) {
+            if (!$pageZones[$i]->getPageZoneType()->getAttribute('is_article') &&
+                    !in_array($pageZones[$i]->getPageZoneType()->getUid(), $hiddenPagezones)) {
                 $pageZoneTypes[] = $pageZones[$i]->getPageZoneType();
             }
         }
         return $pageZoneTypes;
+    }
+
+    /**
+     * Get pagezone uids which should be hidden (f. ex. in placement module)
+     * Usage: User TSConfig
+     * newspaper.placementModule.hidePagezoneTypes = [uid1, ..., uidn]
+     * @todo: Move to pagezone class?
+     * @return array Hidden pagezone uids
+     */
+    public  static function getHiddenPageZoneTypeUids() {
+        if (!isset($GLOBALS['BE_USER'])) {
+            return array(); // Doesn't make sense without a backend user ...
+        }
+        // Check User TSConfig setting
+        if ($tsc = $GLOBALS['BE_USER']->getTSConfigVal('newspaper.placementModule.hidePagezoneTypes')) {
+            return t3lib_div::trimExplode(',', $tsc); // Return array with hidden pagezone uids
+        }
     }
 
     /**
