@@ -696,8 +696,24 @@ class tx_newspaper_BE {
 			}
 		}
 
+        $smarty->assign('TSCONFIG', self::getPlacementModuleUserTsconfig());
+
 		return $smarty->fetch('mod3.tmpl');
 	}
+
+    /**
+     * Get User TSconfig setting for placement module
+     * Settings:
+     * newspaper.placementModule.showDropdownInheritFrom = [0|1]
+     * @return array
+     */
+    private static function getPlacementModuleUserTsconfig() {
+//t3lib_div::debug(tx_newspaper::getUserTSConfig('newspaper.placementModule.showDropdownInheritFrom'));
+        $userTsconfig = array();
+        $tmp = tx_newspaper::getUserTSConfig('newspaper.placementModule.showDropdownInheritFrom');
+        $userTsconfig['show_inheritancesource'] = (!intval($tmp['value']))? 0 : 1;
+        return $userTsconfig;
+    }
 
     /**
      * Get available page zone  types for page zone $pz

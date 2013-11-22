@@ -21,7 +21,7 @@
 		<label>{$LABEL.pagetype}</label>
 
 		<select  onchange="pagezone_type_change(this.value)">
-		{section name=j loop=$PAGEZONETYPE}
+		{section name=j loop=$ilter}
 			{if $PAGEZONETYPE[j]->getUid() == $DATA[i].pagezone_type->getUid()}
 				<option selected="selected"
 			{else}
@@ -31,22 +31,24 @@
 		</select>
 		<label>{$LABEL.pagezonetype}</label>
 
-		<select onchange="inheritancesource_change({$DATA[i].pagezone_id}, this.value)">
+        {if $TSCONFIG.show_inheritancesource}
+            <select onchange="inheritancesource_change({$DATA[i].pagezone_id}, this.value)">
 {* 0 -> default inheritance mode, read upper level *}
-			<option value="0" {if ($DATA[i].inherits_from == 0)}selected="selected"{/if}>{$LABEL.pagezone_inheritancesource_upper}</option>
+                <option value="0" {if ($DATA[i].inherits_from == 0)}selected="selected"{/if}>{$LABEL.pagezone_inheritancesource_upper}</option>
 {* page zone being activated for other page on the same level *}
-			{section name=j loop=$INHERITANCESOURCE}
-				{if $INHERITANCESOURCE[j]->getAbstractUid() == $DATA[i].inherits_from}
-					<option selected="selected"
-				{else}
-					<option
-				{/if} value="{$INHERITANCESOURCE[j]->getAbstractUid()}">{$INHERITANCESOURCENAME[j]}{if $DEBUG_OUTPUT} [#{$INHERITANCESOURCE[j]->getAbstractUid()}]{/if}</option>
-			{/section}
+                {section name=j loop=$INHERITANCESOURCE}
+                    {if $INHERITANCESOURCE[j]->getAbstractUid() == $DATA[i].inherits_from}
+                        <option selected="selected"
+                    {else}
+                        <option
+                    {/if} value="{$INHERITANCESOURCE[j]->getAbstractUid()}">{$INHERITANCESOURCENAME[j]}{if $DEBUG_OUTPUT} [#{$INHERITANCESOURCE[j]->getAbstractUid()}]{/if}</option>
+                {/section}
 {* -1 -> no inheritance *}
-			<option value="-1" {if ($DATA[i].inherits_from == -1)}selected="selected" {/if}>{$LABEL.pagezone_inheritancesource_none}</option>
+                <option value="-1" {if ($DATA[i].inherits_from == -1)}selected="selected" {/if}>{$LABEL.pagezone_inheritancesource_none}</option>
 {* Future feature; <option value="-2" {if ($DATA[i].inherits_from == -1)}selected="selected" {/if}>\todo:use TSConfig setting</option> *}
-		</select>
-		<label>{$LABEL.pagezone_inheritancesource}</label>
+            </select>
+            <label>{$LABEL.pagezone_inheritancesource}</label>
+        {/if}
 
 	{/if}
 
