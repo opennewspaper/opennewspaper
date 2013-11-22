@@ -6,7 +6,6 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
 
     public function setUp() {
         parent::setUp();
-//        self::$skip_setup_because_no_data_have_changed = true;
     }
 
     // to do: organize tests so that tests of dependent functions are executed after those they depend on
@@ -129,7 +128,6 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
 
     }
 
-/*
     public function test_getArticleListPages() {
         $al_uid = $this->fixture->getArticlelistUid();
         $article_list = tx_newspaper_ArticleList_Factory::getInstance()->create($al_uid);
@@ -144,8 +142,6 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
 
         $this->checkIsPageArray($pages);
     }
-
-*/
 
     // Tests related to executeActionsOnPages()
 
@@ -222,7 +218,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
     }
     
     public function test_ActionsForDifferentPageTypes_Articlelist() {
-        $this->skipTest("Weird error, not yet solved:<br />\n Nesting level too deep - recursive dependency? array_unique() in class.tx_newspaper_dependencytree.php:636");
+
         $this->setupRegisteredFunction(tx_newspaper_DependencyTree::ACT_ON_ARTICLE_LIST_PAGES);
 
         $tree = $this->createTree();
@@ -254,7 +250,6 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
     // Tests related to getPages()
 
     public function test_getPages() {
-        $this->skipTest("Weird error, not yet solved:<br />\n Nesting level too deep - recursive dependency? array_unique() in class.tx_newspaper_dependencytree.php:636");
 
         $tree = $this->createTree();
 

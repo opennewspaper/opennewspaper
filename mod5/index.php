@@ -104,9 +104,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 				case 'browse_path' :
 					die($this->browse_path($input));
 				case 'load_article' :
-//t3lib_div::devlog('case load_article', 'newspaper', 0, array('input' => $input, '_request' => $_REQUEST));
-					$response = $this->load_article();
-					die($response);
+					die($this->load_article($input));
 				case 'change_role':
 					$this->changeRole($input); // no die() needed, just change the role and re-render the module
 				break;
@@ -906,12 +904,12 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 		die($result);
 	}
 
-    function import_article(array $input) {
+	function import_article(array $input) {
 
 		$section = new tx_newspaper_Section(intval($input['section']));
 		$articletype = new tx_newspaper_ArticleType(intval($input['articletype']));
 
-        $source = tx_newspaper::getRegisteredSource($input['source_id']);
+		$source = tx_newspaper::getRegisteredSource($input['source_id']);
 		$path = new tx_newspaper_SourcePath($input['source_path']);
 
 		$tag = $input['controltag']? new tx_newspaper_tag(intval($input['controltag'])) : null;
@@ -921,7 +919,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 		$this->logImport($new_article, $input);
 
 		$this->redirectToArticleMask($new_article, $input);
-    }
+	}
 
 	/// Create an article of requested type, perform the import, set necessary attributes and store the article
 	/** This function violates the "do one thing" rule clearly... anyway, still
