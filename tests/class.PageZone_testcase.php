@@ -300,9 +300,12 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 
     private function checkAttributesAreEqualToRecord(tx_newspaper_Pagezone $pagezone, array $record) {
         foreach ($record as $attribute => $value) {
+
+            if ($attribute == 'uid') continue;
+
             $this->assertEquals(
                 $pagezone->getAttribute($attribute), $value,
-                "Attribute $attribute: stored as $value, in memory as " . $this->pagezone->getAttribute($attribute)
+                "Attribute $attribute: stored as $value, in memory as " . $this->pagezone->getAttribute($attribute) . print_r($record, 1)
             );
         }
     }
