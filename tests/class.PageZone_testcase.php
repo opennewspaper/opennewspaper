@@ -46,7 +46,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
     
     public function test_Title() {
         echo $this->pagezone->getTitle();
-        $this->assertEquals('Seitenbereich', $this->pagezone->getTitle());
+        $this->assertTrue('Seitenbereich' == $this->pagezone->getTitle());
     }
     
     public function test_modulename() {
