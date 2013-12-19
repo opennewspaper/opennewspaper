@@ -953,7 +953,7 @@ if (false && $parent_zone->getParentPage()->getPageType()->getAttribute('type_na
 
     /// returns true if pagezone is an article
     public function isArticle() {
-        return $this instanceof tx_newspaper_Article;
+        return $this instanceof tx_newspaper_Article || $this->getPageZoneType()->getAttribute('is_article');
     }
 
 
