@@ -1,0 +1,12 @@
+{* debug *}
+
+{if $pagezone_types}
+<div> {$LL.label_admin_wizard_select_pagezonetype} </div>
+<ul class="w_ul">
+{foreach from=$pagezone_types item=pagezone_type}
+  <li> <a href="index.php?tx_newspaper_mod5[controller]=w_pz&tx_newspaper_mod5[pagetype_uid]={$pagetype->getUid()}&tx_newspaper_mod5[pagezonetype_uid]={$pagezone_type->getUid()}">{$pagezone_type->getAttribute('type_name')}</a> </li>
+{/foreach}
+</ul>
+{else}
+
+{/if}

@@ -157,7 +157,9 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     public function getAttribute($attribute) {
 
         if (!$this->attributes) {
-            $this->attributes = self::readExtraItem($this->getUid(), $this->getTable());
+            $this->attributes = tx_newspaper::selectOneRow(
+                            '*', tx_newspaper::getTable($this), 'uid = ' . $this->getUid()
+            );
         }
 
         if (!array_key_exists($attribute, $this->attributes) && $this->getUid()) {
@@ -168,9 +170,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     }
 
     public function setAttribute($attribute, $value) {
-
         if (!$this->attributes) {
-            $this->attributes = self::readExtraItem($this->getUid(), $this->getTable());
+            $this->attributes = $this->readExtraItem($this->getUid(), $this->getTable());
         }
 
         $this->attributes[$attribute] = $value;
@@ -304,7 +305,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
      *  \todo remove.
      */
     static public function readExtraItem($uid, $table) {
-        if (!$uid) return array();
+        if (!$uid)
+            return array();
         return tx_newspaper::selectOneRow('*', $table, 'uid=' . $uid);
     }
 

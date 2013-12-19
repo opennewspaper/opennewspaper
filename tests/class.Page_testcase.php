@@ -12,15 +12,14 @@ require_once(PATH_typo3conf . 'ext/newspaper/tests/class.tx_newspaper_database_t
 class test_Page_testcase extends tx_newspaper_database_testcase {
 
 	function setUp() {
-        $this->old_page_id = $GLOBALS['TSFE']->page;
-        $GLOBALS['TSFE']->page['uid'] = $this->plugin_page;
-        $GLOBALS['TSFE']->page['tx_newspaper_associated_section'] = $this->section_uid;
-        parent::setUp();
+		$this->old_page_id = $GLOBALS['TSFE']->page;
+		$GLOBALS['TSFE']->page['uid'] = $this->plugin_page;
+		$GLOBALS['TSFE']->page['tx_newspaper_associated_section'] = $this->section_uid;
+		parent::setUp();
         $this->section_uid = $this->fixture->getParentSectionUid();
-        $this->section = new tx_newspaper_Section($this->section_uid);
+		$this->section = new tx_newspaper_Section($this->section_uid);
         $this->section_name = $this->fixture->getParentSectionName();
-        $pagetypes = $this->fixture->getPageTypes();
-        $this->page = new tx_newspaper_Page($this->section, $pagetypes[0]);
+		$this->page = new tx_newspaper_Page($this->section, new tx_newspaper_PageType(1));
 	}
 
 	function tearDown() {
@@ -130,14 +129,15 @@ class test_Page_testcase extends tx_newspaper_database_testcase {
 
         $this->skipTest('test not yet ready'); return;
 	}
+	
+	public function test_toString() {
+		$this->page->getAttribute('uid');
+		$string = strval($this->page);
+		$this->doTestContains($string, 'UID: 1');
+	}
+	
+	////////////////////////////////////////////////////////////////////////////
 
-    public function test_toString() {
-        $uid = $this->page->getAttribute('uid');
-        $string = strval($this->page);
-        $this->doTestContains($string, 'UID: ' . $uid);
-    }
-
-    ////////////////////////////////////////////////////////////////////////////
 
     /**
      * @static

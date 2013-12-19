@@ -78,6 +78,8 @@ class tx_newspaper_Extra_Textbox extends tx_newspaper_Extra {
 
         $timer = tx_newspaper_ExecutionTimer::create();
 
+#$extra = new tx_newspaper_extra_Bio($id);
+#tx_newspaper::devlog('bio save hook: extra '.$extra->getExtraUid().' origin uid '.$extra->getOriginUid());
         if ($fieldArray[self::image_file_field]) {
             $image = new tx_newspaper_Image($fieldArray[self::image_file_field]);
             if (class_exists('tx_AsynchronousTask')) {

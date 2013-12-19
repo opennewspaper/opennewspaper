@@ -6,54 +6,64 @@ require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_extra.ph
 /** These links are intended for pages outside of Typo3/newspaper, whose text
  *  can not be deduced by other means. Of course, they can be used for internal
  *  links just as well.
+ *
+ *  \todo Instead of explicit member variables, just use an attributes array.
+ *  \todo Use tx_newspaper::getTable() instead of tx_newspaper_ExternalLink::$table
  */
 class tx_newspaper_ExternalLink {
 
 	///	Create a tx_newspaper_ExternalLink from a DB record
 	public function __construct($uid) {
 
-		$record = tx_newspaper_DB::getInstance()->selectOneRow(
-			'url', self::table, 'uid = ' . intval($uid)
+		$row = tx_newspaper::selectOneRow(
+			'*', self::table, 'uid = ' . intval($uid)
 		);
 
-		$this->typolink = $record['url'];
+		$this->text = $row['text'];
+		$this->url = $row['url'];
 	}
 
 	public function __toString() {
-		return $this->getURL() . ' ' . $this->getText();
+		return $this->url . ' ' . $this->text;
 	}
 
-	/**
-     *  @return string The text displayed under the link
-     */
+	/// \return The text displayed under the link
 	public function getText() {
-        $parts = explode($this->typolink, " ", 2);
-        return $parts[1]? $parts[1]: $parts[0];
+		return $this->text? $this->text: $this->url;
 	}
 
-    /**
-     *  @return string The URL pointed to
-     */
+	/// \return The URL pointed to
 	public function getURL() {
-		$parts = explode(' ', $this->typolink, 2);
+		$temp_params = explode(' ', $this->url);
 
-        if (stripos($parts[0], 'http://') !== false || stripos($parts[0], 'https://') !== false) {
-			return $parts[0];
+        if (strpos($temp_params[0], 'http://') !== false) {
+			$href = $temp_params[0];
+        } else {
+			$href = 'http://' . $temp_params[0];
         }
-		return 'http://' . $parts[0];
+
+		return $href;
 	}
 
-	/// \return The target frame -
+	/// \return The target frame
 	public function getTarget() {
-		$parts = explode(' ', $this->typolink);
-		for ($i = 1; $i < sizeof($parts); $i++) {
-			if (trim($parts[$i]) != '') return trim($parts[$i]);
+		$temp_params = explode(' ', $this->url);
+		if (sizeof($temp_params) > 0) {
+			unset($temp_params[0]);
+			foreach ($temp_params as $param) {
+				if ($param) {
+					$target = trim($param);
+					break;
+				}
+			}
 		}
+		return $target;
 	}
 
 	////////////////////////////////////////////////////////////////////////////
 
-	private $typolink = null;		///< The URL pointed to
+	private $text = null; 		///< The text displayed under the link
+	private $url = null;		///< The URL pointed to
 
 	/// SQL table for persistence
 	const table = 'tx_newspaper_externallinks';
