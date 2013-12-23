@@ -50,7 +50,6 @@ class InheritanceStructure {
 
     private function &getSectionByName($name) {
         foreach($this->sections as $section) {
-tx_newspaper_File::w($section->getSectionName());
             if (strpos($section->getSectionName(), $name) !== false) return $section;
         }
         throw new tx_newspaper_InconsistencyException("Section $name not found");
@@ -84,17 +83,14 @@ class test_SectionModuleController_testcase extends tx_newspaper_database_testca
     function tearDown() {
     }
 
+    public function test_buildInheritanceStructure() {
+        $this->buildInheritanceStructure($this->fixture->createExtraToInherit('tx_newspaper_Extra_Generic'));
+    }
+
     public function test_changeParent() {
 
-        $s = new InheritanceStructure($this->fixture);
         $inheriting_extra = $this->fixture->createExtraToInherit('tx_newspaper_Extra_Generic');
-tx_newspaper_File::w("structure first: $s");
-        // insert extra on child section that must be gone from the grandchild section after changing parent
-        $s->childZ()->insertExtraAfter($inheriting_extra);
-        $s->childZ()->store();
-        $s->grandchildZ()->store();
-
-        $this->checkInheritanceStructureIsInOrder($s, $inheriting_extra);
+        $s = $this->buildInheritanceStructure($inheriting_extra);
 
         // change parent of grandchild section to parent section, see if extras change and all
         $this->callChangeParent($s->grandchildS(), $s->parentS());
@@ -134,13 +130,40 @@ tx_newspaper_File::w(print_r(array_map(function(tx_newspaper_PageZone $p) { retu
 
     }
 
+
+    /**
+     * @return InheritanceStructure
+     */
+    private function buildInheritanceStructure(tx_newspaper_Extra $inheriting_extra) {
+        $s = new InheritanceStructure($this->fixture);
+
+        // insert extra on child section that must be gone from the grandchild section after changing parent
+        $s->childZ()->insertExtraAfter($inheriting_extra);
+
+        $s->grandchildZ()->rereadExtras();
+
+        $this->checkInheritanceStructureIsInOrder($s, $inheriting_extra);
+
+        return $s;
+    }
+
     private static function debug(tx_newspaper_PageZone $zone, $text = '') {
         tx_newspaper_File::w(
-            "$text: " . $zone->printableName() . print_r(
+            "$text: \n" .
+            $zone->getAbstractUid() .'/'.str_replace('Unit Test - ', '', $zone->printableName()) . "\n" .
+            implode(', ',
                 array_map(
-                    function (tx_newspaper_Extra $e) { return $e->getDescription(); },
+                    function (tx_newspaper_Extra $e) { return $e->getExtraUid() . "/" . $e->getUid(); },
                     $zone->getExtras()
-                ), 1)
+                )
+            ) .
+            " In DB: ". implode(
+                ', ',
+                array_map(
+                    function(array$a) { return array_pop($a); },
+                    tx_newspaper_DB::getInstance()->selectRows('uid_foreign', $zone->getExtra2PagezoneTable(), 'uid_local = ' . $zone->getUid())
+                )
+            )
         );
     }
 
@@ -159,17 +182,18 @@ tx_newspaper_File::w(print_r(array_map(function(tx_newspaper_PageZone $p) { retu
         $section->store();
     }
 
-    /** @var Tx_newspaper_Controller_SectionModuleController */
-    private $controller;
-
     /**
-     * @param $grandchild_section
-     * @param $child_zone
+     *  checks that \p $inheriting_extra has been inserted on the child zone of \p $structure,
+     *  is inherited in the grandchild zone, and not present on the parent zone.
+     * @param $structure
      * @param $inheriting_extra
-     * @param $parent_zone
-     * @return array
      */
     private function checkInheritanceStructureIsInOrder(InheritanceStructure &$structure, tx_newspaper_Extra $inheriting_extra) {
+
+        $this->assertFalse(
+            $structure->parentZ()->doesContainExtra($inheriting_extra),
+            'parent section contains extra after inserting'
+        );
         $this->assertTrue(
             $structure->childZ()->doesContainExtra($inheriting_extra),
             'child section does not contain extra after inserting'
@@ -178,10 +202,6 @@ tx_newspaper_File::w(print_r(array_map(function(tx_newspaper_PageZone $p) { retu
             $structure->grandchildZ()->doesContainExtra($inheriting_extra),
             'grandchild section does not contain extra after inserting '
         );
-        $this->assertFalse(
-            $structure->parentZ()->doesContainExtra($inheriting_extra),
-            'parent section contains extra after inserting'
-        );
 
         $inherited_extra = array_pop($structure->grandchildZ()->getExtrasOf('tx_newspaper_Extra_Generic'));
         $this->assertNotEquals(
@@ -189,6 +209,9 @@ tx_newspaper_File::w(print_r(array_map(function(tx_newspaper_PageZone $p) { retu
             "inherited extra has own uid as origin uid"
         );
     }
+
+    /** @var Tx_newspaper_Controller_SectionModuleController */
+    private $controller;
 
 }
 ?>
