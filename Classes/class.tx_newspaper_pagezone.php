@@ -178,7 +178,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
                 #                t3lib_div::devlog('extra on pagezone', 'newspaper', 0, $extra);
                 #                $extra_uid = $extra->store();
                 #                $extra_table = $extra->getTable();
-                #                $this->relateExtra2Article($extra);
+                #$this->relateExtra2Article($extra);
             }
             #            throw new tx_newspaper_NotYetImplementedException('store Extras placed on $this');
         }
@@ -525,9 +525,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
     public function insertExtraAfter(tx_newspaper_Extra $insert_extra,
                                      $origin_uid = 0, $recursive = true) {
 
-        /** \todo: it should be possible to set the paragraph BEFORE calling
-         *       this function. otherwise a workaround is needed: insert extra to
-         *         article and call changeExtraArticle() on the article afterwards
+        /** \todo: it should be possible to set the paragraph BEFORE calling this function. otherwise a workaround
+         *         is needed: insert extra to article and call changeExtraArticle() on the article afterwards
          */
         $insert_extra->setAttribute('position', $this->getInsertPosition($origin_uid));
         $insert_extra->setAttribute('paragraph', $this->paragraph_for_insert);
@@ -550,17 +549,20 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
             $this->insertExtraOnInheritingPagezones($insert_extra, $origin_uid);
         }
 
+        $this->reread_extras = true;
+
         return $insert_extra;
     }
 
     /// Pass down the insertion to PageZones inheriting from \c $this
-    private function insertExtraOnInheritingPagezones($insert_extra, $origin_uid) {
+    private function insertExtraOnInheritingPagezones(tx_newspaper_Extra $insert_extra, $origin_uid) {
         foreach ($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
             self::cloneExtraOnPagezone($insert_extra, $inheriting_pagezone, $origin_uid);
         }
     }
 
-    private static function cloneExtraOnPagezone($insert_extra, $inheriting_pagezone, $origin_uid) {
+    private static function cloneExtraOnPagezone(tx_newspaper_Extra $insert_extra, tx_newspaper_PageZone $inheriting_pagezone, $origin_uid) {
+
         $copied_extra = clone $insert_extra;
         $copied_extra->setOriginUid($insert_extra->getOriginUid());
 
@@ -1303,7 +1305,8 @@ if (false && $parent_zone->getParentPage()->getPageType()->getAttribute('type_na
      */
     public function getExtras($hidden_too = false) {
 
-        if (empty($this->extras) || $hidden_too) {
+        if (empty($this->extras) || $hidden_too || $this->reread_extras) {
+            $this->reread_extras = false;
             $this->readExtrasForPagezoneID($this->getUid(), $hidden_too);
         }
 
@@ -1311,6 +1314,11 @@ if (false && $parent_zone->getParentPage()->getPageType()->getAttribute('type_na
 
         return $this->extras;
     }
+
+    public function rereadExtras() {
+        $this->readExtrasForPagezoneID($this->getUid(), false);
+    }
+    private $reread_extras = false;
 
     /**
      * @param string $extra_class desired extra class
@@ -1381,11 +1389,12 @@ if (false && $parent_zone->getParentPage()->getPageType()->getAttribute('type_na
      *  \param $hidden_too Also get Extras that are hidden because their
      *        inheritance mode has been set to false
      */
-     protected function readExtrasForPagezoneID($uid, $hidden_too = false) {
+    protected function readExtrasForPagezoneID($uid, $hidden_too = false) {
 
-         $uids = $this->getExtraUidsForPagezoneID($uid);
-         if (empty($uids)) return;
+        $uids = $this->getExtraUidsForPagezoneID($uid);
+        if (empty($uids)) return;
 
+        $this->extras = array();
         foreach ($uids as $uid) {
             try {
                 $deleted = self::getAbstractExtraWithoutEnableFields($uid);
@@ -1395,8 +1404,8 @@ if (false && $parent_zone->getParentPage()->getPageType()->getAttribute('type_na
                 } else {
                     /// \todo remove association table entry, but only if really deleted
                 }
-               } catch (tx_newspaper_EmptyResultException $e) {
-                   /// \todo remove association table entry
+            } catch (tx_newspaper_EmptyResultException $e) {
+                /// \todo remove association table entry
                 t3lib_div::debug('Extra ' . $uid['uid_foreign'] . ': EmptyResult! '. $e);
             }
         }
@@ -1492,6 +1501,8 @@ if (false && $parent_zone->getParentPage()->getPageType()->getAttribute('type_na
                 'uid_foreign' => $extra->getExtraUid()
             )
         );
+        $this->reread_extras = true;
+
         if (self::$debug_lots_of_crap)
             tx_newspaper::devlog('addExtra() after insertRows', $this->getExtraAndPagezone($extra));
     }
@@ -1548,6 +1559,7 @@ if (false && $parent_zone->getParentPage()->getPageType()->getAttribute('type_na
      private static $fields_to_copy_into_pagezone_table = array(
         'pid', 'crdate', 'cruser_id', 'deleted',
     );
+
 
 }
 
