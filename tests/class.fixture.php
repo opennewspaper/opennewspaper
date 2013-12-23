@@ -148,7 +148,7 @@ class tx_newspaper_fixture {
     }
 
     public function getAllSections() {
-        return $this->getParentSection()->getChildSections(true);
+        return array_merge(array($this->getParentSection()), $this->getParentSection()->getChildSections(true));
     }
 
     public function getParentSectionUid() {
