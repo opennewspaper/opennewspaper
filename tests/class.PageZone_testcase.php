@@ -760,7 +760,9 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
         $zone = $this->fixture->getRandomPageZoneForPlacement($grandchild);
 
         $original_extras = $zone->getExtras();
-        $original_origin_uid = array_pop($zone->getExtrasOf('tx_newspaper_Extra_Generic'))->getOriginUid();
+        $inherited = array_pop($zone->getExtrasOf('tx_newspaper_Extra_Generic'));
+        $this->assertTrue(is_object($inherited));
+        $original_origin_uid = $inherited->getOriginUid();
 
         $this->assertTrue(
             $zone->doesContainExtra($inherit_extra),
