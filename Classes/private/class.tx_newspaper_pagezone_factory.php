@@ -58,26 +58,29 @@ class tx_newspaper_PageZone_Factory {
      *  @return tx_newspaper_PageZone A concrete object of a class derived from tx_newspaper_PageZone
      */
     public function &create($uid) {
-        /// Read actual type and UID of the PageZone to instantiate from DB
-        $row = tx_newspaper::selectOneRow(
-            'pagezone_table, pagezone_uid', 'tx_newspaper_pagezone', "uid = $uid"
-        );
-        
-        if (!$row['pagezone_table']) {
-            throw new tx_newspaper_DBException('No pagezone_table in result', 
-                                               $row);
-        }
-        
-        if (!class_exists($row['pagezone_table'])) {
-            throw new tx_newspaper_WrongClassException($row['pagezone_table']);
+
+        if (!isset(self::$registry[$uid])) {
+            /// Read actual type and UID of the PageZone to instantiate from DB
+            $row = tx_newspaper::selectOneRow(
+                'pagezone_table, pagezone_uid', 'tx_newspaper_pagezone', "uid = $uid"
+            );
+
+            if (!$row['pagezone_table']) {
+                throw new tx_newspaper_DBException('No pagezone_table in result', $row);
+            }
+
+            if (!class_exists($row['pagezone_table'])) {
+                throw new tx_newspaper_WrongClassException($row['pagezone_table']);
+            }
+
+            if (!$row['pagezone_uid']) {
+                throw new tx_newspaper_DBException('No pagezone_uid in result', $row);
+            }
+
+            self::$registry[$uid] = new $row['pagezone_table']($row['pagezone_uid']);
         }
 
-        if (!$row['pagezone_uid']) {
-            throw new tx_newspaper_DBException('No pagezone_uid in result', 
-                                               $row);
-        }
-        
-        return new $row['pagezone_table']($row['pagezone_uid']);
+        return self::$registry[$uid];
     }
 
     ///    Create a new PageZone instead reading one from DB
@@ -129,7 +132,8 @@ class tx_newspaper_PageZone_Factory {
     
     /// The only instance of the tx_newspaper_PageZone_Factory Singleton
     private static $instance = null;
-     
+
+    private static $registry = array();
 }
  
 ?>
