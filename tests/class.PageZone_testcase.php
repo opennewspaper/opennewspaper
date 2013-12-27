@@ -698,7 +698,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
             "Parent is " . $pageZone->getParentForPlacement()
         );
 
-       $inherited_extras = array_filter(
+        $inherited_extras = array_filter(
             $pageZone->getExtras(),
             function(tx_newspaper_Extra $e) { return $e->getOriginUid() != $e->getExtraUid(); }
         );
@@ -713,23 +713,25 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 
         // set grandchild section to have no parent
         $grandchild = array_pop($this->fixture->getAllSections());
-        $pageZone = $this->fixture->getRandomPageZoneForPlacement($grandchild);
+        $pagezone = $this->fixture->getRandomPageZoneForPlacement($grandchild);
 
         // remove extras on this page zone
         tx_newspaper_DB::getInstance()->deleteRows(
-            'tx_newspaper_pagezone_page_extras_mm ', 'uid_local = ' . $pageZone->getUid()
+            'tx_newspaper_pagezone_page_extras_mm', 'uid_local = ' . $pagezone->getUid()
         );
-        $this->assertEquals(0, sizeof($pageZone->getExtras()), sizeof($pageZone->getExtras()) . " Extras left!");
+        $pagezone->rereadExtras();
 
-        $pageZone->changeParent(-1);
+        $this->assertEquals(0, sizeof($pagezone->getExtras()), sizeof($pagezone->getExtras()) . " Extras left!");
+
+        $pagezone->changeParent(-1);
 
         $this->assertTrue(
-            is_null($pageZone->getParentForPlacement()),
-            "Parent is " . $pageZone->getParentForPlacement()
+            is_null($pagezone->getParentForPlacement()),
+            "Parent is " . $pagezone->getParentForPlacement()
         );
 
        $inherited_extras = array_filter(
-            $pageZone->getExtras(),
+            $pagezone->getExtras(),
             function(tx_newspaper_Extra $e) { return $e->getOriginUid() != $e->getExtraUid(); }
         );
 
