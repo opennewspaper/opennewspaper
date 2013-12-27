@@ -1391,10 +1391,11 @@ if (false && $parent_zone->getParentPage()->getPageType()->getAttribute('type_na
      */
     protected function readExtrasForPagezoneID($uid, $hidden_too = false) {
 
+        $this->extras = array();
+
         $uids = $this->getExtraUidsForPagezoneID($uid);
         if (empty($uids)) return;
 
-        $this->extras = array();
         foreach ($uids as $uid) {
             try {
                 $deleted = self::getAbstractExtraWithoutEnableFields($uid);
