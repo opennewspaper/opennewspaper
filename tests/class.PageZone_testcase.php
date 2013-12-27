@@ -743,7 +743,12 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 
     public function test_changeParentSwitchInheritanceOffAndOn() {
 
-#        if ($this->change_parent_collection_running) return;
+        /**
+         *  previous tests have messed both with objects and the DB so much, that the following two
+         *  lines are necessary. don't ask me how the changes can persist even across tests, making
+         *  the second line necessary.
+         */
+        if ($this->change_parent_collection_running) return;
         tx_newspaper_PageZone_Factory::clear();
 
         // set up a page zone with both extras on it and inherited extras
