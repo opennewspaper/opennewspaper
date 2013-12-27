@@ -83,6 +83,8 @@ class tx_newspaper_PageZone_Factory {
         return self::$registry[$uid];
     }
 
+    public static function clear() { self::$registry = array(); }
+
     ///    Create a new PageZone instead reading one from DB
     /** \todo Check whether a PageZone of type \p $type is already present on
      *  page \p $page

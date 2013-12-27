@@ -743,7 +743,8 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 
     public function test_changeParentSwitchInheritanceOffAndOn() {
 
-        if ($this->change_parent_collection_running) return;
+#        if ($this->change_parent_collection_running) return;
+        tx_newspaper_PageZone_Factory::clear();
 
         // set up a page zone with both extras on it and inherited extras
         $parent_zone = $this->fixture->getRandomPageZoneForPlacement($this->fixture->getParentSection());
