@@ -758,6 +758,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 
         $grandchild = array_pop($this->fixture->getAllSections());
         $zone = $this->fixture->getRandomPageZoneForPlacement($grandchild);
+        $zone->rereadExtras();
 
         $original_extras = $zone->getExtras();
         $inherited = array_pop($zone->getExtrasOf('tx_newspaper_Extra_Generic'));
