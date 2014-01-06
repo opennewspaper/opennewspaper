@@ -386,6 +386,7 @@ tx_newspaper_File::w(
     )
 );
 tx_newspaper_File::w('set parent of page zone ' . $pagezone->getAbstractUid() . ' from ' . $pagezone->getParentForPlacement()->getAbstractUid() . ' to ' . $inheritor_pagezone->getAbstractUid());
+                        $pagezone->changeParent(0);
                     } else {
                         tx_newspaper_File::w('owie, ow, ow: pagezone active in inheriting page not present in new parent. i will deal with that shit later.');
                     }

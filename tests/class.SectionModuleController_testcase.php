@@ -107,7 +107,7 @@ class test_SectionModuleController_testcase extends tx_newspaper_database_testca
 
         $this->assertFalse(
             in_array($s->childZ(), $s->grandchildZ()->getInheritanceHierarchyUp(false)),
-            "Child zone still in inheritance hierarchy: " . print_r(array_map(function($z) { return $z->printableName() . $z->getAbstractUid(); }, $s->grandchildZ()->getInheritanceHierarchyUp(false)), 1)
+            "Child zone still in inheritance hierarchy: " . print_r(array_map(function(tx_newspaper_PageZone $z) { return $z->printableName() . $z->getAbstractUid(); }, $s->grandchildZ()->getInheritanceHierarchyUp(false)), 1)
         );
         $this->assertTrue(
             in_array($s->parentZ(), $s->grandchildZ()->getInheritanceHierarchyUp(false)),
@@ -120,11 +120,10 @@ class test_SectionModuleController_testcase extends tx_newspaper_database_testca
 
 tx_newspaper_File::w(print_r(array_map(function(tx_newspaper_PageZone $p) { return str_replace('Unit Test - ', '', $p->printableName()); }, $s->grandchildZ()->getInheritanceHierarchyUp()), 1));
         $s->grandchildZ()->rereadExtras();
-tx_newspaper_File::w(print_r(array_map(function(tx_newspaper_Extra    $e) { return $e->getDescription(); }, $s->grandchildZ()->getExtras()), 1));
 #tx_newspaper_File::w(print_r(array_map(function(array $a) {return array_pop($a); }, tx_newspaper_DB::getInstance()->selectRows('uid_foreign', 'tx_newspaper_pagezone_page_extras_mm', 'uid_local = ' . $s->grandchildZ()->getUid())), 1));
         $this->assertFalse(
             $s->grandchildZ()->doesContainExtra($inheriting_extra),
-            "grandchild zone apparently still contains extra inherited from child zone: " . print_r(array_map(function(tx_newspaper_Extra    $e) { return $e->getDescription(); }, $s->grandchildZ()->getExtras()), 1) . "<" . $inheriting_extra->getDescription() . ">"
+            "grandchild zone apparently still contains extra inherited from child zone: " . print_r(array_map(function(tx_newspaper_Extra $e) { return $e->getDescription(); }, $s->grandchildZ()->getExtras()), 1) . "<" . $inheriting_extra->getDescription() . ">"
         );
 
         $this->assertEquals(
@@ -139,9 +138,6 @@ tx_newspaper_File::w(print_r(array_map(function(tx_newspaper_Extra    $e) { retu
                 "inherited extra $inherited_extra not on inheriting zone"
             );
         }
-
-
-        $this->skipTest("Not yet implemented");
 
     }
 
