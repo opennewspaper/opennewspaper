@@ -369,7 +369,31 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
 
         $new_parent = new tx_newspaper_Section($this->module_request['parent_section']);
 
-        $section->setAttribute('parent_section', $new_parent->getUid());
+        tx_newspaper_Section::disableAttributeCache();
+        $section->setParentSection($new_parent);
+        tx_newspaper_PageZone::invalidateParentsCache();
+
+        foreach ($section->getActivePages() as $page) {
+            if ($inheritor_page = $new_parent->getSubPage($page->getPageType())) {
+                foreach ($page->getPageZones() as $pagezone) {
+                    if ($inheritor_pagezone = $inheritor_page->getPageZone($pagezone->getPageZoneType())) {
+tx_newspaper_File::w(
+    print_r(
+        array_map(
+            function(tx_newspaper_PageZone $p) { return $p->printableName(); },
+            $pagezone->getInheritanceHierarchyUp(false)
+        ), 1
+    )
+);
+tx_newspaper_File::w('set parent of page zone ' . $pagezone->getAbstractUid() . ' from ' . $pagezone->getParentForPlacement()->getAbstractUid() . ' to ' . $inheritor_pagezone->getAbstractUid());
+                    } else {
+                        tx_newspaper_File::w('owie, ow, ow: pagezone active in inheriting page not present in new parent. i will deal with that shit later.');
+                    }
+                }
+            } else {
+                tx_newspaper_File::w('ow, ow, ow: page active in inheriting section not present in new parent. i will deal with that shit later.');
+            }
+        }
 
         tx_newspaper_DB::getInstance()->updateRows(
             'pages', 'uid = ' . $section->getTypo3PageID(),

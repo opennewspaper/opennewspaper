@@ -69,7 +69,7 @@ class tx_newspaper_Page
      */
     public function __construct($parent = null, tx_newspaper_PageType $type = null) {
         if ($parent instanceof tx_newspaper_Section) {
-            $this->parentSection = $parent;
+            $this->parent_section = $parent;
             $this->pagetype = $type;
         } else if (is_integer($parent)) {
             $this->setUid($parent);
@@ -114,7 +114,7 @@ class tx_newspaper_Page
              $this->getAttribute('uid');
              $ret = $this->getTable() . ':' . " \n" .
                     'UID: ' . $this->getUid() . " \n" .
-                    ($this->parentSection? ('parentSection: ' . $this->parentSection->getUid() . " \n"): '') .
+                    ($this->parent_section? ('parentSection: ' . $this->parent_section->getUid() . " \n"): '') .
                     'condition: ' . $this->condition . " \n" .
                     'pageZones: ';
              foreach ($this->pageZones as $page_zone) {
@@ -161,7 +161,7 @@ class tx_newspaper_Page
                 $this->getTable(), 'uid = ' . $this->getUid(), $this->attributes
             );
         } else {
-            $this->attributes['section'] = $this->parentSection->getUid();
+            $this->attributes['section'] = $this->parent_section->getUid();
             $this->attributes['pagetype_id'] = $this->pagetype->getUid();
             /** \todo If the PID is not set manually, $tce->process_datamap()
              *           fails silently.
@@ -311,7 +311,7 @@ class tx_newspaper_Page
         if ($this->getPagetype()) $this->smarty->setPageType($this);
 
         /// Pass global attributes to Smarty
-         $this->smarty->assign('section', $this->parentSection->getAttribute('section_name'));
+         $this->smarty->assign('section', $this->parent_section->getAttribute('section_name'));
          $this->smarty->assign('page_type', $this->pagetype->getAttribute('type_name'));
 
         /// Pass the page zones on this page, already rendered, to Smarty
@@ -467,10 +467,10 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
      * @return tx_newspaper_Section The section under which this page lies
      */
      public function getParentSection() {
-         if (!$this->parentSection) {
-             $this->parentSection = new tx_newspaper_Section(intval($this->getAttribute('section')));
-         }
-         return $this->parentSection;
+#         if (!$this->parent_section) {
+             $this->parent_section = new tx_newspaper_Section(intval($this->getAttribute('section')));
+ #        }
+         return $this->parent_section;
      }
 
     public function getTypo3PageID() {
@@ -488,6 +488,7 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
                  'Oops, found a Page without a parent Section: Page ID = ' . $this->getUid()
              );
          }
+tx_newspaper_File::w("    getParentPageOfSameType: " . $parent_section->getAttribute('section_name') . $this->getPageType()->getAttribute('type_name'));
 
          while ($parent_section) {
              /** ... then get parent section of the current section.    */
@@ -496,9 +497,11 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
                  //    Root of section tree reached
                  return null;
              }
+tx_newspaper_File::w("        checking " . $parent_section->getAttribute('section_name'));
 
              foreach ($parent_section->getSubPages() as $page) {
                  if ($page->getPageType()->getUid() == $this->getPageType()->getUid()) {
+tx_newspaper_File::w("            found " . $parent_section->getAttribute('section_name'));
                      return $page;
                  }
              }
@@ -672,7 +675,7 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
      /// tx_newspaper_Smarty object for HTML rendering
      private $smarty = null;
      /// tx_newspaper_Section this page is in
-     private $parentSection = null;
+     private $parent_section = null;
      /// tx_newspaper_PageType of the current page
      private $pagetype = null;
      /// WHERE-condition used to find current page

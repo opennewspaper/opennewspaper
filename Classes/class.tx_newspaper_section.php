@@ -48,8 +48,12 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
                'attributes: ' . print_r($this->attributes, 1) . "\n";
     }
 
+    private static $disable_attribute_cache = false;
+    public static function disableAttributeCache() {
+        self::$disable_attribute_cache = true;
+    }
     public function getAttribute($attribute) {
-        if (!$this->attributes) {
+        if (!$this->attributes || self::$disable_attribute_cache) {
             $this->attributes = tx_newspaper::selectOneRow(
                 '*', $this->getTable(), 'uid = ' . $this->getUid()
             );
@@ -229,8 +233,14 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 
     /** @return tx_newspaper_Section The parent node in the section tree. */
     public function getParentSection() {
+tx_newspaper_File::w("        getParentSection(): " . $this->getAttribute('section_name') . " -> " . intval($this->getAttribute('parent_section')));
         if (!intval($this->getAttribute('parent_section'))) return null;
         return new tx_newspaper_Section($this->getAttribute('parent_section'));
+    }
+
+    public function setParentSection(tx_newspaper_Section $new_parent) {
+        $this->setAttribute('parent_section', $new_parent->getUid());
+        $this->store();
     }
 
     /**
@@ -641,7 +651,10 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
      * @return array Root sections
      */
     public static function getRootSections() {
-        return array_map(function($uid) { return new tx_newspaper_Section($uid); }, self::getRootSectionUids());
+        return array_map(
+            function($uid) { return new tx_newspaper_Section($uid); },
+            self::getRootSectionUids()
+        );
     }
 
     /**
@@ -654,7 +667,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
             function(array $data) { return intval($data['uid']); },
             tx_newspaper::selectRows(
                 'uid', 'tx_newspaper_section',
-                'parent_section=0 AND pid=' . tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_section()),
+                'parent_section=0 AND pid=' . tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_Section()),
                 '', 'sorting'
             )
         );

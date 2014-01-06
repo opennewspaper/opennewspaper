@@ -28,11 +28,11 @@ class InheritanceStructure {
         foreach ($this->sections as $section) {
             $ret .= $section->getSectionName() . "\n";
             foreach ($section->getActivePages() as $page) {
-                $ret .= "    " . $page->getPageType()->getAttribute('type_name') . "\n";
+                $ret .= "    " . str_replace('Unit Test - ', '', $page->getPageType()->getAttribute('type_name')) . "\n";
                 foreach ($page->getPageZones() as $zone) {
-                    $ret .= "        " . $zone->printableName() . "\n";
+                    $ret .= "        " . str_replace('Unit Test - ', '', $zone->printableName()) . "\n";
                     if ($zone->getParentForPlacement() instanceof tx_newspaper_PageZone) {
-                        $ret .= "            parent: " . $zone->getParentForPlacement()->printableName() . "\n";
+                        $ret .= "            parent: " . str_replace('Unit Test - ', '', $zone->getParentForPlacement()->printableName()) . "\n";
                     }
                 }
             }
@@ -98,18 +98,33 @@ class test_SectionModuleController_testcase extends tx_newspaper_database_testca
         // reinstantiate everything to make sure the changes have taken place
         $s = new InheritanceStructure($this->fixture);
         $inheriting_extra = tx_newspaper_Extra_Factory::getInstance()->create($inheriting_extra->getExtraUid());
-tx_newspaper_File::w("structure now: $s");
+# tx_newspaper_File::w("structure now: $s");
 
         $this->assertEquals(
             $s->parentS()->getUid(), $s->grandchildS()->getParentSection()->getUid(),
             "grandchild's parent section: " . $s->grandchildS()->getParentSection()->getUid() . ", parent section: " . $s->parentS()->getUid()
         );
 
-tx_newspaper_File::w(print_r(array_map(function(tx_newspaper_PageZone $p) { return $p->printableName(); }, $s->grandchildZ()->getInheritanceHierarchyUp()), 1));
+        $this->assertFalse(
+            in_array($s->childZ(), $s->grandchildZ()->getInheritanceHierarchyUp(false)),
+            "Child zone still in inheritance hierarchy: " . print_r(array_map(function($z) { return $z->printableName() . $z->getAbstractUid(); }, $s->grandchildZ()->getInheritanceHierarchyUp(false)), 1)
+        );
+        $this->assertTrue(
+            in_array($s->parentZ(), $s->grandchildZ()->getInheritanceHierarchyUp(false)),
+            "Parent zone no longer in inheritance hierarchy"
+        );
+        $this->assertEquals(
+            sizeof($s->grandchildZ()->getInheritanceHierarchyUp(false)), 1,
+            "Too many zones in inheritance hierarchy"
+        );
 
+tx_newspaper_File::w(print_r(array_map(function(tx_newspaper_PageZone $p) { return str_replace('Unit Test - ', '', $p->printableName()); }, $s->grandchildZ()->getInheritanceHierarchyUp()), 1));
+        $s->grandchildZ()->rereadExtras();
+tx_newspaper_File::w(print_r(array_map(function(tx_newspaper_Extra    $e) { return $e->getDescription(); }, $s->grandchildZ()->getExtras()), 1));
+#tx_newspaper_File::w(print_r(array_map(function(array $a) {return array_pop($a); }, tx_newspaper_DB::getInstance()->selectRows('uid_foreign', 'tx_newspaper_pagezone_page_extras_mm', 'uid_local = ' . $s->grandchildZ()->getUid())), 1));
         $this->assertFalse(
             $s->grandchildZ()->doesContainExtra($inheriting_extra),
-            "grandchild zone apparently still contains extra inherited from child zone " . $s->grandchildZ()->getAttribute('inherits_from')
+            "grandchild zone apparently still contains extra inherited from child zone: " . print_r(array_map(function(tx_newspaper_Extra    $e) { return $e->getDescription(); }, $s->grandchildZ()->getExtras()), 1) . "<" . $inheriting_extra->getDescription() . ">"
         );
 
         $this->assertEquals(
