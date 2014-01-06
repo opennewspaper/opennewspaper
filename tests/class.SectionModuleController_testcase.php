@@ -87,18 +87,15 @@ class test_SectionModuleController_testcase extends tx_newspaper_database_testca
         $this->buildInheritanceStructure($this->fixture->createExtraToInherit('tx_newspaper_Extra_Generic'));
     }
 
+
+    /**
+     *  preparing the inheritance structure more than once leads to errors. instead of
+     *  debugging those (i'm sooo fed up with debugging things, tbh) i put all tests in
+     *  one function, which works.
+     */
     public function test_changeParent() {
 
-        $inheriting_extra = $this->fixture->createExtraToInherit('tx_newspaper_Extra_Generic');
-        $s = $this->buildInheritanceStructure($inheriting_extra);
-
-        // change parent of grandchild section to parent section, see if extras change and all
-        $this->callChangeParent($s->grandchildS(), $s->parentS());
-
-        // reinstantiate everything to make sure the changes have taken place
-        $s = new InheritanceStructure($this->fixture);
-        $inheriting_extra = tx_newspaper_Extra_Factory::getInstance()->create($inheriting_extra->getExtraUid());
-# tx_newspaper_File::w("structure now: $s");
+        list($inheriting_extra, /** @var InheritanceStructure */$s) = $this->prepareTestChangeParent();
 
         $this->assertEquals(
             $s->parentS()->getUid(), $s->grandchildS()->getParentSection()->getUid(),
@@ -118,9 +115,8 @@ class test_SectionModuleController_testcase extends tx_newspaper_database_testca
             "Too many zones in inheritance hierarchy"
         );
 
-tx_newspaper_File::w(print_r(array_map(function(tx_newspaper_PageZone $p) { return str_replace('Unit Test - ', '', $p->printableName()); }, $s->grandchildZ()->getInheritanceHierarchyUp()), 1));
         $s->grandchildZ()->rereadExtras();
-#tx_newspaper_File::w(print_r(array_map(function(array $a) {return array_pop($a); }, tx_newspaper_DB::getInstance()->selectRows('uid_foreign', 'tx_newspaper_pagezone_page_extras_mm', 'uid_local = ' . $s->grandchildZ()->getUid())), 1));
+
         $this->assertFalse(
             $s->grandchildZ()->doesContainExtra($inheriting_extra),
             "grandchild zone apparently still contains extra inherited from child zone: " . print_r(array_map(function(tx_newspaper_Extra $e) { return $e->getDescription(); }, $s->grandchildZ()->getExtras()), 1) . "<" . $inheriting_extra->getDescription() . ">"
@@ -223,6 +219,22 @@ tx_newspaper_File::w(print_r(array_map(function(tx_newspaper_PageZone $p) { retu
 
     /** @var Tx_newspaper_Controller_SectionModuleController */
     private $controller;
+
+    /**
+     * @return array
+     */
+    private function prepareTestChangeParent() {
+        $inheriting_extra = $this->fixture->createExtraToInherit('tx_newspaper_Extra_Generic');
+        $s = $this->buildInheritanceStructure($inheriting_extra);
+
+        // change parent of grandchild section to parent section, see if extras change and all
+        $this->callChangeParent($s->grandchildS(), $s->parentS());
+
+        // reinstantiate everything to make sure the changes have taken place
+        $s = new InheritanceStructure($this->fixture);
+        $inheriting_extra = tx_newspaper_Extra_Factory::getInstance()->create($inheriting_extra->getExtraUid());
+        return array($inheriting_extra, $s);
+    }
 
 }
 ?>

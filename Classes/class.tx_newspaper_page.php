@@ -451,14 +451,13 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
             'deleted=0 AND pid IN (' . implode(',', $pid_list) . ') AND page_id=' . intval($this->getUid())
         );
 
-#t3lib_div::devlog('gapz', 'newspaper', 0, $row);
         $list = array();
         for ($i = 0; $i < sizeof($row); $i++) {
             if ($includeDefaultArticle || $row[$i]['pagezone_table'] == 'tx_newspaper_pagezone_page') {
                 $list[] = new $row[$i]['pagezone_table'](intval($row[$i]['pagezone_uid']));
             }
         }
-#t3lib_div::debug($list);
+
         return $list;
     }
 
@@ -467,9 +466,9 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
      * @return tx_newspaper_Section The section under which this page lies
      */
      public function getParentSection() {
-#         if (!$this->parent_section) {
+         if (!$this->parent_section) {
              $this->parent_section = new tx_newspaper_Section(intval($this->getAttribute('section')));
- #        }
+         }
          return $this->parent_section;
      }
 
@@ -488,7 +487,6 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
                  'Oops, found a Page without a parent Section: Page ID = ' . $this->getUid()
              );
          }
-tx_newspaper_File::w("    getParentPageOfSameType: " . $parent_section->getAttribute('section_name') . $this->getPageType()->getAttribute('type_name'));
 
          while ($parent_section) {
              /** ... then get parent section of the current section.    */
@@ -497,11 +495,9 @@ tx_newspaper_File::w("    getParentPageOfSameType: " . $parent_section->getAttri
                  //    Root of section tree reached
                  return null;
              }
-tx_newspaper_File::w("        checking " . $parent_section->getAttribute('section_name'));
 
              foreach ($parent_section->getSubPages() as $page) {
                  if ($page->getPageType()->getUid() == $this->getPageType()->getUid()) {
-tx_newspaper_File::w("            found " . $parent_section->getAttribute('section_name'));
                      return $page;
                  }
              }

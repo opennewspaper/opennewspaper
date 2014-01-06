@@ -377,18 +377,9 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
             if ($inheritor_page = $new_parent->getSubPage($page->getPageType())) {
                 foreach ($page->getPageZones() as $pagezone) {
                     if ($inheritor_pagezone = $inheritor_page->getPageZone($pagezone->getPageZoneType())) {
-tx_newspaper_File::w(
-    print_r(
-        array_map(
-            function(tx_newspaper_PageZone $p) { return $p->printableName(); },
-            $pagezone->getInheritanceHierarchyUp(false)
-        ), 1
-    )
-);
-tx_newspaper_File::w('set parent of page zone ' . $pagezone->getAbstractUid() . ' from ' . $pagezone->getParentForPlacement()->getAbstractUid() . ' to ' . $inheritor_pagezone->getAbstractUid());
                         $pagezone->changeParent(0);
                     } else {
-                        tx_newspaper_File::w('owie, ow, ow: pagezone active in inheriting page not present in new parent. i will deal with that shit later.');
+                       tx_newspaper_File::w('owie, ow, ow: pagezone active in inheriting page not present in new parent. i will deal with that shit later.');
                     }
                 }
             } else {

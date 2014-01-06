@@ -482,7 +482,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 
         if (!$structure_only) {
             $inherit_mode = intval($this->getAttribute('inherits_from'));
-#tx_newspaper_File::w("inherit mode $inherit_mode");
             if ($inherit_mode < 0) return null;
             if ($inherit_mode > 0 && self::isHorizontalInheritanceEnabled()) {
                 return tx_newspaper_PageZone_Factory::getInstance()->create($inherit_mode);
@@ -1280,12 +1279,10 @@ if (false && $parent_zone->getParentPage()->getPageType()->getAttribute('type_na
         if (isset(self::$parents_cache[$this->getAbstractUid()])) return self::$parents_cache[$this->getAbstractUid()];
 
         $current_page = $this->getParentPage();
-tx_newspaper_File::w("searching parent for " . $current_page->getParentSection()->getAttribute('section_name') . $current_page->getPageType()->getAttribute('type_name') . $this->getPageZoneType()->getAttribute('type_name'));
 
         while ($current_page) {
             $current_page = $current_page->getParentPageOfSameType();
             if (!$current_page instanceof tx_newspaper_Page) break;
-tx_newspaper_File::w("    checking " . $current_page->getParentSection()->getAttribute('section_name') . $current_page->getPageType()->getAttribute('type_name') . $this->getPageZoneType()->getAttribute('type_name'));
 
             /** Look for PageZone of the same type. If no active PageZone is
              *  found, continue looking in the parent section.
@@ -1293,7 +1290,6 @@ tx_newspaper_File::w("    checking " . $current_page->getParentSection()->getAtt
             $parent_pagezone = $current_page->getPageZone($this->getPageZoneType());
             if (!is_null($parent_pagezone)) {
                 self::$parents_cache[$this->getAbstractUid()] = $parent_pagezone;
-tx_newspaper_File::w("        found " . $current_page->getParentSection()->getAttribute('section_name') . $current_page->getPageType()->getAttribute('type_name') . $parent_pagezone->getPageZoneType()->getAttribute('type_name'));
                 return $parent_pagezone;
             }
 

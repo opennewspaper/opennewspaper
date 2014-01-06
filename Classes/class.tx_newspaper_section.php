@@ -233,7 +233,6 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 
     /** @return tx_newspaper_Section The parent node in the section tree. */
     public function getParentSection() {
-tx_newspaper_File::w("        getParentSection(): " . $this->getAttribute('section_name') . " -> " . intval($this->getAttribute('parent_section')));
         if (!intval($this->getAttribute('parent_section'))) return null;
         return new tx_newspaper_Section($this->getAttribute('parent_section'));
     }
