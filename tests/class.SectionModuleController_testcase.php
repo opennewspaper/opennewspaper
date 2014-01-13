@@ -155,7 +155,7 @@ class test_SectionModuleController_testcase extends tx_newspaper_database_testca
     }
 
     private static function debug(tx_newspaper_PageZone $zone, $text = '') {
-        tx_newspaper_File::w(
+        tx_newspaper_Debug::w(
             "$text: \n" .
             $zone->getAbstractUid() .'/'.str_replace('Unit Test - ', '', $zone->printableName()) . "\n" .
             implode(', ',
