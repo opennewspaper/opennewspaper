@@ -1037,7 +1037,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         $article->removeDanglingRelations();
         $article->checkSectionIsValid();
 
-        self::updateDependencyTree($article);
+        self::updateDependencyTree($article, $fieldArray);
 
     }
 
@@ -1192,10 +1192,10 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     }
 
 
-    public static function updateDependencyTree(tx_newspaper_Article $article) {
+    public static function updateDependencyTree(tx_newspaper_Article $article, array $field_array = array()) {
         if (tx_newspaper_DependencyTree::useDependencyTree()) {
             $tags = self::getRemovedTags($article);
-            $tree = tx_newspaper_DependencyTree::generateFromArticle($article, $tags);
+            $tree = tx_newspaper_DependencyTree::generateFromArticle($article, $tags, $field_array);
             $tree_proxy = new tx_newspaper_DependencyTreeProxy($tree);
             $tree_proxy->executeActionsOnPages('tx_newspaper_Article');
         }
