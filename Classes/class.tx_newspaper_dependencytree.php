@@ -50,7 +50,7 @@ require_once('private/class.tx_newspaper_cachablepage.php');
  *        $np_page = $page->getNewspaperPage();
  *        tx_newspaper::devlog(
  *            $np_page->getUid(),
- *    		  $np_page->getParentSection()->getAttribute('section_name') .
+ *              $np_page->getParentSection()->getAttribute('section_name') .
  *            $np_page->getPageType()->getAttribute('type_name')
  *        );
  *    }
@@ -91,10 +91,18 @@ class tx_newspaper_DependencyTree {
      *  @param $article The article which is changed. \p $article is from now on
      *    called "the affected article".
      */
-    static public function generateFromArticle(tx_newspaper_Article $article, array $removed_tags = array()) {
+    static public function generateFromArticle(tx_newspaper_Article $article, array $removed_tags = array(), array $new_attributes = array()) {
 
         $tree = self::create();
         $tree->setArticle($article);
+        if (!empty($new_attributes)) {
+            if (isset($new_attributes['starttime'])) {
+                $tree->starttime = $new_attributes['starttime'];
+            }
+            if (isset($new_attributes['endtime'])) {
+                $tree->endtime = $new_attributes['endtime'];
+            }
+        }
         if (!empty($removed_tags)) {
             $tree->setDeletedContentTags($removed_tags);
         }
@@ -170,9 +178,7 @@ class tx_newspaper_DependencyTree {
      *    \c tx_newspaper_DependencyTree::ACT_ON_ARTICLE_LIST_PAGES.
      *    Defaults to \c ACT_ON_ARTICLES|ACT_ON_SECTION_PAGES.
      */
-    static public function registerAction($action,
-                                          $when = 3,
-                                          $key = '') {
+    static public function registerAction($action, $when = 3, $key = '') {
         if (is_callable($action)) {
             $new_action = array(
                 'function' => $action,
@@ -366,11 +372,15 @@ class tx_newspaper_DependencyTree {
     }
 
     private function getStarttime() {
-        return $this->getAttributeForArticleOrExtra('starttime');
+        return $this->starttime;
+        if (!is_null($this->starttime)) return $this->starttime;
+        return $this->getAttributeForArticleOrExtra('starttime')? $this->getAttributeForArticleOrExtra('starttime'): null;
     }
 
     private function getEndtime() {
-        return $this->getAttributeForArticleOrExtra('endtime');
+        return $this->endtime;
+        if (!is_null($this->endtime)) return $this->endtime;
+        return $this->getAttributeForArticleOrExtra('endtime')? $this->getAttributeForArticleOrExtra('endtime'): null;
     }
 
     private function getAttributeForArticleOrExtra($attribute) {
@@ -480,7 +490,7 @@ class tx_newspaper_DependencyTree {
 
     private function addCachablePagesForPage(tx_newspaper_Page $page) {
         if ($page->getPageType() == tx_newspaper_PageType::getArticlePageType()) {
-            $this->article_pages = array_merge($this->article_pages, allArticlePagesForPage($page));
+            $this->article_pages = array_merge($this->article_pages, $this->allArticlePagesForPage($page));
         } else if ($page->getTypo3PageID() == tx_newspaper::getDossierPageID()) {
             /// \todo add dossier pages
             tx_newspaper::devlog('todo: add dossier page', $page->getUid());
@@ -489,17 +499,41 @@ class tx_newspaper_DependencyTree {
         }
     }
 
+    /// Returns the page and all articles that are displayed on it.
+    /** Condition: \p $page is an article page. This is not checked. */
+    private function allArticlePagesForPage(tx_newspaper_Page $page) {
+
+        $section = $page->getParentSection();
+        $articles = $section->getArticles(tx_newspaper_DependencyTree::limitForArticlesOnPlacementChange());
+
+        $pages = array();
+        foreach ($articles as $article) {
+            $pages[] = $this->makePageWithTimes($page, $article);
+        }
+        return $pages;
+    }
+
     private function makeCachablePages(array $pages, tx_newspaper_Article $article = null) {
         $cachable_pages = array();
         foreach($pages as $page) {
             if ($page instanceof tx_newspaper_Page) {
-                $new_page = new tx_newspaper_CachablePage($page, $article);
-                if ($this->getStarttime()) $new_page->setStarttime($this->getStarttime());
-                if ($this->getEndtime()) $new_page->setEndtime($this->getEndtime());
+                $new_page = $this->makePageWithTimes($page, $article);
                 $cachable_pages[] = $new_page;
             }
         }
         return $cachable_pages;
+    }
+
+    /**
+     * @param tx_newspaper_Article $article
+     * @param tx_newspaper_Page $page
+     * @return tx_newspaper_CachablePage
+     */
+    private function makePageWithTimes(tx_newspaper_Page $page, tx_newspaper_Article $article = null) {
+        $new_page = new tx_newspaper_CachablePage($page, $article);
+        /* if (!is_null($this->getStarttime())) */$new_page->setStarttime($this->getStarttime());
+        if (!is_null($this->getEndtime())) $new_page->setEndtime($this->getEndtime());
+        return $new_page;
     }
 
     private static function tsConfigValueOrDefault($var, $default) {
@@ -533,12 +567,15 @@ class tx_newspaper_DependencyTree {
     private $articlelist_pages = array();   ///< Pages displaying article lists containing the article
     private $articlelist_pages_filled = false;
 
+    private $starttime = null;
+    private $endtime = null;
+
     private static $registered_actions = array();
 
 }
 
 function getAllArticlePages(array $sections) {
-	$article_pages = array();
+    $article_pages = array();
     foreach ($sections as $section) {
         $article_page = getArticlePage($section);
         if ($article_page instanceof tx_newspaper_Page) $article_pages[] = $article_page;
@@ -611,88 +648,88 @@ function getDossierPage() {
 }
 
 function getAllArticleListPages(array $article_lists) {
-	$pages = array();
-	foreach ($article_lists as $list) {
-		$pages = array_merge($pages, getArticleListPages($list));
-	}
-	return array_unique($pages);
+    $pages = array();
+    foreach ($article_lists as $list) {
+        $pages = array_merge($pages, getArticleListPages($list));
+    }
+    return array_unique($pages);
 }
 
 function getArticleListPages(tx_newspaper_ArticleList $article_list) {
 
-	$extras = getAllExtras($article_list);
+    $extras = getAllExtras($article_list);
 
-	$pagezones = array();
-	foreach ($extras as $extra) {
-		$pagezones = array_merge($pagezones, getAllPageZones($extra));
-	}
-	$pagezones = array_unique($pagezones);
+    $pagezones = array();
+    foreach ($extras as $extra) {
+        $pagezones = array_merge($pagezones, getAllPageZones($extra));
+    }
+    $pagezones = array_unique($pagezones);
 
-	$pages = array();
-	foreach ($pagezones as $pagezone) {
-		$pages[] = getPage($pagezone);
-	}
-	$pages = array_unique($pages);
+    $pages = array();
+    foreach ($pagezones as $pagezone) {
+        $pages[] = getPage($pagezone);
+    }
+    $pages = array_unique($pages);
 
-	return $pages;
+    return $pages;
 }
 
 /// get all extras that reference $article_list
 function getAllExtras(tx_newspaper_ArticleList $article_list) {
-	return getAllExtrasOfType('tx_newspaper_extra_articlelist', $article_list);
+    return getAllExtrasOfType('tx_newspaper_extra_articlelist', $article_list);
 }
 
 function getAllExtrasOfType($extra_type, tx_newspaper_ArticleList $article_list) {
 
-	$article_list_extra_uids = tx_newspaper::selectRows(
-		'uid', $extra_type,
-		'articlelist = ' . $article_list->getUid()
-	);
+    $article_list_extra_uids = tx_newspaper::selectRows(
+        'uid', $extra_type,
+        'articlelist = ' . $article_list->getUid()
+    );
 
-	$extras = array();
+    $extras = array();
 
-	foreach ($article_list_extra_uids as $record) {
-		$extras = array_merge($extras, getAbstractExtras($record['uid'], $extra_type));
-	}
+    foreach ($article_list_extra_uids as $record) {
+        $extras = array_merge($extras, getAbstractExtras($record['uid'], $extra_type));
+    }
 
-	return $extras;
+    return $extras;
 }
 
 function getAbstractExtras($concrete_extra_uid, $extra_table) {
 
-	$extra_uids = tx_newspaper::selectRows(
-			'uid', 'tx_newspaper_extra',
-			'extra_uid = ' . $concrete_extra_uid . ' AND extra_table = \'' . $extra_table . '\''
-	);
+    $extra_uids = tx_newspaper::selectRows(
+            'uid', 'tx_newspaper_extra',
+            'extra_uid = ' . $concrete_extra_uid . ' AND extra_table = \'' . $extra_table . '\''
+    );
 
-	$extras = array();
+    $extras = array();
 
-	foreach ($extra_uids as $uid) {
-		$extras[] = tx_newspaper_Extra_Factory::getInstance()->create($uid['uid']);
-	}
+    foreach ($extra_uids as $uid) {
+        $extras[] = tx_newspaper_Extra_Factory::getInstance()->create($uid['uid']);
+    }
 
-	return $extras;
+    return $extras;
 }
 
 /// get all page zones that contain \p $extra
 function getAllPageZones(tx_newspaper_Extra $extra) {
 
-	$pagezone_uids = tx_newspaper::selectRows(
-		'uid_local', 'tx_newspaper_pagezone_page_extras_mm',
-		'uid_foreign = ' . $extra->getExtraUid()
-	);
+    $pagezone_uids = tx_newspaper::selectRows(
+        'uid_local', 'tx_newspaper_pagezone_page_extras_mm',
+        'uid_foreign = ' . $extra->getExtraUid()
+    );
 
-	$pagezones = array();
-	foreach ($pagezone_uids as $uid) {
-		$pagezones[] = new tx_newspaper_Pagezone_Page($uid['uid_local']);
-	}
+    $pagezones = array();
+    foreach ($pagezone_uids as $uid) {
+        $pagezones[] = new tx_newspaper_Pagezone_Page($uid['uid_local']);
+    }
 
-	return $pagezones;
+    return $pagezones;
 }
 
 /// get all pages that contain $pagezone
 function getPage(tx_newspaper_Pagezone $pagezone) {
-	return new tx_newspaper_Page(intval($pagezone->getAttribute('page_id')));
+    return new tx_newspaper_Page(intval($pagezone->getAttribute('page_id')));
 }
 
 /**  @return tx_newspaper_ArticleList[] array of all article lists \p $article belongs to
@@ -729,24 +766,10 @@ function getAllArticleLists() {
 
 }
 
-/// Returns the page and all articles that are displayed on it.
-/** Condition: \p $page is an article page. This is not checked. */
-function allArticlePagesForPage(tx_newspaper_Page $page) {
-
-    $section = $page->getParentSection();
-    $articles = $section->getArticles(tx_newspaper_DependencyTree::limitForArticlesOnPlacementChange());
-
-    $pages = array();
-    foreach ($articles as $article) {
-        $pages[] = new tx_newspaper_CachablePage($page, $article);
-    }
-    return $pages;
-}
-
 function debugPage(tx_newspaper_CachablePage $page) {
     $np_page = $page->getNewspaperPage();
     tx_newspaper::devlog($np_page->getUid(),
-    					 $np_page->getParentSection()->getAttribute('section_name') . $np_page->getPageType()->getAttribute('type_name'));
+                         $np_page->getParentSection()->getAttribute('section_name') . $np_page->getPageType()->getAttribute('type_name'));
 }
 
 /**
