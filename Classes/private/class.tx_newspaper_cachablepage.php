@@ -46,7 +46,6 @@ class tx_newspaper_CachablePage {
 
         /// \todo page type
         $type = $this->newspaper_page->getPageType();
-#        t3lib_div::devlog('getGETParameters',$type->getCondition());
 
         return $parameters;
     }
@@ -65,8 +64,8 @@ class tx_newspaper_CachablePage {
     }
 
     public function getStarttime() {
-        if ($this->starttime) return $this->starttime;
-        if (is_null($this->newspaper_article)) return 0;
+        if (!is_null($this->starttime)) return $this->starttime;
+        if (is_null($this->newspaper_article)) return null;
         return $this->newspaper_article->getAttribute('starttime');
     }
 
@@ -75,8 +74,8 @@ class tx_newspaper_CachablePage {
     }
 
     public function getEndtime() {
-        if ($this->endtime) return $this->endtime;
-        if (is_null($this->newspaper_article)) return 0;
+        if (!is_null($this->endtime)) return $this->endtime;
+        if (is_null($this->newspaper_article)) return null;
         return $this->newspaper_article->getAttribute('endtime');
     }
 
@@ -89,7 +88,7 @@ class tx_newspaper_CachablePage {
     private $newspaper_page = null;
     private $newspaper_article = null;
     private $get_parameters = array();
-    private $starttime = 0;
-    private $endtime = 0;
+    private $starttime = null;
+    private $endtime = null;
 
 }
