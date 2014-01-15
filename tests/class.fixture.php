@@ -90,7 +90,7 @@ class tx_newspaper_fixture {
         return $pagezonetypes;
     }
 
-    /** @return tx_newspaper_PageZone[] */
+    /** @return tx_newspaper_PageZone_Page[] */
     public function getPageZones() {
         if (!$this->pagezones) {
             foreach ($this->pagezone_uids as $uid) {
@@ -757,6 +757,7 @@ class tx_newspaper_fixture {
     private $pagezone_without_inheritance_uid;
 
     /// The Page Zones in the hierarchy as a flat array of objects
+    /** @var tx_newspaper_PageZone_Page[] */
     private $pagezones = array();
 
     private $extra_uids = array();

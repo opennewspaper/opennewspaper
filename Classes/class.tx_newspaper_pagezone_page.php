@@ -34,7 +34,7 @@ require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_pagezone
 /// A section of a page for an online edition of a newspaper
 /** Pages are divided into several independent sections, or zones, such as:
  *  - Left column, containing the main content area (article text, list of 
- * 	  articles)
+ *       articles)
  *  - Right column with additional info or ads
  *  - footer area  
  *  A PageZone contains a list of content elements.
@@ -47,50 +47,75 @@ require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_pagezone
  */
 class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
 
-	public function __construct($uid = 0) {
+    public function __construct($uid = 0) {
 
         $timer = tx_newspaper_ExecutionTimer::create();
 
-		parent::__construct($uid);
-		if ($uid) {
+        parent::__construct($uid);
+        if ($uid) {
             if (!self::$lazy_creation) {
                 $this->readExtrasForPagezoneID($uid);
             }
             $this->readAttributes($this->getTable(), $uid);
-		    $this->pagezonetype = new tx_newspaper_PageZoneType($this->attributes['pagezonetype_id']);
-		    $this->pagezone_uid = $this->createPageZoneRecord();
-		}
+            $this->pagezonetype = new tx_newspaper_PageZoneType($this->attributes['pagezonetype_id']);
+            $this->pagezone_uid = $this->createPageZoneRecord();
+        }
 
- 	}
+     }
 
-	/// \todo Will this work in the parent class too?
-	public function __clone() {
- 		/*  ensure attributes are loaded from DB. readExtraItem() isn't  
- 		 *  called here because maybe the content is already there and it would
- 		 *  cause the DB operation to be done twice.
- 		 */
-		$this->getAttribute('uid');
-		
-		//  unset the UID so the object can be written to a new DB record.
- 		$this->attributes['uid'] = 0;
- 		$this->setUid(0);
+        /// Convert object to string to make it visible in stack backtraces, devlog etc.
+    public function __toString() {
+        try {
+            return $this->printableName();
+        } catch (tx_newspaper_Exception $e) {
+            return '... oops, exception thrown: ' . $e;
+        }
+    }
 
- 		$this->setAttribute('crdate', time());
- 		$this->setAttribute('tstamp', time());
- 		
- 		/// \todo clone extras
- 		$old_extras = $this->getExtras();
- 		$this->extras = array();
- 		foreach ($old_extras as $old_extra) {
- 			$this->extras[] = clone $old_extra;
- 		}
- 	}
+    public function printableName() {
+        $ret = '';
+        $page = $this->getParentPage();
+        if ($page instanceof tx_newspaper_Page) {
+            $section = $page->getParentSection();
+            if ($section instanceof tx_newspaper_Section) {
+                $ret .= $section->getAttribute('section_name') . '/';
+            }
+            $ret .= $page->getPageType()->getAttribute('type_name') . '/';
+        }
+        $ret .= $this->getPageZoneType()->getAttribute('type_name');
 
-	static function getModuleName() { return 'np_pagezone_page'; }
+        return $ret;
+    }
 
-	public function getExtra2PagezoneTable() {
-		return self::$extra_2_pagezone_table;
-	}
+
+    /// \todo Will this work in the parent class too?
+    public function __clone() {
+         /*  ensure attributes are loaded from DB. readExtraItem() isn't  
+          *  called here because maybe the content is already there and it would
+          *  cause the DB operation to be done twice.
+          */
+        $this->getAttribute('uid');
+        
+        //  unset the UID so the object can be written to a new DB record.
+         $this->attributes['uid'] = 0;
+         $this->setUid(0);
+
+         $this->setAttribute('crdate', time());
+         $this->setAttribute('tstamp', time());
+         
+         /// \todo clone extras
+         $old_extras = $this->getExtras();
+         $this->extras = array();
+         foreach ($old_extras as $old_extra) {
+             $this->extras[] = clone $old_extra;
+         }
+     }
+
+    static function getModuleName() { return 'np_pagezone_page'; }
+
+    public function getExtra2PagezoneTable() {
+        return self::$extra_2_pagezone_table;
+    }
 
     public static function updateDependencyTree(tx_newspaper_PageZone_Page $pagezone) {
         if (tx_newspaper_DependencyTree::useDependencyTree()) {
@@ -99,7 +124,7 @@ class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
         }
     }
 
-	static protected $extra_2_pagezone_table = 'tx_newspaper_pagezone_page_extras_mm';
+    static protected $extra_2_pagezone_table = 'tx_newspaper_pagezone_page_extras_mm';
 }
  
 ?>

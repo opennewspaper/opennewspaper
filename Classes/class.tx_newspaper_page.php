@@ -222,7 +222,7 @@ class tx_newspaper_Page
     }
 
     ///    Get all  tx_newspaper_PageZone s on the current tx_newspaper_Page
-    /** @return tx_newspaper_PageZone[] zones on the current page, or \c true if there is none.
+    /** @return tx_newspaper_PageZone_Page[] zones on the current page, or \c true if there is none.
      *
      *  @attention \c true is used as a sentinel value to denote that there are
      *         no tx_newspaper_PageZone s under this tx_newspaper_Page, so that SQL

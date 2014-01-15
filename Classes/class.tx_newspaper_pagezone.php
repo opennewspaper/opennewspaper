@@ -78,27 +78,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 
     /// Convert object to string to make it visible in stack backtraces, devlog etc.
     public function __toString() {
-        try {
-            return get_class($this) . ' ' . $this->getUid() . " (" . $this->printableName() . ")";
-        } catch (tx_newspaper_Exception $e) {
-            return '... oops, exception thrown: ' . $e;
-        }
-
-    }
-
-    public function printableName() {
-        $ret = '';
-        $page = $this->getParentPage();
-        if ($page instanceof tx_newspaper_Page) {
-            $section = $page->getParentSection();
-            if ($section instanceof tx_newspaper_Section) {
-                $ret .= $section->getAttribute('section_name') . '/';
-            }
-            $ret .= $page->getPageType()->getAttribute('type_name') . '/';
-        }
-        $ret .= $this->getPageZoneType()->getAttribute('type_name');
-
-        return $ret;
+        return get_class($this) . ' ' . $this->getUid() . " (" . $this->getAbstractUid() . ")";
     }
 
 
@@ -218,24 +198,19 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 
     public function getTitle() {
         return tx_newspaper::getTranslation('title_' . $this->getTable());
-
     }
-
 
     function getUid() {
         return intval($this->uid);
     }
 
-
     function setUid($uid) {
         $this->uid = $uid;
     }
 
-
     public  function getTable() {
         return tx_newspaper::getTable($this);
     }
-
 
     static function getModuleName() {
         return 'np_pagezone';
@@ -342,7 +317,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
     }
 
 
-     /// \todo: oliver: deprecated? probably yes
+     /// \todo: oliver: deprecated? probably yes - but used in tx_newspaper_Article
     static function readExtraItem($uid, $table) {
         throw new tx_newspaper_NotYetImplementedException();
     }
@@ -404,7 +379,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
             }
 
             if ($this->parent_page_id) {
-                $this->parent_page = new tx_newspaper_page($this->parent_page_id);
+                $this->parent_page = new tx_newspaper_Page($this->parent_page_id);
             } else {
                 // that's ok, articles don't have parent pages
                 return null;
@@ -414,19 +389,20 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
     }
 
 
-    ///    Get a list of Page Zones to which the inheritance of \p $this can change.
-    /** The parent, from which the current Page Zone inherits its Extras, can be
-     *  altered. This function lists the Zones it can be altered to:
-     *  - The PageZone of the same type in the tx_newspaper_Section which is the
-     *    parent of the current Section (this is the default)
-     *  - Any PageZone of the same tx_newspaper_PageZoneType as \c $this which
-     *    lies under a tx_newspaper_Page in the same tx_newspaper_Section as
-     *    \c $this. (Expect for page zone $this)
+    /**
+     *  Get a list of Page Zones to which the inheritance of \p $this can change.
      *
-     *     \param $sistersOnly Return sister pagezones only, ignore parent page zone
+     *  The parent, from which the current Page Zone inherits its Extras, can be altered. This
+     *  function lists the Zones it can be altered to:
+     *  - The PageZone of the same type in the tx_newspaper_Section which is the parent of the
+     *    current Section (this is the default)
+     *  - Any PageZone of the same tx_newspaper_PageZoneType as \c $this which lies under a
+     *    tx_newspaper_Page in the same tx_newspaper_Section as \c $this. (Expect for page zone $this)
      *
-     *  \return List of Page Zones to which the inheritance of \p $this can
-     *      change.
+     *  @param bool $sistersOnly Return sister pagezones only, ignore parent page zone
+     *
+     *  @return tx_newspaper_PageZone_Page List of Page Zones to which the inheritance of \p $this can change.
+     *
      */
     public function getPossibleParents($sistersOnly=false) {
 
@@ -467,7 +443,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
      *         the return value only on the structure of the tx_newspaper_Section
      *         tree.
      *
-     *  @return tx_newspaper_PageZone The object from which to copy the
+     *  @return tx_newspaper_PageZone_Page|null The object from which to copy the
      *      tx_newspaper_Extra s and their placements.
      *
      *  \todo What if inherit_mode points to a non-existent PageZone? Currently
@@ -502,8 +478,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 
     /// Get the hierarchy of Page Zones from which the current Zone inherits the placement of its extras
     /** @param bool $including_myself If true, add $this to the list
-     *  @param tx_newspaper_PageZone[] $hierarchy List of already found parents (for recursive calling)
-     *  @return tx_newspaper_PageZone[] Inheritance hierarchy of Page Zones from which the current Page
+     *  @param tx_newspaper_PageZone_Page[] $hierarchy List of already found parents (for recursive calling)
+     *  @return tx_newspaper_PageZone_Page[] Inheritance hierarchy of Page Zones from which the current Page
      *              Zone inherits, ordered upwards
      */
     public function getInheritanceHierarchyUp($including_myself = true,
@@ -649,10 +625,9 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
      *  toggled to false previously), the Extras must be reactivated and placed
      *  according to their origin_uid.
      *
-     *  \param $extra The Extra whose inheritance status is changed
-     *  \param $inherits Whether to pass the Extra down the hierarchy
-     *  \exception tx_newspaper_InconsistencyException If $extra is not present
-     *             on the PageZone
+     *  @param tx_newspaper_Extra $extra The Extra whose inheritance status is changed
+     *  @param bool $inherits Whether to pass the Extra down the hierarchy
+     *  @exception tx_newspaper_InconsistencyException If $extra is not present on the PageZone
      */
     public function setInherits(tx_newspaper_Extra $extra, $inherits = true) {
 
@@ -966,18 +941,14 @@ if (false && $parent_zone->getParentPage()->getPageType()->getAttribute('type_na
 
     /// returns true if pagezone is a default article
     public function isDefaultArticle() {
-        if ($this->isPagezonePage()) {
-            return false;
-        }
+        if ($this->isPagezonePage()) return false;
         return ($this->getAttribute('is_template') == 1);
     }
 
 
     /// returns true if pagezone is a concrete article
     public function isConcreteArticle() {
-        if ($this->isPagezonePage()) {
-            return false;
-        }
+        if ($this->isPagezonePage()) return false;
         // So $this is an instance of tx_newspaper_article
         return !$this->isDefaultArticle();
     }
@@ -1125,13 +1096,13 @@ if (false && $parent_zone->getParentPage()->getPageType()->getAttribute('type_na
     }
 
 
-    /// Find next free position after the Extra whose origin_uid attribute matches $origin_uid
+    /// Find next free position after the Extra whose origin uid attribute matches \p $origin_uid
     /** Side effect: finds the paragraph of the Extra matching \p $origin_uid
      *  and stores it in \p $this->paragraph_for_insert
      *
-     *  \param $origin_uid The origin_uid of the Extra after which a free place
-     *                     is wanted
-     *  \return A position value which is halway between the found Extra and the
+     *  @param int $origin_uid The origin_uid of the Extra after which a free place is wanted
+     *
+     *  @return int A position value which is halway between the found Extra and the
      *             next Extra
      */
     protected function getInsertPosition($origin_uid) {
@@ -1269,8 +1240,10 @@ if (false && $parent_zone->getParentPage()->getPageType()->getAttribute('type_na
         self::$parents_cache = array();
     }
 
-    /** Step from parent to parent until a PageZone with matching type is
-     *  found.
+    /**
+     *  Step from parent to parent until a PageZone with matching type is found.
+     *
+     *  @return tx_newspaper_PageZone_Page|null
      */
     public function getParentPageZoneOfSameType() {
 
@@ -1323,7 +1296,7 @@ if (false && $parent_zone->getParentPage()->getPageType()->getAttribute('type_na
     private $reread_extras = false;
 
     /**
-     * @param string $extra_class desired extra class
+     * @param string|tx_newspaper_Extra $extra_class desired extra class or instance thereof
      * @return tx_newspaper_Extra[] All ${extra_class}es on this PageZone
      */
     public function getExtrasOf($extra_class) {
@@ -1469,16 +1442,15 @@ if (false && $parent_zone->getParentPage()->getPageType()->getAttribute('type_na
      }
 
 
-     /// Returns the table which links Extras to this type of page zone
-     /** This function is needed, and non-static, because late static binding
-      *  does not work too well with PHP (at least prior to 5.3, which introduced
-      *  the static:: storage type - but this is not yet distributed widely
-      *  enough).
-      *  \return self::$extra_2_pagezone_table
+     /**
+      *  Returns the table which links Extras to this type of page zone
+      *
+      *  This function is needed, and non-static, because late static binding does not work too well
+      *  with PHP (at least prior to 5.3, which introduced the static:: storage type - but this is
+      *  not yet distributed widely enough).
+      *  @return string self::$extra_2_pagezone_table
       */
      abstract public function getExtra2PagezoneTable();
-
-
 
     ///    Retrieve a single Extra, defined by its index in the sequence
     /** \param $index
