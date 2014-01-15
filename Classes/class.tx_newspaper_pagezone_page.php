@@ -111,6 +111,50 @@ class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
          }
      }
 
+    /**
+     *  Render the page zone, containing all extras
+     *
+     *  @param string $template_set the template set used to render this page (as passed down from
+     *  tx_newspaper_Page::render() )
+     *  @return string The rendered page as HTML (or XML, if you insist)
+     */
+    public function render($template_set = '') {
+
+        /// Check whether to use a specific template set
+        if ($this->getAttribute('template_set')) {
+            $template_set = $this->getAttribute('template_set');
+        }
+
+        /// Configure Smarty rendering engine
+        if ($template_set) {
+            $this->smarty->setTemplateSet($template_set);
+        }
+        if ($this->getParentPage() && $this->getParentPage()->getPagetype()) {
+            $this->smarty->setPageType($this->getParentPage());
+        }
+        if ($this->getPageZoneType()) {
+            $this->smarty->setPageZoneType($this);
+        }
+
+        /// Pass global attributes to Smarty
+        $this->smarty->assign('class', get_class($this));
+        $this->smarty->assign('attributes', $this->attributes);
+        $this->smarty->assign('normalized_name', $this->getPageZoneType()->getAttribute('normalized_name'));
+
+        /// Pass the Extras on this page zone, already rendered, to Smarty
+        $this->smarty->assign('extras', array_map(
+            function(tx_newspaper_Extra $e) use($template_set) { return $e->render($template_set); },
+            $this->getExtras()
+        ));
+
+        $this->smarty->assign('typoscript', tx_newspaper::getNewspaperTyposcript());
+
+        $rendered = $this->smarty->fetch($this);
+
+        return $rendered;
+    }
+
+
     static function getModuleName() { return 'np_pagezone_page'; }
 
     public function getExtra2PagezoneTable() {
