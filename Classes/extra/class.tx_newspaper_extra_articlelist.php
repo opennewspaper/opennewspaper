@@ -63,7 +63,13 @@ class tx_newspaper_extra_ArticleList extends tx_newspaper_Extra {
 
         $num = $this->getAttribute('num_articles')? $this->getAttribute('num_articles'): 1;
         $first = $this->getAttribute('first_article')? $this->getAttribute('first_article')-1: 0;
-        $articles = $this->articlelist->getArticles($num, $first);
+
+        $articles = array_values(
+            array_filter(
+                $this->articlelist->getArticles($num, $first),
+                function(tx_newspaper_Article $a) { return !($a->getPrimarySection() instanceof tx_newspaper_NullSection); }
+            )
+        );
 
         $this->smarty->assign('articles', $articles);
 

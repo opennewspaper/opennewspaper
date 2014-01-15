@@ -44,8 +44,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
         try {
             $this->getAttribute('uid');
         } catch (tx_newspaper_Exception $e) { }
-        return get_class($this) . '-object ' . $this->getUid() . " \n" .
-               'attributes: ' . print_r($this->attributes, 1) . "\n";
+        return get_class($this) . ' ' . $this->getAttribute('section_name') . '('. $this->getUid() . ")\n";
     }
 
     private static $disable_attribute_cache = false;
@@ -483,7 +482,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
         if ($max_shift > 8) return 8;
     }
 
-     public function getTable() {
+    public function getTable() {
         return tx_newspaper::getTable($this);
     }
 
@@ -778,7 +777,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
     }
 
 
-     private $attributes = array();                    ///< The member variables
+    private $attributes = array();                    ///< The member variables
     private $subPages = array();
     private $articlelist = null;
     private $uid = 0;
@@ -787,6 +786,13 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
      /// table which stores the tx_newspaper_ArticleList associated with this section
      static private $list_table = 'tx_newspaper_articlelist';
  }
+
+class tx_newspaper_NullSection extends tx_newspaper_Section {
+
+    public function getUid() { return 0; }
+    public function getAttribute($dummy) { return null; }
+
+}
 
 tx_newspaper::registerSaveHook(new tx_newspaper_Section());
 
