@@ -306,10 +306,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
         return $this->pagezonetype;
     }
 
-    /// Default implementation for page zones which do not have paragraphs
-    public function changeExtraParagraph(tx_newspaper_Extra $extra, $new_paragraph) {
-        $extra->store();
-    }
+    abstract public function changeExtraParagraph(tx_newspaper_Extra $extra, $new_paragraph);
 
     /// Get the UID of the abstract record for this PageZone.
     /** \return UID of the record containing the data for the abstract portion
@@ -326,9 +323,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
     }
 
 
-    ///    Get the tx_newspaper_Page on which the PageZone lies.
-    /** @return tx_newspaper_Page on which the PageZone lies.
-     */
+    /** @return tx_newspaper_Page on which the PageZone lies. */
     public function getParentPage() {
 
         if (!$this->parent_page) {

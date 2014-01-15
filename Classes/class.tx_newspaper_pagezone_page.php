@@ -154,6 +154,10 @@ class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
         return $rendered;
     }
 
+    /// Default implementation for page zones which do not have paragraphs
+    public function changeExtraParagraph(tx_newspaper_Extra $extra, $new_paragraph) {
+        $extra->store();
+    }
 
     static function getModuleName() { return 'np_pagezone_page'; }
 

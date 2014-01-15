@@ -1002,7 +1002,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface, tx_newspap
 
         self::insertNewExtraOnPagezone($e, $pz);
 
-        $pz->changeExtraParagraph($e, intval(t3lib_div::_GP('paragraph'))); // changeExtraParagraph() stores the extras, so no need to store after call this function call
+        $pz->changeExtraParagraph($e, intval(t3lib_div::_GP('paragraph'))); // changeExtraParagraph() stores the extras, so no need to store after this function call
     }
 
     private static function isNewExtraOnPageZone($status, $table) {
