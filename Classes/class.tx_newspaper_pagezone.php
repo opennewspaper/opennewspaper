@@ -591,79 +591,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
         return true;
     }
 
-    /**
-     * Change parent Page Zone
-     * Hide Extras placed on this Page Zone. Inherit Extras from new parent.
-     * @param   int $newAbstractParentUid Abstract page zone uid OR 0 for same page zone type above in hierarchy
-     *          OR <0 or NULL for no inheritance
-     */
-    public function changeParent($newAbstractParentUid) {
-
-        $this->removeInheritedExtras();
-        $this->hideOriginExtras();
-
-        if (is_null($newAbstractParentUid)) $newAbstractParentUid = -1;
-        $parent_zone = $this->getParentZone($newAbstractParentUid);
-
-        if ($parent_zone) {
-            $this->inheritExtrasFrom($parent_zone);
-            $concrete_uid = $parent_zone->getUid();
-        } else {
-            $concrete_uid = -1;
-        }
-
-        $this->storeWithNewParent($concrete_uid);
-
-        self::$debug_lots_of_crap = false;
-    }
-
-    private function removeInheritedExtras() {
-        $debug_extras = array();
-        foreach ($this->getExtras() as $extra) {
-            if (!$extra->isOriginExtra()) {
-                $debug_extras[] = $extra;
-                /// Delete Extra, also on sub-PageZones
-                $this->removeExtra($extra, true);
-            }
-        }
-    }
-
-    private function hideOriginExtras() {
-        $debug_extras = array();
-        foreach ($this->getExtras() as $extra) {
-            if ($extra->isOriginExtra()) {
-                $debug_extras[] = $extra;
-                /// Hide and move to end of page zone
-                $extra->setAttribute('show_extra', 0);
-                $extra->store();
-            }
-        }
-    }
-
-    private function getParentZone($new_parent_uid) {
-        $parent_uid = intval($new_parent_uid);
-
-        if ($parent_uid < 0) {
-            return null;
-        } else if ($parent_uid == 0) {
-            return $this->getParentPageZoneOfSameType();
-        } else {
-            return tx_newspaper_PageZone_Factory::getInstance()->create($parent_uid);
-        }
-
-    }
-
-    private function inheritExtrasFrom(tx_newspaper_PageZone $parent_zone) {
-        foreach (array_reverse($parent_zone->getExtras()) as $extra_to_copy) {
-            $this->inheritExtra($extra_to_copy);
-        }
-    }
-
-    private function inheritExtra(tx_newspaper_Extra $extra) {
-        $copied = $extra->duplicate(true);
-        $copied->setOriginUid($extra->getOriginUid());
-        return $this->insertExtraAfter($copied);
-    }
 
     /** @return tx_newspaper_Extra */
     private function copyExtra(tx_newspaper_Extra $extra) {
@@ -679,7 +606,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
         return $new_extra;
     }
 
-    static private $debug_lots_of_crap = false;
+    static protected $debug_lots_of_crap = false;
     private function getExtraAndPagezone(tx_newspaper_Extra $extra) {
         if ($this instanceof tx_newspaper_Article) return array();
         if (!self::$debug_lots_of_crap) return array();
@@ -707,12 +634,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
             ),
             array_slice(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS), 1, 5)
         );
-    }
-
-    private function storeWithNewParent($concrete_uid) {
-        $this->setAttribute('inherits_from', intval($concrete_uid));
-        $this->setAttribute('tstamp', time());
-        $this->store();
     }
 
 
