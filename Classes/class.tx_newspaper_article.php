@@ -825,6 +825,11 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         return self::$extra_2_pagezone_table;
     }
 
+    /**
+     *  Empty default implementation
+     */
+    public function getExtraOriginAsString(tx_newspaper_Extra $extra) { return ''; }
+
     /// Is the current article an "Article as URL"
     /**
      * Checks if current article type is configured as "Article as URL" in newspaper.articleTypeAsUrl = [uid1,...uidn]

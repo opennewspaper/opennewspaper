@@ -198,6 +198,37 @@ class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
         return $zones;
     }
 
+    /**
+     *  Return the section \p $extra was inserted in string format
+     *  @todo Make the '---' and '< error >' messages class constants instead of hardcoding them.
+     */
+    public function getExtraOriginAsString(tx_newspaper_Extra $extra) {
+        $original_pagezone = $this->getExtraOrigin($extra);
+        if (!$original_pagezone) return '---';
+        if ($original_pagezone->getUid() == $this->getUid()) return '---';
+        /** @var tx_newspaper_Page $page */
+        $page = $original_pagezone->getParentPage();
+        $section = $page->getParentSection();
+        if (!$section instanceof tx_newspaper_Section) return '< error >';
+        if ($section->getUid() == $this->getParentPage()->getParentSection()->getUid()) {
+            return $page->getPageType()->getAttribute('type_name');
+        }
+        return $section->getAttribute('section_name');
+    }
+
+    private function getExtraOrigin(tx_newspaper_Extra $extra) {
+        if ($extra->isOriginExtra()) return $this;
+
+        foreach ($this->getInheritanceHierarchyUp(false) as $origin_pagezone) {
+            foreach ($origin_pagezone->getExtras() as $potential_origin_extra) {
+                if ($potential_origin_extra->getExtraUid() == $extra->getOriginUid()) {
+                    return $origin_pagezone;
+                }
+            }
+        }
+    }
+
+
     static function getModuleName() { return 'np_pagezone_page'; }
 
     public function getExtra2PagezoneTable() {

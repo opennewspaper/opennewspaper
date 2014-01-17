@@ -323,7 +323,9 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
     }
 
 
-    /** @return tx_newspaper_Page on which the PageZone lies. */
+    /**
+     *  @return tx_newspaper_Page on which the PageZone lies.
+     */
     public function getParentPage() {
 
         if (!$this->parent_page) {
@@ -807,35 +809,15 @@ if (false && $parent_zone->getParentPage()->getPageType()->getAttribute('type_na
         $this->store();
     }
 
-    public function getExtraOrigin(tx_newspaper_Extra $extra) {
-        if ($extra->isOriginExtra()) return $this;
 
-        foreach ($this->getInheritanceHierarchyUp(false) as $origin_pagezone) {
-            foreach ($origin_pagezone->getExtras() as $potential_origin_extra) {
-                if ($potential_origin_extra->getExtraUid() == $extra->getOriginUid()) {
-                    return $origin_pagezone;
-                }
-            }
-        }
-    }
 
-    /// Return the section \p $extra was inserted in string format
-    /** \todo Make the '---' and '< error >' messages class constants instead of
-     *      hardcoding them.
+    /**
+     *  This should actually be only defined in tx_newspaper_PageZone_Page, but because
+     *  tx_newspaper_BE::populateExtraData() calls this on generic page zones it must be defined here.
+     * @param tx_newspaper_Extra $extra
+     * @return mixed
      */
-    public function getExtraOriginAsString(tx_newspaper_Extra $extra) {
-        $original_pagezone = $this->getExtraOrigin($extra);
-        if (!$original_pagezone) return '---';
-        if ($original_pagezone->getUid() == $this->getUid()) return '---';
-        $page = $original_pagezone->getParentPage();
-        $section = $page->getParentSection();
-        if (!$section instanceof tx_newspaper_Section) return '< error >';
-        if ($section->getUid() == $this->getParentPage()->getParentSection()->getUid()) {
-            return $page->getPageType()->getAttribute('type_name');
-        }
-        return $section->getAttribute('section_name');
-    }
-
+    abstract public function getExtraOriginAsString(tx_newspaper_Extra $extra);
 
     /// returns true if pagezone is an article
     public function isArticle() {

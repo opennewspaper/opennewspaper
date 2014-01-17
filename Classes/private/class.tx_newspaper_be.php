@@ -813,13 +813,7 @@ class tx_newspaper_BE {
     private static function getPageZoneDataForPlacementModule($showLevelsAbove, tx_newspaper_PageZone $pz, array &$data, array &$extraData) {
         // Add UPPER level page zones and extras, if any
         if ($showLevelsAbove) {
-            $pz_up = array_reverse($pz->getInheritanceHierarchyUp(false));
-            for ($i = 0; $i < sizeof($pz_up); $i++) {
-                if (self::accessToSectionIsGranted($pz_up[$i])) {
-                    $data[] = self::extractData($pz_up[$i]);
-                    $extraData[] = tx_newspaper_BE::collectExtras($pz_up[$i]);
-                }
-            }
+            self::addLevelsAbove($pz, $data, $extraData);
         }
         // Add CURRENT page zone and extras
         $data[] = self::extractData($pz); // empty array if concrete article
@@ -836,6 +830,22 @@ class tx_newspaper_BE {
 		}
 //t3lib_div::devlog('getPageZoneDataForPlacementModule() - some more data added', 'newspaper', 0, array('pz' => $pz, 'data' => $data));
 
+    }
+
+    /**
+     * @param tx_newspaper_PageZone $pz
+     * @param array $data
+     * @param array $extraData
+     * @return array
+     */
+    private static function addLevelsAbove(tx_newspaper_PageZone_Page $pz, array &$data, array &$extraData) {
+        $pz_up = array_reverse($pz->getInheritanceHierarchyUp(false));
+        for ($i = 0; $i < sizeof($pz_up); $i++) {
+            if (self::accessToSectionIsGranted($pz_up[$i])) {
+                $data[] = self::extractData($pz_up[$i]);
+                $extraData[] = tx_newspaper_BE::collectExtras($pz_up[$i]);
+            }
+        }
     }
 
     /**
