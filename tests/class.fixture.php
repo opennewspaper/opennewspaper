@@ -102,7 +102,7 @@ class tx_newspaper_fixture {
 
     /**
      * @param $parent_section
-     * @return tx_newspaper_PageZone
+     * @return tx_newspaper_PageZone_Page
      */
     public function &getRandomPageZoneForPlacement(tx_newspaper_Section $parent_section) {
         $pagetype = array_pop($this->getPageTypes());

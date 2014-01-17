@@ -347,45 +347,12 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
         }
         return $this->parent_page;
     }
-
-
     /**
-     *  The Page Zone from which \c $this inherits the placement of its Extras.
-     *
-     *  The page zone depends on attribute \c 'inherit_mode' (defined in
-     *  pagezone_page and article):
-     *
-     *  If negative, don't inherit at all; if positive,    inherit from the pagezone_page
-     *  identified by the UID given (parameter misnomer ;-) ; if zero, find the
-     *  page zone in the parent page or higher up in the hierarchy with the same
-     *  page zone type as \c $this.
-     *
-     *  @param bool  $structure_only Ignore the value of \c 'inherit_mode', base
-     *         the return value only on the structure of the tx_newspaper_Section
-     *         tree.
-     *
-     *  @return tx_newspaper_PageZone_Page|null The object from which to copy the
-     *      tx_newspaper_Extra s and their placements.
-     *
-     *  \todo What if inherit_mode points to a non-existent PageZone? Currently
-     *         a DBException is thrown.
-     *  \todo A recursive version of this function would be more elegant, I reckon.
+     *  dummy function, soon to be removed (as soon as all refernences to this function from inside this class are cleared up)
+     *  moved to pagezone_page.
      */
     public function getParentForPlacement($structure_only = false) {
-
-        $timer = tx_newspaper_ExecutionTimer::create();
-
-        self::setLazyCreation(true);
-
-        if (!$structure_only) {
-            $inherit_mode = intval($this->getAttribute('inherits_from'));
-            if ($inherit_mode < 0) return null;
-            if ($inherit_mode > 0 && tx_newspaper_PageZone_Page::isHorizontalInheritanceEnabled()) {
-                return tx_newspaper_PageZone_Factory::getInstance()->create($inherit_mode);
-            }
-        }
-
-        return $this->getParentPageZoneOfSameType();
+        return null;
     }
 
 
@@ -933,112 +900,18 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
         return $this->getExtra(sizeof($this->getExtras())-1)->getAttribute('position');
     }
 
-
-    static private $parents_cache = array();
-    static public function invalidateParentsCache() {
-        self::$parents_cache = array();
-    }
-
-    /**
-     *  Step from parent to parent until a PageZone with matching type is found.
-     *
-     *  @return tx_newspaper_PageZone_Page|null
-     */
-    public function getParentPageZoneOfSameType() {
-
-        $timer = tx_newspaper_ExecutionTimer::create();
-
-        if (isset(self::$parents_cache[$this->getAbstractUid()])) return self::$parents_cache[$this->getAbstractUid()];
-
-        $current_page = $this->getParentPage();
-
-        while ($current_page) {
-            $current_page = $current_page->getParentPageOfSameType();
-            if (!$current_page instanceof tx_newspaper_Page) break;
-
-            /** Look for PageZone of the same type. If no active PageZone is
-             *  found, continue looking in the parent section.
-             */
-            $parent_pagezone = $current_page->getPageZone($this->getPageZoneType());
-            if (!is_null($parent_pagezone)) {
-                self::$parents_cache[$this->getAbstractUid()] = $parent_pagezone;
-                return $parent_pagezone;
-            }
-
-        }
-
-        return null;
-
-    }
-
-
     /// Retrieve the array of Extras on the PageZone, sorted by position
     /** @param bool $hidden_too Also get Extras that are hidden because their
      *        inheritance mode has been set to false
      *  @return tx_newspaper_Extra[]
      */
-    public function getExtras($hidden_too = false) {
-
-        if (empty($this->extras) || $hidden_too || $this->reread_extras) {
-            $this->reread_extras = false;
-            $this->readExtrasForPagezoneID($this->getUid(), $hidden_too);
-        }
-
-        usort($this->extras, array(get_class($this), 'compareExtras'));
-
-        return $this->extras;
-    }
-
-    public function rereadExtras() {
-        $this->readExtrasForPagezoneID($this->getUid(), false);
-    }
-    private $reread_extras = false;
+    abstract public function getExtras($hidden_too = false);
 
     /**
      * @param string|tx_newspaper_Extra $extra_class desired extra class or instance thereof
      * @return tx_newspaper_Extra[] All ${extra_class}es on this PageZone
      */
-    public function getExtrasOf($extra_class) {
-
-        if ($extra_class instanceof tx_newspaper_Extra) {
-            $extra_class = tx_newspaper::getTable($extra_class);
-        }
-
-        $extras = array();
-
-        if ($this->extras && false) { // use the cached array of extras
-            foreach ($this->getExtras() as $extra) {
-                if (tx_newspaper::getTable($extra) == strtolower($extra_class)) {
-                    $extras[] = $extra;
-                }
-            }
-        } else {
-            $records = tx_newspaper::selectRows(
-                'DISTINCT uid_foreign',
-                $this->getExtra2PagezoneTable(),
-                'uid_local = ' . $this->getUid(),
-                '', '', '', false
-            );
-            if (empty($records)) return $extras;
-
-            $uids = array(0);
-            foreach ($records as $record) {
-                $uids[] = $record['uid_foreign'];
-            }
-
-            $uids = tx_newspaper::selectRows(
-                'uid', tx_newspaper_Extra_Factory::getExtraTable(),
-                'uid IN (' . implode(', ', $uids) . ') AND extra_table = \'' . strtolower($extra_class) . '\''
-            );
-
-            foreach ($uids as $uid) {
-                $extras[] = tx_newspaper_Extra_Factory::getInstance()->create($uid['uid']);
-            }
-        }
-
-        return $extras;
-    }
-
+    abstract public function getExtrasOf($extra_class);
 
     /// Read Extras from DB
     /** Objective: Read tx_newspaper_Extra array and attributes from the base

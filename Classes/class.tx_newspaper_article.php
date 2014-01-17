@@ -362,7 +362,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
      *
      *  @return tx_newspaper_Extra[] list of extras associated with this Article in sorted order
      */
-    public function getExtras() {
+    public function getExtras($hidden_too = false) {
         if (!$this->extras) {
             $extras = tx_newspaper::selectRows(
                             'uid_foreign', 'tx_newspaper_article_extras_mm',
@@ -597,8 +597,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     /**
      *  @return bool \c true if article is a default article (else \c false).
      */
-    public function isDefaultArticle() {
-        return $this->getAttribute('is_template');
+    public function isConcreteArticle() {
+        return !((boolean)$this->getAttribute('is_template'));
     }
 
     /// Generates a URL which links to the tx_newspaper_Article on the correct tx_newspaper_Page.
