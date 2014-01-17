@@ -159,6 +159,45 @@ class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
         $extra->store();
     }
 
+
+    /**
+     *  Get a list of Page Zones to which the inheritance of \p $this can change.
+     *
+     *  The parent, from which the current Page Zone inherits its Extras, can be altered. This
+     *  function lists the Zones it can be altered to:
+     *  - The PageZone of the same type in the tx_newspaper_Section which is the parent of the
+     *    current Section (this is the default)
+     *  - Any PageZone of the same tx_newspaper_PageZoneType as \c $this which lies under a
+     *    tx_newspaper_Page in the same tx_newspaper_Section as \c $this. (Expect for page zone $this)
+     *
+     *  @param bool $siblingsOnly Return sister pagezones only, ignore parent page zone
+     *
+     *  @return tx_newspaper_PageZone_Page[] List of Page Zones to which the inheritance of \p $this can change.
+     *
+     */
+    public function getPossibleParents($siblingsOnly = false) {
+
+        $zones = array();
+
+        if (!$siblingsOnly) {
+            $parent_zone = $this->getParentForPlacement(true);
+            if ($parent_zone) $zones[] = $parent_zone;
+        }
+
+        if (self::isHorizontalInheritanceEnabled()) {
+            $sister_pages = $this->getParentPage()->getParentSection()->getActivePages();
+            foreach ($sister_pages as $page) {
+                if ($sister_zone = $page->getPageZone($this->getPageZoneType())) {
+                    if ($sister_zone->getParentPage()->getPageType() != $this->getParentPage()->getPageType()) {
+                        $zones[] = $sister_zone;
+                    }
+                }
+            }
+        }
+
+        return $zones;
+    }
+
     static function getModuleName() { return 'np_pagezone_page'; }
 
     public function getExtra2PagezoneTable() {

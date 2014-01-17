@@ -54,7 +54,6 @@ class tx_newspaper_BE {
         </style>';
     }
 
-
 /// backend: render list of pages and pagezones for section
 
 
@@ -569,16 +568,7 @@ class tx_newspaper_BE {
             $pageTypes = self::getPageTypesForPagezone($pz);
             $pageZoneTypes = self::getPageZoneTypesForPagezone($pz);
 
-            // add possible inheritance sources for this page zone
-            $pp = $pz->getPossibleParents(true);
-            $page_name = array();
-            for ($i = 0; $i < sizeof($pp); $i++) {
-                // Get name of page
-                $page_name[] = $pp[$i]->getParentPage()->getPageType()->getAttribute('type_name'); // Can't be accessed with smarty
-            }
-//t3lib_div::devlog('inh from', 'newspaper', 0, array($pp, $page_name));
-            $smarty->assign('INHERITANCESOURCE', $pp);
-            $smarty->assign('INHERITANCESOURCENAME', $page_name);
+            self::assignPossibleInheritanceSources($pz, $smarty);
         }
 
         $message['pagezone_empty'] = self::getTranslation('message_pagezone_empty');
@@ -700,6 +690,24 @@ class tx_newspaper_BE {
 
 		return $smarty->fetch('mod3.tmpl');
 	}
+
+    /**
+     *  add possible inheritance sources for this page zone
+     *  @param tx_newspaper_PageZone $pz
+     *  @param $smarty
+     *  @return int
+     */
+    private static function assignPossibleInheritanceSources(tx_newspaper_PageZone_Page $pz, tx_newspaper_Smarty $smarty) {
+        $pp = $pz->getPossibleParents(true);
+        $page_name = array();
+        for ($i = 0; $i < sizeof($pp); $i++) {
+            // Get name of page
+            $page_name[] = $pp[$i]->getParentPage()->getPageType()->getAttribute('type_name'); // Can't be accessed with smarty
+        }
+//t3lib_div::devlog('inh from', 'newspaper', 0, array($pp, $page_name));
+        $smarty->assign('INHERITANCESOURCE', $pp);
+        $smarty->assign('INHERITANCESOURCENAME', $page_name);
+    }
 
     /**
      * Get User TSconfig setting for placement module
