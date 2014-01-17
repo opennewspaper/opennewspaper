@@ -100,8 +100,9 @@ class tx_newspaper_PageZone_Factory {
         $pagezone->setParentPage($page);
         $pagezone->setPageZoneType($type);
 
-        /*    store the pagezone and read it from DB again. this is the easiest
-         *  way to ensure the attributes are consistent in memory.
+        /*
+         * store the pagezone and read it from DB again. this is the easiest
+         * way to ensure the attributes are consistent in memory.
          */
         $uid = $pagezone->store();
 
@@ -109,14 +110,13 @@ class tx_newspaper_PageZone_Factory {
             $pagezone_reborn = new tx_newspaper_Article($uid);
         } else {
             $pagezone_reborn = new tx_newspaper_PageZone_Page($uid);
-        }
+            ///    copy Extras from appropriate page zone
+            $parent = $pagezone_reborn->getParentForPlacement();
 
-        ///    copy Extras from appropriate page zone
-        $parent = $pagezone_reborn->getParentForPlacement();
-
-        if ($parent) {
-            /// copy if parent section exists
-            $pagezone_reborn->copyExtrasFrom($parent);
+            if ($parent) {
+                /// copy if parent section exists
+                $pagezone_reborn->copyExtrasFrom($parent);
+            }
         }
 
         $pagezone_reborn->store();

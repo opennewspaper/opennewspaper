@@ -516,7 +516,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
     }
 
 
-
     /// Get the hierarchy of Page Zones inheriting placement from $this
     /**
      * @param bool|\If $including_myself true, add $this to the list
@@ -591,51 +590,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
         if ($parent->getUid() != $this->getUid()) return false;
         return true;
     }
-
-    /// As the name says, copies Extras from another PageZone
-    /** In particular, it copies the entry from the abstract Extra supertable,
-     *  but not the data from the concrete Extra_* tables. I.e. it creates a
-     *  new Extra which is a reference to a concrete Extra for each copyable
-     *  Extra on the template PageZone.
-     *  Also, it sets the origin_uid property on the copied Extras to reflect
-     *  the origin of the Extra.
-     *
-     *  \param $parent_zone Page Zone from which the Extras are copied.
-     */
-    public function copyExtrasFrom(tx_newspaper_PageZone $parent_zone) {
-        foreach ($parent_zone->getExtras() as $extra_to_copy) {
-            if (!$extra_to_copy->getAttribute('is_inheritable')) continue;
-            /// Clone $extra_to_copy
-            /** Not nice: because we're working on the abstract superclass here, we
-             *     can't clone the superclass entry because there's no object for it.
-             */
-            $new_extra = array();
-            foreach (tx_newspaper::getAttributes('tx_newspaper_extra') as $attribute) {
-                $new_extra[$attribute] = $extra_to_copy->getAttribute($attribute);
-            }
-            $new_extra['show_extra'] = 1;
-            if ($extra_to_copy->getOriginUid()) {
-               $new_extra['origin_uid'] = $extra_to_copy->getOriginUid();
-            } else {
-              $new_extra['origin_uid'] = $extra_to_copy->getAttribute('uid');
-            }
-            $extra_uid = tx_newspaper::insertRows('tx_newspaper_extra', $new_extra);
-if (false && $parent_zone->getParentPage()->getPageType()->getAttribute('type_name') == 'Liste') {
-   tx_newspaper::devlog(
-    'tx_newspaper_PageZone::copyExtrasFrom: $extra_to_copy', 
-    array(
-        'Extra' => $extra_to_copy, 
-        'origin uid' => $extra_to_copy->getOriginUid(), 
-        'uid' => $extra_to_copy->getAttribute('uid'),
-        'new uid' => $extra_uid
-    )
-  );
-}
-
-            $this->addExtra(tx_newspaper_Extra_Factory::getInstance()->create($extra_uid));
-        }
-    }
-
 
     /**
      * Change parent Page Zone
