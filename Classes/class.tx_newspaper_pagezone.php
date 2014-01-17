@@ -378,21 +378,12 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
         if (!$structure_only) {
             $inherit_mode = intval($this->getAttribute('inherits_from'));
             if ($inherit_mode < 0) return null;
-            if ($inherit_mode > 0 && self::isHorizontalInheritanceEnabled()) {
+            if ($inherit_mode > 0 && tx_newspaper_PageZone_Page::isHorizontalInheritanceEnabled()) {
                 return tx_newspaper_PageZone_Factory::getInstance()->create($inherit_mode);
             }
         }
 
         return $this->getParentPageZoneOfSameType();
-    }
-
-    /**
-     * Check if horizontal inheritance is switched on
-     * @return int Value configured in TSConfig newspaper.horizontal_inheritance_enabled or 0 as default
-     */
-    public static function isHorizontalInheritanceEnabled() {
-        $TSConfig = tx_newspaper::getTSConfig();
-        return intval($TSConfig['newspaper.']['horizontal_inheritance_enabled']);
     }
 
     /// Get the hierarchy of Page Zones from which the current Zone inherits the placement of its extras

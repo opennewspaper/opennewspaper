@@ -211,6 +211,15 @@ class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
         }
     }
 
+    /**
+     * Check if horizontal inheritance is switched on
+     * @return int Value configured in TSConfig newspaper.horizontal_inheritance_enabled or 0 as default
+     */
+    public static function isHorizontalInheritanceEnabled() {
+        $TSConfig = tx_newspaper::getTSConfig();
+        return intval($TSConfig['newspaper.']['horizontal_inheritance_enabled']);
+    }
+
     static protected $extra_2_pagezone_table = 'tx_newspaper_pagezone_page_extras_mm';
 }
  

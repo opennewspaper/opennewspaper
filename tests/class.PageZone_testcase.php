@@ -639,7 +639,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 
         if ($this->change_parent_collection_running) return;
 
-        if (!tx_newspaper_Pagezone::isHorizontalInheritanceEnabled()) {
+        if (!tx_newspaper_Pagezone_Page::isHorizontalInheritanceEnabled()) {
             /*
              * If horizontal inheritance is not enabled, only changing the parent to
              * the pagezone one up in the hierarchy and to none will work, i.e. switching
