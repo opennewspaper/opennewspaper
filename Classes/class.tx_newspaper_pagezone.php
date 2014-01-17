@@ -516,41 +516,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
     }
 
 
-    /// Set whether PageZones down the inheritance hierarchy inherit this Extra
-    /** If the inheritance mode is changed to false, the Extra must be removed
-     *  from all PageZones inheriting from $this (if it's  already present there).
-     *  If it is set to true, it must be copied to all inheriting PageZones. Or,
-     *  if it is already present there (because the inheritance status was
-     *  toggled to false previously), the Extras must be reactivated and placed
-     *  according to their origin_uid.
-     *
-     *  @param tx_newspaper_Extra $extra The Extra whose inheritance status is changed
-     *  @param bool $inherits Whether to pass the Extra down the hierarchy
-     *  @exception tx_newspaper_InconsistencyException If $extra is not present on the PageZone
-     */
-    public function setInherits(tx_newspaper_Extra $extra, $inherits = true) {
-
-        //    Check if the Extra is really present. An exception is thrown if not.
-        $this->indexOfExtra($extra);
-
-        if ($inherits == $extra->getAttribute('is_inheritable')) return;
-
-        $extra->setAttribute('is_inheritable', $inherits);
-        $extra->store();
-
-        foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
-            $copied_extra = $inheriting_pagezone->findExtraByOriginUID($extra->getOriginUid(), true);
-
-            if ($copied_extra && $copied_extra->getExtraUid() != $extra->getExtraUid()) {
-                $copied_extra->setAttribute('gui_hidden', !$inherits);
-                $copied_extra->store();
-            } else {
-                ///    \todo What's going on here?
-            }
-
-        }
-    }
-
 
     /// Get the hierarchy of Page Zones inheriting placement from $this
     /**

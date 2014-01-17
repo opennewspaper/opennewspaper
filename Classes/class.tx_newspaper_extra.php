@@ -969,12 +969,12 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface, tx_newspap
     }
 
     /// Save hook function, called from the global save hook in tx_newspaper_typo3hook
-    /** Writes an abstract record for a concreate3 article list, if no abstract record is available
-     * \param $status Status of the current operation, 'new' or 'update
-     * \param $table The table currently processing data for
-     * \param $id The record uid currently processing data for, [integer] or [string] (like 'NEW...')
-     * \param $fieldArray The field array of a record
-     * \param $that t3lib_TCEmain object?
+    /** Writes an abstract record for a concrete article list, if no abstract record is available
+     * @param string $status Status of the current operation, 'new' or 'update
+     * @param string $table The table currently processing data for
+     * @param int $id The record uid currently processing data for, [integer] or [string] (like 'NEW...')
+     * @param array $fieldArray The field array of a record
+     * @param t3lib_TCEmain $that t3lib_TCEmain object?
      */
     public static function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that) {
         $timer = tx_newspaper_ExecutionTimer::create();
@@ -1015,7 +1015,9 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface, tx_newspap
         );
     }
 
-    /** @return tx_newspaper_PageZone */
+    /**
+     *  @return tx_newspaper_PageZone_Page (that it is not an article has been verified in isNewExtraOnPageZone())
+     */
     private static function getPagezoneForInsertingNewExtra($table, $id) {
         $pz_uid = intval(t3lib_div::_GP('new_extra_pz_uid'));
         if (!$pz_uid) {
@@ -1028,7 +1030,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface, tx_newspap
     private static function instantiateNewExtra($table, $id, t3lib_tcemain $that) {
         // get uid of new concrete extra (that was just stored)
         if (!$concrete_extra_uid = intval($that->substNEWwithIDs[$id])) {
-            t3lib_div::devlog('writeRecordsIfNewExtraOnPageZone(): new id ' . $id . ' could not be substituted', 'newspaper', 3, array('table' => $table, 'id' => $id, 'pz_uid' => $pz_uid));
+            t3lib_div::devlog('writeRecordsIfNewExtraOnPageZone(): new id ' . $id . ' could not be substituted', 'newspaper', 3, array('table' => $table, 'id' => $id));
             die('Fatal error: New extra ' . $table . ' could not be created. <b>Please contact developers.</b> Please <i>reload</i> the backend if you cannot access the backend anymore.');
         }
 
@@ -1047,7 +1049,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface, tx_newspap
         $e->setAttribute('is_inheritable', 1); // always 1 until #844 is fixed (and un-inherited etxra causes a bug)
     }
 
-    private static function insertNewExtraOnPagezone(tx_newspaper_Extra $e, tx_newspaper_PageZone $pz) {
+    private static function insertNewExtraOnPagezone(tx_newspaper_Extra $e, tx_newspaper_PageZone_Page $pz) {
         $after_origin_uid = intval(t3lib_div::_GP('new_extra_after_origin_uid'));
         $pz->insertExtraAfter($e, $after_origin_uid, true); // insert BEFORE setting the paragraph (so the paragraph can be inherited)
 
