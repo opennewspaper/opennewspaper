@@ -198,6 +198,21 @@ class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
         return $zones;
     }
 
+    /// Get the hierarchy of Page Zones from which the current Zone inherits the placement of its extras
+    /** @param bool $including_myself If true, add $this to the list
+     *  @param tx_newspaper_PageZone_Page[] $hierarchy List of already found parents (for recursive calling)
+     *  @return tx_newspaper_PageZone_Page[] Inheritance hierarchy of Page Zones from which the current Page
+     *              Zone inherits, ordered upwards
+     */
+    public function getInheritanceHierarchyUp($including_myself = true,
+                                              $hierarchy = array()) {
+        if ($including_myself) $hierarchy[] = $this;
+        if ($this->getParentForPlacement()) {
+            return $this->getParentForPlacement()->getInheritanceHierarchyUp(true, $hierarchy);
+        } else return $hierarchy;
+    }
+
+
     /**
      *  Return the section \p $extra was inserted in string format
      *  @todo Make the '---' and '< error >' messages class constants instead of hardcoding them.

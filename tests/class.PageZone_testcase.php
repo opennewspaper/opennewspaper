@@ -982,7 +982,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
     }
     
     private $bad_uid = 2000000000;            ///< pagezone that does not exist
-    /** @var tx_newspaper_PageZone */
+    /** @var tx_newspaper_PageZone_Page */
     private $pagezone = null;
     private $source = null;
     private $uid = 0;
