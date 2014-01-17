@@ -649,19 +649,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
     /// returns true if pagezone is an article
     abstract public function isArticle();
 
-    /// returns true if pagezone is a default article
-    public function isDefaultArticle() {
-        if ($this instanceof tx_newspaper_PageZone_Page) return false;
-        return ($this->getAttribute('is_template') == 1);
-    }
-
-
     /// returns true if pagezone is a concrete article
-    public function isConcreteArticle() {
-        if ($this instanceof tx_newspaper_PageZone_Page) return false;
-        // So $this is an instance of tx_newspaper_article
-        return !$this->isDefaultArticle();
-    }
+    abstract public function isConcreteArticle();
 
     /// delete this concrete and the parent abstract pagezone
     public function delete() {

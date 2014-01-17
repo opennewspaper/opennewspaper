@@ -322,6 +322,8 @@ class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
         return $this->getPageZoneType()->getAttribute('is_article');
     }
 
+    /// returns true if pagezone is a concrete article
+    public function isConcreteArticle() { return false; }
 
     /**
      *  Return the section \p $extra was inserted in string format

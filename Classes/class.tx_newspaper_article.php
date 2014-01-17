@@ -533,16 +533,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     }
 
 
-    public function isArticle() { return true; }
-
-    /// checks if article is a default article or a concrete article
-    /**
-     *  @return bool \c true if article is a default article (else \c false).
-     */
-    public function isDefaultArticle() {
-        return $this->getAttribute('is_template');
-    }
-
     /// Delete all Extras
     public function clearExtras() {
         $this->extras = array();
@@ -599,6 +589,16 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
                     $inheriting_pagezone->changeExtraParagraph($copied_extra, $new_paragraph);
             }
         }
+    }
+
+    public function isArticle() { return true; }
+
+    /// checks if article is a default article or a concrete article
+    /**
+     *  @return bool \c true if article is a default article (else \c false).
+     */
+    public function isDefaultArticle() {
+        return $this->getAttribute('is_template');
     }
 
     /// Generates a URL which links to the tx_newspaper_Article on the correct tx_newspaper_Page.
