@@ -532,6 +532,9 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         return null;
     }
 
+
+    public function isArticle() { return true; }
+
     /// checks if article is a default article or a concrete article
     /**
      *  @return bool \c true if article is a default article (else \c false).

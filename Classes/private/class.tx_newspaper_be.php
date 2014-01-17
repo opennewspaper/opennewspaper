@@ -583,7 +583,7 @@ class tx_newspaper_BE {
         $smarty->assign('DUMMY_ICON', tx_newspaper_BE::renderIcon('gfx/dummy_button.gif', '', self::getTranslation('label_new_top')));
         $smarty->assign('IS_CONCRETE_ARTICLE', $pz->isConcreteArticle());
         $smarty->assign('IS_CONCRETE_ARTICLE_RELOAD', $ajax_reload);
-        if ($pz->isPagezonePage()) {
+        if ($pz instanceof tx_newspaper_PageZone_Page) {
             $smarty->assign('DEBUG_OUTPUT', tx_newspaper::getUserTSConfigForDebugging('newspaper.debug.be.placementModule'));
         }
         $smarty->assign('CLEAR_CLIPBOARD_ICON', tx_newspaper_BE::renderIcon('gfx/closedok.gif', '', self::getTranslation('label_clear_clipboard')));
@@ -609,7 +609,7 @@ class tx_newspaper_BE {
             $smarty_pz->assign('IS_CONCRETE_ARTICLE', $pz->isConcreteArticle());
             $smarty_pz->assign('USE_TEMPLATE_SETS', self::useTemplateSetsForContentPlacement()); // are template set dropdowns visible or not
             $smarty_pz->assign('CLIPBOARD', self::getClipboardData());
-            if ($pz->isPagezonePage() && $data[$i]['pagezone_type']->getAttribute('is_article') == 0) {
+            if ($pz instanceof tx_newspaper_PageZone_Page && $data[$i]['pagezone_type']->getAttribute('is_article') == 0) {
                 $smarty_pz->assign('DEBUG_OUTPUT', tx_newspaper::getUserTSConfigForDebugging('newspaper.debug.be.placementModule'));
                 if (sizeof($extraData[$i]) > 0) {
                     // render pagezone table only if extras are available

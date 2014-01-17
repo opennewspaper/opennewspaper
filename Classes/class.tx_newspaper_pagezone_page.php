@@ -317,6 +317,30 @@ class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
         self::$debug_lots_of_crap = false;
     }
 
+    /// returns true if pagezone is an article
+    public function isArticle() {
+        return $this->getPageZoneType()->getAttribute('is_article');
+    }
+
+
+    /**
+     *  Return the section \p $extra was inserted in string format
+     *  @todo Make the '---' and '< error >' messages class constants instead of hardcoding them.
+     */
+    public function getExtraOriginAsString(tx_newspaper_Extra $extra) {
+        $original_pagezone = $this->getExtraOrigin($extra);
+        if (!$original_pagezone) return '---';
+        if ($original_pagezone->getUid() == $this->getUid()) return '---';
+        /** @var tx_newspaper_Page $page */
+        $page = $original_pagezone->getParentPage();
+        $section = $page->getParentSection();
+        if (!$section instanceof tx_newspaper_Section) return '< error >';
+        if ($section->getUid() == $this->getParentPage()->getParentSection()->getUid()) {
+            return $page->getPageType()->getAttribute('type_name');
+        }
+        return $section->getAttribute('section_name');
+    }
+
     private function removeInheritedExtras() {
         $debug_extras = array();
         foreach ($this->getExtras() as $extra) {
@@ -371,24 +395,6 @@ class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
         $this->store();
     }
 
-
-    /**
-     *  Return the section \p $extra was inserted in string format
-     *  @todo Make the '---' and '< error >' messages class constants instead of hardcoding them.
-     */
-    public function getExtraOriginAsString(tx_newspaper_Extra $extra) {
-        $original_pagezone = $this->getExtraOrigin($extra);
-        if (!$original_pagezone) return '---';
-        if ($original_pagezone->getUid() == $this->getUid()) return '---';
-        /** @var tx_newspaper_Page $page */
-        $page = $original_pagezone->getParentPage();
-        $section = $page->getParentSection();
-        if (!$section instanceof tx_newspaper_Section) return '< error >';
-        if ($section->getUid() == $this->getParentPage()->getParentSection()->getUid()) {
-            return $page->getPageType()->getAttribute('type_name');
-        }
-        return $section->getAttribute('section_name');
-    }
 
     private function getExtraOrigin(tx_newspaper_Extra $extra) {
         if ($extra->isOriginExtra()) return $this;

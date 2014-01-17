@@ -647,27 +647,18 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
     abstract public function getExtraOriginAsString(tx_newspaper_Extra $extra);
 
     /// returns true if pagezone is an article
-    public function isArticle() {
-        return $this instanceof tx_newspaper_Article || $this->getPageZoneType()->getAttribute('is_article');
-    }
-
-
-    /// returns true if pagezone is a pagezone_page
-    public function isPagezonePage() {
-        return $this instanceof tx_newspaper_PageZone_Page;
-    }
-
+    abstract public function isArticle();
 
     /// returns true if pagezone is a default article
     public function isDefaultArticle() {
-        if ($this->isPagezonePage()) return false;
+        if ($this instanceof tx_newspaper_PageZone_Page) return false;
         return ($this->getAttribute('is_template') == 1);
     }
 
 
     /// returns true if pagezone is a concrete article
     public function isConcreteArticle() {
-        if ($this->isPagezonePage()) return false;
+        if ($this instanceof tx_newspaper_PageZone_Page) return false;
         // So $this is an instance of tx_newspaper_article
         return !$this->isDefaultArticle();
     }
