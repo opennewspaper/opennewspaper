@@ -483,11 +483,25 @@ class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
         return $extras;
     }
 
-
-    public function rereadExtras() {
-        $this->readExtrasForPagezoneID($this->getUid(), false);
+        ///    Remove a given Extra from the PageZone
+    /** \param $remove_extra Extra to be removed
+     *  \param $recursive if true, remove \p $remove_extra on inheriting page zones
+     *  \return false if $remove_extra was not found, true otherwise
+     *  \todo DELETE WHERE origin_uid = ...
+     */
+    public function removeExtra(tx_newspaper_Extra $remove_extra, $recursive = true) {
+        if ($recursive) $this->removeExtraOnInheritingPagezones($remove_extra);
+        parent::removeExtra($remove_extra, $recursive);
     }
-    private $reread_extras = false;
+
+
+
+    private function removeExtraOnInheritingPagezones(tx_newspaper_Extra $remove_extra) {
+        foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
+            $copied_extra = $inheriting_pagezone->findExtraByOriginUID($remove_extra->getOriginUid(), true);
+            if ($copied_extra) $inheriting_pagezone->removeExtra($copied_extra, false);
+        }
+    }
 
     private function removeInheritedExtras() {
         $debug_extras = array();

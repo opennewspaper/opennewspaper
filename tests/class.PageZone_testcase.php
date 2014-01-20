@@ -9,6 +9,7 @@
 // TODO relative paths so that the IDE can resolve dependencies
 require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_pagezone.php');
 require_once('class.fixture.php');
+require_once('class.InheritanceStructure.php');
 require_once('class.tx_newspaper_database_testcase.php');
 
 /// testsuite for class tx_newspaper_pagezone
@@ -842,6 +843,17 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 
     public function test_copyExtrasFrom() {
         $this->fail("To do!");
+    }
+
+    public function test_removeExtra() {
+        $s = new InheritanceStructure($this->fixture);
+        $e = $s->parentZ()->getExtrasOf('tx_newspaper_extra_ArticleList')[0];
+        $this->assertTrue($e instanceof tx_newspaper_extra_ArticleList);
+        $s->parentZ()->removeExtra($e);
+        $this->assertFalse($s->parentZ()->doesContainExtra($e));
+        $this->assertFalse($s->childZ()->doesContainExtra($e));
+        $this->assertFalse($s->grandchildZ()->doesContainExtra($e));
+
     }
 
     public function runAllTests() {

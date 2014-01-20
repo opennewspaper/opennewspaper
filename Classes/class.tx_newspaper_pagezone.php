@@ -347,6 +347,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
         }
         return $this->parent_page;
     }
+
     /**
      *  dummy function, soon to be removed (as soon as all refernences to this function from inside this class are cleared up)
      *  moved to pagezone_page.
@@ -417,8 +418,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
      *  \todo DELETE WHERE origin_uid = ...
      */
     public function removeExtra(tx_newspaper_Extra $remove_extra, $recursive = true) {
-
-        if ($recursive) $this->removeExtraOnInheritingPagezones($remove_extra);
 
         if (!$this->removeExtraFromArray($remove_extra)) return false;
 
@@ -699,14 +698,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
     //    protected functions
     //
     ////////////////////////////////////////////////////////////////////////////
-
-
-    private function removeExtraOnInheritingPagezones(tx_newspaper_Extra $remove_extra) {
-        foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
-            $copied_extra = $inheriting_pagezone->findExtraByOriginUID($remove_extra->getOriginUid(), true);
-            if ($copied_extra) $inheriting_pagezone->removeExtra($copied_extra, false);
-        }
-    }
 
     private function removeExtraFromArray(tx_newspaper_Extra $remove_extra) {
         $index = -1;
@@ -1007,7 +998,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
      *  \param $table Table which stores the concrete object
      *  \param $uid UID in the table of the concrete type
      */
-     protected function readAttributes($table, $uid) {
+    protected function readAttributes($table, $uid) {
         /// Read Attributes from persistent storage
          $this->attributes = tx_newspaper::selectOneRow('*', $table, 'uid = ' . $uid);
          $this->attributes['query'] = tx_newspaper_DB::getQuery();
@@ -1022,7 +1013,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
       *  not yet distributed widely enough).
       *  @return string self::$extra_2_pagezone_table
       */
-     abstract public function getExtra2PagezoneTable();
+    abstract public function getExtra2PagezoneTable();
 
     ///    Retrieve a single Extra, defined by its index in the sequence
     /** \param $index
@@ -1033,6 +1024,11 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
         return $extras[$index];
     }
 
+
+    public function rereadExtras() {
+        $this->readExtrasForPagezoneID($this->getUid(), false);
+    }
+    protected $reread_extras = false;
 
     /// Add an Extra to the PageZone, both in RAM and persistently
     public function addExtra(tx_newspaper_Extra $extra) {
@@ -1083,27 +1079,28 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
     }
 
     protected $uid = 0;                ///< The UID of the record in the concrete table
-     protected $pagezone_uid = 0;    ///< The UID of the record in the abstract PageZone table
-     protected $extra_uid = 0;        ///< The UID of the record in the abstract Extra table
+    protected $pagezone_uid = 0;    ///< The UID of the record in the abstract PageZone table
+    protected $extra_uid = 0;        ///< The UID of the record in the abstract Extra table
 
-     protected $smarty = null;        ///< Smarty object for rendering
+    protected $smarty = null;        ///< Smarty object for rendering
 
-     protected $attributes = array();    ///< array of attributes
-     protected $pagezone_attributes = array(); ///< array of attributes for the parent part of the record
+    protected $attributes = array();    ///< array of attributes
+    protected $pagezone_attributes = array(); ///< array of attributes for the parent part of the record
     /** @var tx_newspaper_Extra[] */
-     protected $extras = array();        ///< array of tx_newspaper_Extra s
-     protected $pagezonetype = null;
+    protected $extras = array();        ///< array of tx_newspaper_Extra s
+    /** @var tx_newspaper_PageZoneType  */
+    protected $pagezonetype = null;
 
-     protected $parent_page_id = 0;    ///< UID of the parent Page
-     protected $parent_page = null;    ///< Parent Page object
+    protected $parent_page_id = 0;    ///< UID of the parent Page
+    protected $parent_page = null;    ///< Parent Page object
 
-     /// Default Smarty template for HTML rendering
-     static protected $defaultTemplate = 'tx_newspaper_pagezone.tmpl';
+    /// Default Smarty template for HTML rendering
+    static protected $defaultTemplate = 'tx_newspaper_pagezone.tmpl';
 
     /// Temporary variable to store the paragraph of Extras after which a new Extra is inserted
     private $paragraph_for_insert = 0;
 
-     private static $fields_to_copy_into_pagezone_table = array(
+    private static $fields_to_copy_into_pagezone_table = array(
         'pid', 'crdate', 'cruser_id', 'deleted',
     );
 

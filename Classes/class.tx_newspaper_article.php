@@ -565,29 +565,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
             $extra->setAttribute('paragraph', intval($new_paragraph));
             $extra->setAttribute('position', $this->getInsertPosition(0));
             $extra->store();
-
-            /** Change the paragraph in inheriting page zones too.
-             *  \todo Optional: only overwrite paragraph in inheriting pagezones if it has not been changed manually there.
-             */
-            foreach ($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
-                if (!($inheriting_pagezone instanceof tx_newspaper_Article)) {
-                    /* Probably no harm can come if the page zone is not an Article. So we just write
-                     * a message to the devlog and skip it.
-                     */
-                    t3lib_div::devlog(
-                                    'Weird: There\'s a PageZone inheriting from an Article which is not itself an Article',
-                                    'newspaper', 0,
-                                    array(
-                                        'parent page zone' => $this,
-                                        'inheriting page zone' => $inheriting_pagezone
-                                    )
-                    );
-                    continue;
-                }
-                $copied_extra = $inheriting_pagezone->findExtraByOriginUID($extra->getOriginUid());
-                if ($copied_extra)
-                    $inheriting_pagezone->changeExtraParagraph($copied_extra, $new_paragraph);
-            }
         }
     }
 
