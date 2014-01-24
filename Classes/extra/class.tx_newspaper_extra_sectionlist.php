@@ -66,7 +66,7 @@ class tx_newspaper_extra_SectionList extends tx_newspaper_Extra {
     }
 
     public function getDescription() {
-        return $this->getAttribute('short_description');
+        return $this->getAttribute('short_description')? $this->getAttribute('short_description'): $this->getTable() . " (" . $this->getUid() . ", Extra " . $this->getExtraUid() . ")";
     }
 
     public static function getModuleName() {

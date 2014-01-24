@@ -16,6 +16,9 @@ require_once('class.tx_newspaper_database_testcase.php');
 class test_PageZone_testcase extends tx_newspaper_database_testcase {
 
     function setUp() {
+
+        $timer = tx_newspaper_ExecutionTimer::create();
+
         /** @var t3lib_DB */
         global $TYPO3_DB;
         parent::setUp();
@@ -842,7 +845,22 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
     }
 
     public function test_copyExtrasFrom() {
-        $this->fail("To do!");
+
+        $timer = tx_newspaper_ExecutionTimer::create();
+
+        $s = new InheritanceStructure($this->fixture);
+        $from = $s->parentS()->getActivePages()[0]->getPageZone($this->getAPageZoneType());
+        $to = $this->createPagezoneForInheriting();
+
+        $to->copyExtrasFrom($from);
+        $to->rereadExtras();
+
+        foreach ($from->getExtras() as $extra) {
+            $this->assertTrue(
+                $to->doesContainExtra($extra),
+                "Pagezone " . $to->printableName() . " does not contain " . $extra->getDescription()
+            );
+        }
     }
 
     public function test_removeExtra() {
@@ -853,7 +871,6 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
         $this->assertFalse($s->parentZ()->doesContainExtra($e));
         $this->assertFalse($s->childZ()->doesContainExtra($e));
         $this->assertFalse($s->grandchildZ()->doesContainExtra($e));
-
     }
 
     public function runAllTests() {
@@ -971,8 +988,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
      * @return tx_newspaper_PageZone_Page
      */
     private function createPagezoneForInheriting() {
-        $pagezonetypes = $this->fixture->getPageZoneTypes();
-        $pagezonetype = $pagezonetypes[0];
+        $pagezonetype = $this->getAPageZoneType();
         $this->assertTrue($pagezonetype instanceof tx_newspaper_PageZoneType, 'no page zone type found');
 
         $zone = new tx_newspaper_PageZone_Page();
@@ -984,6 +1000,15 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 
         return $zone;
     }
+
+    /**
+     * @return tx_newspaper_PageZoneType
+     */
+    private function getAPageZoneType() {
+        $pagezonetypes = $this->fixture->getPageZoneTypes();
+        return $pagezonetypes[0];
+    }
+
 
     private function printPageZones(array $zones, $prefix = "") {
         if ($prefix) echo "$prefix:<br />\n";

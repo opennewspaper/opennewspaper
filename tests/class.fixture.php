@@ -36,6 +36,8 @@ class tx_newspaper_fixture {
 
     public function __construct(tx_phpunit_database_testcase $test) {
 
+        $timer = tx_newspaper_ExecutionTimer::create();
+
         $this->test = $test;
 
         $this->createSectionHierarchy();
@@ -410,6 +412,7 @@ class tx_newspaper_fixture {
             array(
                 'position' => $position,
                 'origin_uid' => $extra_object->getExtraUid(),
+                'is_inheritable'=> 1,
             )
         );
 
