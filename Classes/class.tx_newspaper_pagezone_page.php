@@ -260,7 +260,7 @@ class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
     public function copyExtrasFrom(tx_newspaper_PageZone $parent_zone) {
         foreach ($parent_zone->getExtras() as $extra_to_copy) {
             if (!$extra_to_copy->getAttribute('is_inheritable')) continue;
-tx_newspaper_Debug::w($extra_to_copy->getDescription());
+
             /// Clone $extra_to_copy
             /** Not nice: because we're working on the abstract superclass here, we
              *     can't clone the superclass entry because there's no object for it.
@@ -484,18 +484,18 @@ tx_newspaper_Debug::w($extra_to_copy->getDescription());
         return $extras;
     }
 
-        ///    Remove a given Extra from the PageZone
-    /** \param $remove_extra Extra to be removed
-     *  \param $recursive if true, remove \p $remove_extra on inheriting page zones
-     *  \return false if $remove_extra was not found, true otherwise
-     *  \todo DELETE WHERE origin_uid = ...
+    /**
+     *  Remove a given Extra from the PageZone
+     *
+     *  @param tx_newspaper_Extra $remove_extra Extra to be removed
+     *  @param bool $recursive if true, remove \p $remove_extra on inheriting page zones
+     *  @return bool false if $remove_extra was not found, true otherwise
+     *  @todo DELETE WHERE origin_uid = ...
      */
     public function removeExtra(tx_newspaper_Extra $remove_extra, $recursive = true) {
         if ($recursive) $this->removeExtraOnInheritingPagezones($remove_extra);
         parent::removeExtra($remove_extra, $recursive);
     }
-
-
 
     private function removeExtraOnInheritingPagezones(tx_newspaper_Extra $remove_extra) {
         foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
@@ -503,6 +503,34 @@ tx_newspaper_Debug::w($extra_to_copy->getDescription());
             if ($copied_extra) $inheriting_pagezone->removeExtra($copied_extra, false);
         }
     }
+
+    /**
+     *  Move an Extra present on the PageZone after another Extra, defined by its origin UID
+     *
+     *  @param tx_newspaper_Extra $move_extra The Extra to be moved
+     *  @param int $origin_uid The origin UID of the Extra after which $new_extra will be inserted. If
+     *              \p $origin_uid == 0, insert at the beginning.
+     *  @param bool $recursive if true, move \p $move_extra after Extra with origin UID \p $origin_uid
+     *              on inheriting page zones
+     *  @exception tx_newspaper_InconsistencyException If $move_extra is not present on the PageZone
+     */
+    public function moveExtraAfter(tx_newspaper_Extra $move_extra, $origin_uid = 0, $recursive = true) {
+
+        parent::moveExtraAfter($move_extra, $origin_uid, $recursive);
+
+        if ($recursive) $this->moveExtraOnInheritingPagezones($move_extra, $origin_uid);
+    }
+
+    private function moveExtraOnInheritingPagezones(tx_newspaper_Extra $move_extra, $origin_uid) {
+        $timer = tx_newspaper_ExecutionTimer::create();
+        foreach ($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
+            $copied_extra = $inheriting_pagezone->findExtraByOriginUID($move_extra->getOriginUid());
+            if ($copied_extra) {
+                $inheriting_pagezone->moveExtraAfter($copied_extra, $origin_uid, false);
+            }
+        }
+    }
+
 
     private function removeInheritedExtras() {
         $debug_extras = array();

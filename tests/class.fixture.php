@@ -218,6 +218,7 @@ class tx_newspaper_fixture {
     ////////////////////////////////////////////////////////////////////////////
 
     private function createTypo3Pages() {
+        $timer = tx_newspaper_ExecutionTimer::create();
         // Create sysfolder (uid 2574) for storing records and other newspaper related pages (like dossier page)
         foreach($this->typo3_newspaper_pages_data as $page) {
             tx_newspaper::insertRows($this->typo3_pages_table, $page);
@@ -225,6 +226,7 @@ class tx_newspaper_fixture {
     }
 
     private function createSectionHierarchy() {
+        $timer = tx_newspaper_ExecutionTimer::create();
         foreach ($this->section_data as $i => $section) {
             $section['parent_section'] = $this->section_uids[sizeof($this->section_uids)-1];
             $uid = tx_newspaper::insertRows($this->section_table, $section);
@@ -235,6 +237,7 @@ class tx_newspaper_fixture {
     }
 
     private function createArticleList() {
+        $timer = tx_newspaper_ExecutionTimer::create();
             $this->articlelist_id = tx_newspaper::insertRows($this->articlelistauto_table, $this->articlelistauto_data);
 
             $this->articlelist_data['section_id'] = $this->getParentSectionUid();
@@ -249,6 +252,7 @@ class tx_newspaper_fixture {
     }
 
     private function createArticles() {
+        $timer = tx_newspaper_ExecutionTimer::create();
         $this->article_uid = tx_newspaper::insertRows($this->article_table, $this->article_data);
         $this->article2section_uid = tx_newspaper::insertRows(
             'tx_newspaper_article_sections_mm',
@@ -300,6 +304,7 @@ class tx_newspaper_fixture {
     }
 
     private function createPages() {
+        $timer = tx_newspaper_ExecutionTimer::create();
         foreach ($this->pagetype_data as $pagetype) {
             $this->pagetype_uids[] = tx_newspaper::insertRows($this->pagetype_table, $pagetype);
         }
@@ -325,6 +330,7 @@ class tx_newspaper_fixture {
      *  @todo Create page zones which don't inherit from another page zone
      */
     private function createPageZones() {
+        $timer = tx_newspaper_ExecutionTimer::create();
         foreach ($this->pagezonetype_data as $pagezonetype) {
             $this->pagezonetype_uids[] = tx_newspaper::insertRows($this->pagezonetype_table, $pagezonetype);
         }
@@ -365,9 +371,9 @@ class tx_newspaper_fixture {
     }
 
     private function createExtras() {
+        $timer = tx_newspaper_ExecutionTimer::create();
 //        $pagezone_uid = $this->pagezone_uids[0];
-        foreach ($this->pagezone_uids as $pagezone_uid)
-        {
+        foreach ($this->pagezone_uids as $pagezone_uid) {
             $pagezone = tx_newspaper_PageZone_Factory::getInstance()->create($pagezone_uid);
 
             $this->createImageExtras($pagezone);
@@ -385,19 +391,19 @@ class tx_newspaper_fixture {
     private function createArticlelistExtras(tx_newspaper_Pagezone $pagezone) {
         foreach($this->articlelist_extra_data as $i => $extra) {
             $extra['articlelist'] = $this->getAbstractArticlelistUid();
-            $this->createExtraFromData($this->articlelist_extra_table, $extra, $this->extra_pos[$i], $pagezone);
+            $this->createExtraFromData($this->articlelist_extra_table, $extra, 8*$this->extra_pos[$i], $pagezone);
         }
     }
 
     private function createSectionlistExtras() {
         $pagezonetype_for_sectionlist = new tx_newspaper_PageZoneType($this->pagezonetype_uids[0]);
-        foreach ($this->section_uids as $section_uid) {
+        foreach ($this->section_uids as $i => $section_uid) {
             $section = new tx_newspaper_Section($section_uid);
             $pages = $section->getActivePages();
             foreach ($pages as $page) {
                 if ($page->getPageType()->getAttribute('is_article_page')) continue;
                 $pagezone = $page->getPageZone($pagezonetype_for_sectionlist);
-                $this->createExtraFromData($this->sectionlist_extra_table, $this->sectionlist_extra_data, 0, $pagezone);
+                $this->createExtraFromData($this->sectionlist_extra_table, $this->sectionlist_extra_data, $this->extra_pos[$i], $pagezone);
             }
         }
     }
@@ -919,7 +925,7 @@ class tx_newspaper_fixture {
 
 
     private $extra_pos = array(
-        1024, 2048, 4096
+        1024, 2048, 4096, 8192, 16384
     );
 
     /** @var tx_phpunit_database_testcase  */

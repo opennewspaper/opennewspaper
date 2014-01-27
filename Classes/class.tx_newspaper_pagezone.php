@@ -411,11 +411,13 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
         $inheriting_pagezone->insertExtraAfter($copied_extra, $origin_uid, false);
     }
 
-    ///    Remove a given Extra from the PageZone
-    /** \param $remove_extra Extra to be removed
-     *  \param $recursive if true, remove \p $remove_extra on inheriting page zones
-     *  \return false if $remove_extra was not found, true otherwise
-     *  \todo DELETE WHERE origin_uid = ...
+    /**
+     *  Remove a given Extra from the PageZone
+     *
+     *  @param tx_newspaper_Extra $remove_extra Extra to be removed
+     *  @param bool $recursive if true, remove \p $remove_extra on inheriting page zones
+     *  @return bool false if $remove_extra was not found, true otherwise
+     *  @todo DELETE WHERE origin_uid = ...
      */
     public function removeExtra(tx_newspaper_Extra $remove_extra, $recursive = true) {
 
@@ -430,14 +432,15 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
         return true;
     }
 
-    /// Move an Extra present on the PageZone after another Extra, defined by its origin UID
-    /** \param $move_extra The Extra to be moved
-     *  \param $origin_uid The origin UID of the Extra after which $new_extra
-     *             will be inserted. If $origin_uid == 0, insert at the beginning.
-     *  \param $recursive if true, move \p $move_extra after Extra with origin
-     *          UID \p $origin_uid on inheriting page zones
-     *  \exception tx_newspaper_InconsistencyException If $move_extra is not
-     *             present on the PageZone
+    /**
+     *  Move an Extra present on the PageZone after another Extra, defined by its origin UID
+     *
+     *  @param tx_newspaper_Extra $move_extra The Extra to be moved
+     *  @param int $origin_uid The origin UID of the Extra after which $new_extra will be inserted. If
+     *              \p $origin_uid == 0, insert at the beginning.
+     *  @param bool $recursive if true, move \p $move_extra after Extra with origin UID \p $origin_uid
+     *              on inheriting page zones
+     *  @exception tx_newspaper_InconsistencyException If $move_extra is not present on the PageZone
      */
     public function moveExtraAfter(tx_newspaper_Extra $move_extra, $origin_uid = 0, $recursive = true) {
 
@@ -448,14 +451,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
         $this->checkExtraIsOnThis($move_extra);
 
         $this->changePositionOfExtra($move_extra, $origin_uid);
-
-        if (!$recursive) return;
-
-        $this->moveExtraOnInheritingPagezones($move_extra, $origin_uid);
-
-        /** ... and that's it. We don't need to update the M-M association table
-         *  because we already asserted that the Extra is on the PageZone.
-         */
     }
 
     private function changePositionOfExtra(tx_newspaper_Extra $move_extra, $origin_uid) {
@@ -472,21 +467,12 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
         }
     }
 
-    ///    Move Extra on inheriting PageZones
-    private function moveExtraOnInheritingPagezones(tx_newspaper_Extra $move_extra, $origin_uid) {
-        $timer = tx_newspaper_ExecutionTimer::create();
-        foreach ($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
-            $copied_extra = $inheriting_pagezone->findExtraByOriginUID($move_extra->getOriginUid());
-            if ($copied_extra) $inheriting_pagezone->moveExtraAfter($copied_extra, $origin_uid, false);
-        }
-    }
-
 
     /// Get the hierarchy of Page Zones inheriting placement from $this
     /**
      * @param bool|\If $including_myself true, add $this to the list
      * @param array|List $hierarchy of already found parents (for recursive calling)
-     * @return tx_newspaper_Pagezone[] Inheritance hierarchy of pages inheriting from the current Page
+     * @return tx_newspaper_Pagezone_Page[] Inheritance hierarchy of pages inheriting from the current Page
      *             Zone, ordered downwards, depth-first
      */
     public function getInheritanceHierarchyDown($including_myself = true,

@@ -95,7 +95,7 @@ class tx_newspaper_FileLogger extends tx_newspaper_TimingLogger {
     protected function formatMessage($message, tx_newspaper_TimingInfo $info, $depth) {
         $message = parent::formatMessage($message, $info, $depth);
         $message = str_pad($message, self::message_width, ' ');
-        $time = sprintf(' %8.2f ms', $info->getExecutionTime());
+        $time = sprintf(' %9.2f ms', $info->getExecutionTime());
         return $message . $time;
     }
     

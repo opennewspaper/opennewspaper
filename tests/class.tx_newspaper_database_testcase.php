@@ -13,14 +13,15 @@ class tx_newspaper_database_testcase extends tx_phpunit_database_testcase {
     const fallback_test_db = 'onlinetaz_2_hel_test';
 
      function setUp($createFixture = true) {
+         $timer = tx_newspaper_ExecutionTimer::create();
 
          if (self::$skip_setup_because_no_data_have_changed) return;
 
-        $this->testDatabase = $this->getTestDB();
+         $this->testDatabase = $this->getTestDB();
 
          $this->createDatabase();
          $this->cleanDatabase();
-        $this->useTestDatabase();
+         $this->useTestDatabase();
          $this->importTables(PATH_typo3conf . 'ext/newspaper/tests/typo3.newspaper.basis1.sql');
          $this->importExtensions(array('newspaper', 'devlog'));
 //             $this->importData(PATH_typo3conf . 'ext/newspaper/tests/typo3.newspaper.basis1.inserts.sql');
