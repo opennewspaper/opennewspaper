@@ -671,10 +671,14 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 
     public function doesContainExtra(tx_newspaper_Extra $extra, $exact_extra = false) {
         foreach($this->getExtras() as $tested_extra) {
-            if ($tested_extra->getExtraUid() == $extra->getExtraUid()) return true;
+            if ($tested_extra->getExtraUid() == $extra->getExtraUid()) {
+                return true;
+            }
             if (!$exact_extra &&
                 $tested_extra->getAttribute('extra_uid') == $extra->getAttribute('extra_uid') &&
-                $tested_extra->getAttribute('extra_table') == $extra->getAttribute('extra_table')) return true;
+                $tested_extra->getAttribute('extra_table') == $extra->getAttribute('extra_table')) {
+                return true;
+            }
         }
         return false;
     }

@@ -26,6 +26,21 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
         parent::tearDown();
     }
 
+    public function test_insertExtraAfter() {
+        $extras = $this->article->getExtras();
+        $this->fail("not yet implemented " . print_r($extras, 1));
+    }
+
+    public function test_moveExtraAfter() {
+        $extras = $this->article->getExtras();
+        $this->fail("not yet implemented " . print_r($extras, 1));
+    }
+
+    public function test_removeExtra() {
+        $extras = $this->article->getExtras();
+        $this->fail("not yet implemented " . print_r($extras, 1));
+    }
+
     /**
      *  storeHiddenStatusWithHooks() MUST set the 'hidden' attribute in the
      *  object and the DB.

@@ -15,6 +15,7 @@ require_once('class.tx_newspaper_database_testcase.php');
 /// testsuite for class tx_newspaper_pagezone
 class test_PageZone_testcase extends tx_newspaper_database_testcase {
 
+
     function setUp() {
 
         $timer = tx_newspaper_ExecutionTimer::create();
@@ -38,8 +39,84 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
         $this->pagezone_uid = $this->pagezone->getAbstractUid();
 
         $this->createExtras();
+    }
 
-//        $this->source = new tx_newspaper_DBSource();
+    public function test_insertExtraAfter() {
+        $s = new InheritanceStructure($this->fixture);
+        $after = $s->parentZ()->getExtrasOf('tx_newspaper_extra_ArticleList')[0];
+        $this->assertTrue(
+            $after instanceof tx_newspaper_extra_ArticleList,
+            "Finding first article list on page zone failed"
+        );
+        $insert = $this->fixture->createExtraToInherit('tx_newspaper_Extra_Textbox');
+        $this->assertFalse(
+            $s->parentZ()->doesContainExtra($insert),
+            "WTF??? page zone contains extra just created."
+        );
+
+        $s->parentZ()->insertExtraAfter($insert, $after->getOriginUid());
+
+        $this->assertTrue(
+            $s->parentZ()->doesContainExtra($insert),
+            "Inserting extra failed"
+        );
+        $this->assertTrue(
+            $this->extraComesBefore($after, $insert, $s->parentZ()),
+            "inserted extra before specified place instead of after"
+        );
+    }
+
+    public function test_insertExtraAfterOnChildren() {
+        $this->makePageZoneHierarchy();
+        $first = $this->level1->getExtrasOf('tx_newspaper_extra_Generic')[0];
+        $this->assertTrue(
+            $first instanceof tx_newspaper_extra_Generic,
+            "Finding first generic extra on page zone failed" . self::printExtrasWithPosition($this->level1)
+        );
+        $insert = $this->fixture->createExtraToInherit('tx_newspaper_Extra_Textbox');
+        $this->assertFalse(
+            $this->level1->doesContainExtra($insert),
+            "WTF??? page zone contains extra just created."
+        );
+
+        $this->level1->insertExtraAfter($insert, $first->getOriginUid());
+
+        $this->level2->rereadExtras();
+        $this->level3_1->rereadExtras();
+
+        $this->assertTrue(
+            $this->level2->doesContainExtra($insert),
+            "Inserting extra on child zone failed " . self::printExtrasWithPosition($this->level1) . self::printExtrasWithPosition($this->level2) . self::printExtrasWithPosition($this->level3_1) . self::printExtrasWithPosition($this->level3_2)
+        );
+        $this->assertTrue(
+            $this->extraComesBefore($first, $insert, $this->level2),
+            "inserted extra on child zone before specified place instead of after " . self::printExtrasWithPosition($this->level2) .
+                " expected " . self::printExtrasWithPosition($this->level1)
+        );
+        $this->assertTrue(
+            $this->level3_1->doesContainExtra($insert),
+            "Inserting extra on grandchild zone failed " . self::printExtrasWithPosition($this->level3_1)
+        );
+        $this->assertTrue(
+            $this->extraComesBefore($first, $insert, $this->level3_1),
+            "inserted extra on grandchild zone before specified place instead of after " . self::printExtrasWithPosition($this->level3_1) .
+                " expected " . self::printExtrasWithPosition($this->level1)
+        );
+    }
+
+    private static function printExtrasWithPosition(tx_newspaper_PageZone $pz) {
+        return print_r(self::getExtrasWithPosition($pz), 1);
+    }
+
+    private static function getExtrasWithPosition(tx_newspaper_PageZone $pz) {
+        return array_map(
+            'test_PageZone_testcase::extraWithPosition',
+            $pz->getExtras()
+        );
+    }
+
+    private static function extraWithPosition (tx_newspaper_Extra $e) {
+        return $e->getTable() . " (" . $e->getUid() . ")@" . $e->getAttribute('position');
     }
 
     public function test_removeExtra() {
@@ -98,31 +175,11 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 
         $this->assertTrue(
             $this->extraComesBefore($second, $first, $s->childZ()),
-            "move failed on child: " .  print_r(
-                array_map(
-                    function(tx_newspaper_Extra $e) { return $e->getDescription() . "@" . $e->getAttribute('position'); },
-                    $s->childZ()->getExtras()
-                ), 1
-            ) . ", expected " . print_r(
-                array_map(
-                    function(tx_newspaper_Extra $e) { return $e->getDescription() . "@" . $e->getAttribute('position'); },
-                    $s->parentZ()->getExtras()
-                ), 1
-            )
+            "move failed on child: " . self::printExtrasWithPosition($s->childZ()) . " expected " . self::printExtrasWithPosition($s->parentZ())
         );
         $this->assertTrue(
             $this->extraComesBefore($second, $first, $s->grandchildZ()),
-            "move failed on grandchild: " .  print_r(
-                array_map(
-                    function(tx_newspaper_Extra $e) { return $e->getDescription() . "@" . $e->getAttribute('position'); },
-                    $s->grandchildZ()->getExtras()
-                ), 1
-            ) . ", expected " . print_r(
-                array_map(
-                    function(tx_newspaper_Extra $e) { return $e->getDescription() . "@" . $e->getAttribute('position'); },
-                    $s->parentZ()->getExtras()
-                ), 1
-            )
+            "move failed on grandchild: " . self::printExtrasWithPosition($s->grandchildZ()) . " expected " . self::printExtrasWithPosition($s->parentZ())
         );
 
     }
@@ -1034,11 +1091,18 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
         }
     }
 
-    private function makePageZoneHierarchy() {
-        $this->inherited_extra = $this->fixture->createExtraToInherit('tx_newspaper_Extra_Generic');
+    private function makePageZoneHierarchy(array $inherited_extras = array()) {
+        if (empty($inherited_extras)) {
+            $this->inherited_extra = $this->fixture->createExtraToInherit('tx_newspaper_Extra_Generic');
+            $inherited_extras = array($this->inherited_extra);
+        }
 
         $this->level1 = $this->createPagezoneForInheriting();
-        $this->level1->addExtra($this->inherited_extra);
+
+        foreach ($inherited_extras as $extra) {
+            $this->level1->addExtra($extra);
+        }
+
 
         $this->level2 = $this->createPagezoneForInheriting();
         $this->level2->changeParent($this->level1->getAbstractUid());
