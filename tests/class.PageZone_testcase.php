@@ -162,24 +162,31 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
     }
 
     public function test_moveExtraAfterOnChildren() {
-        $s = new InheritanceStructure($this->fixture);
-        $extras = $s->parentZ()->getExtras();
-        $first = $extras[0];
-        $second = $extras[1];
+        $this->makePageZoneHierarchy(array($this->fixture->createExtraToInherit('tx_newspaper_Extra_Generic'), $this->fixture->createExtraToInherit('tx_newspaper_Extra_Ad')));
+        $first = $this->level1->getExtrasOf('tx_newspaper_extra_Generic')[0];
+        $this->assertTrue(
+            $first instanceof tx_newspaper_extra_Generic,
+            "Finding first extra on page zone failed" . self::printExtrasWithPosition($this->level1)
+        );
+        $second = $this->level1->getExtrasOf('tx_newspaper_extra_Ad')[0];
+        $this->assertTrue(
+            $second instanceof tx_newspaper_extra_Ad,
+            "Finding second extra on page zone failed" . self::printExtrasWithPosition($this->level1)
+        );
 
-        $s->parentZ()->moveExtraAfter($first, $second->getOriginUid(), true);
+        $this->level1->moveExtraAfter($first, $second->getOriginUid(), true);
 
-        $s->parentZ()->rereadExtras();
-        $s->childZ()->rereadExtras();
-        $s->grandchildZ()->rereadExtras();
+        $this->level1->rereadExtras();
+        $this->level2->rereadExtras();
+        $this->level3_1->rereadExtras();
 
         $this->assertTrue(
-            $this->extraComesBefore($second, $first, $s->childZ()),
-            "move failed on child: " . self::printExtrasWithPosition($s->childZ()) . " expected " . self::printExtrasWithPosition($s->parentZ())
+            $this->extraComesBefore($second, $first, $this->level2),
+            "move failed on child: " . self::printExtrasWithPosition($this->level2) . " expected " . self::printExtrasWithPosition($this->level1)
         );
         $this->assertTrue(
-            $this->extraComesBefore($second, $first, $s->grandchildZ()),
-            "move failed on grandchild: " . self::printExtrasWithPosition($s->grandchildZ()) . " expected " . self::printExtrasWithPosition($s->parentZ())
+            $this->extraComesBefore($second, $first, $this->level3_1),
+            "move failed on grandchild: " . self::printExtrasWithPosition($this->level3_1) . " expected " . self::printExtrasWithPosition($this->level1)
         );
 
     }
