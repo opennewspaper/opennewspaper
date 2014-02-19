@@ -277,7 +277,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
      *          passed down from tx_newspaper_Page::render() )
      *    \return The rendered page as HTML (or XML, if you insist)
      */
-    abstract public function render($template_set = '');
+#    abstract public function render($template_set = '');
 
 
      /// \todo: oliver: deprecated? probably yes - but used in tx_newspaper_Article
@@ -886,7 +886,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
      *        inheritance mode has been set to false
      *  @return tx_newspaper_Extra[]
      */
-    abstract public function getExtras($hidden_too = false);
+#    abstract public function getExtras($hidden_too = false);
 
     /**
      * @param string|tx_newspaper_Extra $extra_class desired extra class or instance thereof

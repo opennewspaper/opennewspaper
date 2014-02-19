@@ -43,7 +43,8 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 
     public function test_insertExtraAfter() {
         $s = new InheritanceStructure($this->fixture);
-        $after = $s->parentZ()->getExtrasOf('tx_newspaper_extra_ArticleList')[0];
+        $lists = $s->parentZ()->getExtrasOf('tx_newspaper_extra_ArticleList');
+        $after = $lists[0];
         $this->assertTrue(
             $after instanceof tx_newspaper_extra_ArticleList,
             "Finding first article list on page zone failed"
@@ -68,7 +69,8 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 
     public function test_insertExtraAfterOnChildren() {
         $this->makePageZoneHierarchy();
-        $first = $this->level1->getExtrasOf('tx_newspaper_extra_Generic')[0];
+        $generics = $this->level1->getExtrasOf('tx_newspaper_extra_Generic');
+        $first = $generics[0];
         $this->assertTrue(
             $first instanceof tx_newspaper_extra_Generic,
             "Finding first generic extra on page zone failed" . self::printExtrasWithPosition($this->level1)
@@ -121,7 +123,8 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 
     public function test_removeExtra() {
         $s = new InheritanceStructure($this->fixture);
-        $e = $s->parentZ()->getExtrasOf('tx_newspaper_extra_ArticleList')[0];
+        $extras = $s->parentZ()->getExtrasOf('tx_newspaper_extra_ArticleList');
+        $e = $extras[0];
         $this->assertTrue($e instanceof tx_newspaper_extra_ArticleList);
         $s->parentZ()->removeExtra($e);
         $this->assertFalse($s->parentZ()->doesContainExtra($e));
@@ -163,12 +166,14 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 
     public function test_moveExtraAfterOnChildren() {
         $this->makePageZoneHierarchy(array($this->fixture->createExtraToInherit('tx_newspaper_Extra_Generic'), $this->fixture->createExtraToInherit('tx_newspaper_Extra_Ad')));
-        $first = $this->level1->getExtrasOf('tx_newspaper_extra_Generic')[0];
+        $generics = $this->level1->getExtrasOf('tx_newspaper_extra_Generic');
+        $first = $generics[0];
         $this->assertTrue(
             $first instanceof tx_newspaper_extra_Generic,
             "Finding first extra on page zone failed" . self::printExtrasWithPosition($this->level1)
         );
-        $second = $this->level1->getExtrasOf('tx_newspaper_extra_Ad')[0];
+        $ads = $this->level1->getExtrasOf('tx_newspaper_extra_Ad');
+        $second = $ads[0];
         $this->assertTrue(
             $second instanceof tx_newspaper_extra_Ad,
             "Finding second extra on page zone failed" . self::printExtrasWithPosition($this->level1)
@@ -196,7 +201,8 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
         $timer = tx_newspaper_ExecutionTimer::create();
 
         $s = new InheritanceStructure($this->fixture);
-        $from = $s->parentS()->getActivePages()[0]->getPageZone($this->getAPageZoneType());
+        $pages = $s->parentS()->getActivePages(); 
+        $from = $pages[0]->getPageZone($this->getAPageZoneType());
         $to = $this->createPagezoneForInheriting();
 
         $to->copyExtrasFrom($from);
