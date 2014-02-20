@@ -213,8 +213,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         /// Ensure the page zone has an entry in the abstract supertable...
         $pagezone_uid = $this->createPageZoneRecord($this->getUid(), $this->getTable());
 
-        $this->connectToPage($pagezone_uid);
-
         /// store all extras and make sure they are in the MM relation table
         if ($this->extras) {
             foreach ($this->extras as $extra) {
