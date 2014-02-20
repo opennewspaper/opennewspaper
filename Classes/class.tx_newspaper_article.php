@@ -472,7 +472,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
      *  would result in an error.
      */
     public function insertExtraAfter(tx_newspaper_Extra $insert_extra, $origin_uid = 0, $recursive = true) {
-        tx_newspaper_PageZone::insertExtraAfter($insert_extra, $origin_uid, $this->isDefaultArticle());
+        parent::insertExtraAfter($insert_extra, $origin_uid, $this->isDefaultArticle());
     }
 
     /// Get the tx_newspaper_PageZoneType associated with this Article

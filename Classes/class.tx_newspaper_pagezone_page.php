@@ -521,6 +521,104 @@ class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
         if ($recursive) $this->moveExtraOnInheritingPagezones($move_extra, $origin_uid);
     }
 
+    public function insertExtraAfter(tx_newspaper_Extra $insert_extra,
+                                     $origin_uid = 0, $recursive = true) {
+        $insert_extra = parent::insertExtraAfter($insert_extra, $origin_uid, $recursive);
+        if ($recursive /* && (boolean)$insert_extra->getAttribute('is_inheritable') */) {
+            $this->insertExtraOnInheritingPagezones($insert_extra, $origin_uid);
+        }
+        return $insert_extra;
+    }
+
+    /// Get the hierarchy of Page Zones inheriting placement from $this
+    /**
+     * @param bool $including_myself If $including_myself true, add $this to the list
+     * @param tx_newspaper_Pagezone_Page[] $hierarchy of already found parents (for recursive calling)
+     * @return tx_newspaper_Pagezone_Page[] Inheritance hierarchy of pages inheriting from the current Page
+     *             Zone, ordered downwards, depth-first
+     */
+    public function getInheritanceHierarchyDown($including_myself = true,
+                                                $hierarchy = array()) {
+
+        $timer = tx_newspaper_ExecutionTimer::create();
+
+        self::setLazyCreation(true);
+
+        if ($including_myself) $hierarchy[] = $this;
+
+        $hierarchy = array_merge($hierarchy, $this->getExplicitlyInheritingPagezoneHierarchy());
+
+        if (!$this->getParentPage()) return $hierarchy;
+
+        return $this->addInheritingPagezonesDownTheHierarchy($hierarchy);
+    }
+
+    /// Reads page zones which have been explicitly set to inherit from \c $this.
+    private function getExplicitlyInheritingPagezoneHierarchy() {
+
+        $hierarchy = array();
+
+        $table = tx_newspaper::getTable($this);
+        $heirs = tx_newspaper::selectRows(
+            'uid', $table, 'inherits_from = ' . $this->getUid()
+        );
+
+        foreach ($heirs as $heir) {
+            if (intval($heir['uid']) == $this->getUid()) continue;
+            $inheriting_pagezone = new tx_newspaper_PageZone_Page($heir['uid']);
+            $hierarchy = $inheriting_pagezone->getInheritanceHierarchyDown(true, $hierarchy);
+        }
+
+        return $hierarchy;
+    }
+
+        /// look for page zones on pages in section down the section hierarchy
+    private function addInheritingPagezonesDownTheHierarchy(array $hierarchy) {
+
+        $timer = tx_newspaper_ExecutionTimer::create();
+
+        $sub_pages = $this->getParentPage()->getSubPagesOfSameType();
+
+        foreach ($sub_pages as $sub_page) {
+            $this->addInheritingPagezoneOnPage($sub_page, $hierarchy);
+        }
+
+        return $hierarchy;
+    }
+    private function addInheritingPagezoneOnPage(tx_newspaper_Page $sub_page, array &$hierarchy) {
+
+        $timer = tx_newspaper_ExecutionTimer::create();
+
+        $inheriting_pagezone = $sub_page->getPageZone($this->getPageZoneType());
+        if ($this->isInheritedBy($inheriting_pagezone)) {
+            $hierarchy = $inheriting_pagezone->getInheritanceHierarchyDown(true, $hierarchy);
+        }
+    }
+
+    private function isInheritedBy(tx_newspaper_PageZone $pagezone = null) {
+        $timer = tx_newspaper_ExecutionTimer::create();
+        if (!$pagezone instanceof tx_newspaper_PageZone) return false;
+        $parent = $pagezone->getParentForPlacement(false);
+        if (!$parent instanceof tx_newspaper_PageZone) return false;
+        if ($parent->getUid() != $this->getUid()) return false;
+        return true;
+    }
+
+    /// Pass down the insertion to PageZones inheriting from \c $this
+    private function insertExtraOnInheritingPagezones(tx_newspaper_Extra $insert_extra, $origin_uid) {
+        foreach ($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
+            self::cloneExtraOnPagezone($insert_extra, $inheriting_pagezone, $origin_uid);
+        }
+    }
+
+    private static function cloneExtraOnPagezone(tx_newspaper_Extra $insert_extra, tx_newspaper_PageZone $inheriting_pagezone, $origin_uid) {
+
+        $copied_extra = clone $insert_extra;
+        $copied_extra->setOriginUid($insert_extra->getOriginUid());
+
+        $inheriting_pagezone->insertExtraAfter($copied_extra, $origin_uid, false);
+    }
+
     private function moveExtraOnInheritingPagezones(tx_newspaper_Extra $move_extra, $origin_uid) {
         $timer = tx_newspaper_ExecutionTimer::create();
         foreach ($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {

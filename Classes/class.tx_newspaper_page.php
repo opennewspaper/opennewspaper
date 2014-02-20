@@ -259,9 +259,9 @@ class tx_newspaper_Page
      *  tx_newspaper_PageZoneType on every  tx_newspaper_Page. If it is found on
      *  \c $this, it is returned. Otherwise, \c null is returned.
      *
-     *  @param $type Wanted tx_newspaper_PageZoneType.
+     *  @param tx_newspaper_PageZoneType $type Wanted tx_newspaper_PageZoneType.
      *
-     *  @return tx_newspaper_PageZone of type \p $type, or \c null.
+     *  @return tx_newspaper_PageZone_Page of type \p $type, or \c null.
      */
     function &getPageZone(tx_newspaper_PageZoneType $type) {
 

@@ -41,97 +41,6 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
         $this->createExtras();
     }
 
-    public function test_insertExtraAfter() {
-        $s = new InheritanceStructure($this->fixture);
-        $lists = $s->parentZ()->getExtrasOf('tx_newspaper_extra_ArticleList');
-        $after = $lists[0];
-        $this->assertTrue(
-            $after instanceof tx_newspaper_extra_ArticleList,
-            "Finding first article list on page zone failed"
-        );
-        $insert = $this->fixture->createExtraToInherit('tx_newspaper_Extra_Textbox');
-        $this->assertFalse(
-            $s->parentZ()->doesContainExtra($insert),
-            "WTF??? page zone contains extra just created."
-        );
-
-        $s->parentZ()->insertExtraAfter($insert, $after->getOriginUid());
-
-        $this->assertTrue(
-            $s->parentZ()->doesContainExtra($insert),
-            "Inserting extra failed"
-        );
-        $this->assertTrue(
-            $this->extraComesBefore($after, $insert, $s->parentZ()),
-            "inserted extra before specified place instead of after"
-        );
-    }
-
-    public function test_insertExtraAfterOnChildren() {
-        $this->makePageZoneHierarchy();
-        $generics = $this->level1->getExtrasOf('tx_newspaper_extra_Generic');
-        $first = $generics[0];
-        $this->assertTrue(
-            $first instanceof tx_newspaper_extra_Generic,
-            "Finding first generic extra on page zone failed" . self::printExtrasWithPosition($this->level1)
-        );
-        $insert = $this->fixture->createExtraToInherit('tx_newspaper_Extra_Textbox');
-        $this->assertFalse(
-            $this->level1->doesContainExtra($insert),
-            "WTF??? page zone contains extra just created."
-        );
-
-        $this->level1->insertExtraAfter($insert, $first->getOriginUid());
-
-        $this->level2->rereadExtras();
-        $this->level3_1->rereadExtras();
-
-        $this->assertTrue(
-            $this->level2->doesContainExtra($insert),
-            "Inserting extra on child zone failed " . self::printExtrasWithPosition($this->level1) . self::printExtrasWithPosition($this->level2) . self::printExtrasWithPosition($this->level3_1) . self::printExtrasWithPosition($this->level3_2)
-        );
-        $this->assertTrue(
-            $this->extraComesBefore($first, $insert, $this->level2),
-            "inserted extra on child zone before specified place instead of after " . self::printExtrasWithPosition($this->level2) .
-                " expected " . self::printExtrasWithPosition($this->level1)
-        );
-        $this->assertTrue(
-            $this->level3_1->doesContainExtra($insert),
-            "Inserting extra on grandchild zone failed " . self::printExtrasWithPosition($this->level3_1)
-        );
-        $this->assertTrue(
-            $this->extraComesBefore($first, $insert, $this->level3_1),
-            "inserted extra on grandchild zone before specified place instead of after " . self::printExtrasWithPosition($this->level3_1) .
-                " expected " . self::printExtrasWithPosition($this->level1)
-        );
-    }
-
-    private static function printExtrasWithPosition(tx_newspaper_PageZone $pz) {
-        return print_r(self::getExtrasWithPosition($pz), 1);
-    }
-
-    private static function getExtrasWithPosition(tx_newspaper_PageZone $pz) {
-        return array_map(
-            'test_PageZone_testcase::extraWithPosition',
-            $pz->getExtras()
-        );
-    }
-
-    private static function extraWithPosition (tx_newspaper_Extra $e) {
-        return $e->getTable() . " (" . $e->getUid() . ")@" . $e->getAttribute('position');
-    }
-
-    public function test_removeExtra() {
-        $s = new InheritanceStructure($this->fixture);
-        $extras = $s->parentZ()->getExtrasOf('tx_newspaper_extra_ArticleList');
-        $e = $extras[0];
-        $this->assertTrue($e instanceof tx_newspaper_extra_ArticleList);
-        $s->parentZ()->removeExtra($e);
-        $this->assertFalse($s->parentZ()->doesContainExtra($e));
-        $this->assertFalse($s->childZ()->doesContainExtra($e));
-        $this->assertFalse($s->grandchildZ()->doesContainExtra($e));
-    }
-
     public function test_moveExtraAfter() {
         $s = new InheritanceStructure($this->fixture);
         $extras = $s->parentZ()->getExtras();
@@ -194,26 +103,6 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
             "move failed on grandchild: " . self::printExtrasWithPosition($this->level3_1) . " expected " . self::printExtrasWithPosition($this->level1)
         );
 
-    }
-
-    public function test_copyExtrasFrom() {
-
-        $timer = tx_newspaper_ExecutionTimer::create();
-
-        $s = new InheritanceStructure($this->fixture);
-        $pages = $s->parentS()->getActivePages(); 
-        $from = $pages[0]->getPageZone($this->getAPageZoneType());
-        $to = $this->createPagezoneForInheriting();
-
-        $to->copyExtrasFrom($from);
-        $to->rereadExtras();
-
-        foreach ($from->getExtras() as $extra) {
-            $this->assertTrue(
-                $to->doesContainExtra($extra),
-                "Pagezone " . $to->printableName() . " does not contain " . $extra->getDescription()
-            );
-        }
     }
 
     public function test_changeParentSetsUpInheritanceHierarchy() {
@@ -450,6 +339,117 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
         $this->test_changeParentWithoutParentWithoutExtras();
         echo "<p>test_changeParentSwitchInheritanceOffAndOn()</p>";
         $this->test_changeParentSwitchInheritanceOffAndOn();
+    }
+
+    public function test_removeExtra() {
+        $s = new InheritanceStructure($this->fixture);
+        $extras = $s->parentZ()->getExtrasOf('tx_newspaper_extra_ArticleList');
+        $e = $extras[0];
+        $this->assertTrue($e instanceof tx_newspaper_extra_ArticleList);
+        $s->parentZ()->removeExtra($e);
+        $this->assertFalse($s->parentZ()->doesContainExtra($e));
+        $this->assertFalse($s->childZ()->doesContainExtra($e));
+        $this->assertFalse($s->grandchildZ()->doesContainExtra($e));
+    }
+
+    public function test_insertExtraAfter() {
+        $s = new InheritanceStructure($this->fixture);
+        $lists = $s->parentZ()->getExtrasOf('tx_newspaper_extra_ArticleList');
+        $after = $lists[0];
+        $this->assertTrue(
+            $after instanceof tx_newspaper_extra_ArticleList,
+            "Finding first article list on page zone failed"
+        );
+        $insert = $this->fixture->createExtraToInherit('tx_newspaper_Extra_Textbox');
+        $this->assertFalse(
+            $s->parentZ()->doesContainExtra($insert),
+            "WTF??? page zone contains extra just created."
+        );
+
+        $s->parentZ()->insertExtraAfter($insert, $after->getOriginUid());
+
+        $this->assertTrue(
+            $s->parentZ()->doesContainExtra($insert),
+            "Inserting extra failed"
+        );
+        $this->assertTrue(
+            $this->extraComesBefore($after, $insert, $s->parentZ()),
+            "inserted extra before specified place instead of after"
+        );
+    }
+
+    public function test_insertExtraAfterOnChildren() {
+        $this->makePageZoneHierarchy();
+        $generics = $this->level1->getExtrasOf('tx_newspaper_extra_Generic');
+        $first = $generics[0];
+        $this->assertTrue(
+            $first instanceof tx_newspaper_extra_Generic,
+            "Finding first generic extra on page zone failed" . self::printExtrasWithPosition($this->level1)
+        );
+        $insert = $this->fixture->createExtraToInherit('tx_newspaper_Extra_Textbox');
+        $this->assertFalse(
+            $this->level1->doesContainExtra($insert),
+            "WTF??? page zone contains extra just created."
+        );
+
+        $this->level1->insertExtraAfter($insert, $first->getOriginUid());
+
+        $this->level2->rereadExtras();
+        $this->level3_1->rereadExtras();
+
+        $this->assertTrue(
+            $this->level2->doesContainExtra($insert),
+            "Inserting extra on child zone failed " . self::printExtrasWithPosition($this->level1) . self::printExtrasWithPosition($this->level2) . self::printExtrasWithPosition($this->level3_1) . self::printExtrasWithPosition($this->level3_2)
+        );
+        $this->assertTrue(
+            $this->extraComesBefore($first, $insert, $this->level2),
+            "inserted extra on child zone before specified place instead of after " . self::printExtrasWithPosition($this->level2) .
+                " expected " . self::printExtrasWithPosition($this->level1)
+        );
+        $this->assertTrue(
+            $this->level3_1->doesContainExtra($insert),
+            "Inserting extra on grandchild zone failed " . self::printExtrasWithPosition($this->level3_1)
+        );
+        $this->assertTrue(
+            $this->extraComesBefore($first, $insert, $this->level3_1),
+            "inserted extra on grandchild zone before specified place instead of after " . self::printExtrasWithPosition($this->level3_1) .
+                " expected " . self::printExtrasWithPosition($this->level1)
+        );
+    }
+
+    private static function printExtrasWithPosition(tx_newspaper_PageZone $pz) {
+        return print_r(self::getExtrasWithPosition($pz), 1);
+    }
+
+    private static function getExtrasWithPosition(tx_newspaper_PageZone $pz) {
+        return array_map(
+            'test_PageZone_testcase::extraWithPosition',
+            $pz->getExtras()
+        );
+    }
+
+    private static function extraWithPosition (tx_newspaper_Extra $e) {
+        return $e->getTable() . " (" . $e->getUid() . ")@" . $e->getAttribute('position');
+    }
+
+    public function test_copyExtrasFrom() {
+
+        $timer = tx_newspaper_ExecutionTimer::create();
+
+        $s = new InheritanceStructure($this->fixture);
+        $pages = $s->parentS()->getActivePages(); 
+        $from = $pages[0]->getPageZone($this->getAPageZoneType());
+        $to = $this->createPagezoneForInheriting();
+
+        $to->copyExtrasFrom($from);
+        $to->rereadExtras();
+
+        foreach ($from->getExtras() as $extra) {
+            $this->assertTrue(
+                $to->doesContainExtra($extra),
+                "Pagezone " . $to->printableName() . " does not contain " . $extra->getDescription()
+            );
+        }
     }
 
     public function test_doesContainExtra() {
