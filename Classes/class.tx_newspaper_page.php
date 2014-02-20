@@ -637,6 +637,10 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
         return ($type->getAttribute('is_article')) ? 'tx_newspaper_article' : 'tx_newspaper_pagezone_page';
     }
 
+    /**
+     * @param tx_newspaper_PagezoneType $type
+     * @return tx_newspaper_PageZone_Page
+     */
     private function createNewPagezone(tx_newspaper_PagezoneType $type) {
 
         $pz = tx_newspaper_PageZone_Factory::getInstance()->createNew($this, $type);
@@ -649,6 +653,11 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
         return $pz;
     }
 
+    /**
+     * @param array $record
+     * @param tx_newspaper_PagezoneType $type
+     * @return tx_newspaper_PageZone_Page
+     */
     private static function restorePagezoneFromRecord(array $record, tx_newspaper_PagezoneType $type) {
         tx_newspaper::updateRows(
             'tx_newspaper_pagezone', 'uid=' . $record['pz_uid'],

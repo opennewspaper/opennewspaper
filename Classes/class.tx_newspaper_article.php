@@ -1185,8 +1185,10 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     //    protected functions
     //
     ////////////////////////////////////////////////////////////////////////////
-    /// Find out which tx_newspaper_Page is currently displayed
 
+    protected function getExtraAndPagezone(tx_newspaper_Extra $extra) { return array(); }
+
+    /// Find out which tx_newspaper_Page is currently displayed
     /** Uses \c $_GET to find out which tx_newspaper_PageType is requested on
      *  the current tx_newspaper_Section.
      *

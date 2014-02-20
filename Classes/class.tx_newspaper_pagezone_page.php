@@ -553,6 +553,37 @@ class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
         return $this->addInheritingPagezonesDownTheHierarchy($hierarchy);
     }
 
+
+    protected function getExtraAndPagezone(tx_newspaper_Extra $extra) {
+
+        if (!self::$debug_lots_of_crap) return array();
+
+        return array(
+            tx_newspaper_DB::getInstance()->selectRows(
+                'tx_newspaper_extra.uid, tx_newspaper_extra.crdate, tx_newspaper_extra.cruser_id, tx_newspaper_extra.position, tx_newspaper_extra.origin_uid, tx_newspaper_extra.show_extra,
+                 tx_newspaper_extra.extra_table, tx_newspaper_extra.extra_uid,
+                 tx_newspaper_pagezone_page.crdate AS pagezone_date, tx_newspaper_pagezone_page.cruser_id AS pagezone_user,
+                 tx_newspaper_pagezonetype.type_name,
+                 tx_newspaper_pagetype.type_name,
+                 tx_newspaper_section.section_name',
+                'tx_newspaper_extra
+                 JOIN tx_newspaper_pagezone_page_extras_mm ON tx_newspaper_extra.uid                     =  tx_newspaper_pagezone_page_extras_mm.uid_foreign
+                 JOIN tx_newspaper_pagezone_page           ON tx_newspaper_pagezone_page.uid             = tx_newspaper_pagezone_page_extras_mm.uid_local
+                 JOIN tx_newspaper_pagezonetype            ON tx_newspaper_pagezone_page.pagezonetype_id = tx_newspaper_pagezonetype.uid
+                 JOIN tx_newspaper_pagezone                ON tx_newspaper_pagezone.pagezone_uid         = tx_newspaper_pagezone_page.uid
+                 JOIN tx_newspaper_page                    ON tx_newspaper_pagezone.page_id              = tx_newspaper_page.uid
+                 JOIN tx_newspaper_pagetype                ON tx_newspaper_page.pagetype_id              = tx_newspaper_pagetype.uid
+                 JOIN tx_newspaper_section                 ON tx_newspaper_page.section                  = tx_newspaper_section.uid',
+                'tx_newspaper_extra.extra_table = "' . $extra->getAttribute('extra_table') . '"
+                 AND tx_newspaper_extra.extra_uid = ' . $extra->getAttribute('extra_uid') . '
+                 AND tx_newspaper_pagezone.pagezone_table = "tx_newspaper_pagezone_page"
+                 AND tx_newspaper_pagezone_page.uid = ' . $this->getUid() . ' OR tx_newspaper_pagezone_page.uid = ' . $this->getParentForPlacement()->getUid()
+            ),
+            array_slice(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS), 1, 5)
+        );
+    }
+
+
     /// Reads page zones which have been explicitly set to inherit from \c $this.
     private function getExplicitlyInheritingPagezoneHierarchy() {
 
