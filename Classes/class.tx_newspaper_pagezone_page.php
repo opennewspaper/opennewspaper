@@ -584,6 +584,19 @@ class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
     }
 
 
+    /** Deduce the $extra_after_which from the parent page(s):
+     *  http://segfault.hal.taz.de/mediawiki/index.php/Vererbung_Bestueckung_Seitenbereiche_(DEV)
+     *  (2.3.1.3 Beispiel - Aenderung Ebene 1, aber Referenzelement wird nicht vererbt)
+     */
+    protected function deduceInsertExtraFromParent($origin_uid) {
+        $parent = $this->getParentForPlacement();
+        if (!$parent instanceof tx_newspaper_PageZone) {
+            throw new tx_newspaper_DoesntInheritException($this, $origin_uid);
+        } else {
+            return $parent->getInsertPosition($origin_uid);
+        }
+    }
+
     /// Reads page zones which have been explicitly set to inherit from \c $this.
     private function getExplicitlyInheritingPagezoneHierarchy() {
 

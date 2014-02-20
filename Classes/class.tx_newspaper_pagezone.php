@@ -627,7 +627,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
      *
      *  @param int $origin_uid The origin_uid of the Extra after which a free place is wanted
      *
-     *  @return int A position value which is halway between the found Extra and the
+     *  @return int A position value which is halfway between the found Extra and the
      *             next Extra
      */
     protected function getInsertPosition($origin_uid) {
@@ -658,14 +658,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
      *  http://segfault.hal.taz.de/mediawiki/index.php/Vererbung_Bestueckung_Seitenbereiche_(DEV)
      *  (2.3.1.3 Beispiel - Aenderung Ebene 1, aber Referenzelement wird nicht vererbt)
      */
-    private function deduceInsertExtraFromParent($origin_uid) {
-        $parent = $this->getParentForPlacement();
-        if (!$parent instanceof tx_newspaper_PageZone) {
-            throw new tx_newspaper_DoesntInheritException($this, $origin_uid);
-        } else {
-            return $parent->getInsertPosition($origin_uid);
-        }
-    }
+    abstract protected function deduceInsertExtraFromParent($origin_uid);
 
     private function shiftPositionOfAllExtras() {
         foreach ($this->getExtras() as $extra) {

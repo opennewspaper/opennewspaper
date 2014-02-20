@@ -1295,6 +1295,14 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     //
     ////////////////////////////////////////////////////////////////////////////
 
+    /** Deduce the $extra_after_which from the parent page(s):
+     *  http://segfault.hal.taz.de/mediawiki/index.php/Vererbung_Bestueckung_Seitenbereiche_(DEV)
+     *  (2.3.1.3 Beispiel - Aenderung Ebene 1, aber Referenzelement wird nicht vererbt)
+     */
+    protected function deduceInsertExtraFromParent($origin_uid) {
+        throw new tx_newspaper_DoesntInheritException($this, $origin_uid);
+    }
+
     /** Check whether to use a specific template set.
      *  This must be done regardless if this is a template used to define
      *  default placements for articles, or an actual article.
