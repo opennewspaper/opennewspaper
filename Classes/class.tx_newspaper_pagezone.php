@@ -248,27 +248,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
     /**
      *  @return tx_newspaper_Page on which the PageZone lies.
      */
-    public function getParentPage() {
-
-        if (!$this->parent_page) {
-            if (!$this->parent_page_id) {
-                $pagezone_record = tx_newspaper::selectOneRow(
-                    'page_id', 'tx_newspaper_pagezone',
-                    'pagezone_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($this->getTable(), 'tx_newspaper_pagezone') .
-                    ' AND pagezone_uid = ' .$this->getUid()
-                );
-                $this->parent_page_id = intval($pagezone_record['page_id']);
-            }
-
-            if ($this->parent_page_id) {
-                $this->parent_page = new tx_newspaper_Page($this->parent_page_id);
-            } else {
-                // that's ok, articles don't have parent pages
-                return null;
-            }
-        }
-        return $this->parent_page;
-    }
+    abstract public function getParentPage();
 
     /**
      *  dummy function, soon to be removed (as soon as all refernences to this function from inside this class are cleared up)
@@ -463,11 +443,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
         $this->pagezonetype = $type;
     }
 
-
-    public function setParentPage(tx_newspaper_Page $parent) {
-        $this->parent_page = $parent;
-        $this->parent_page_id = $parent->getUid();
-    }
 
     public function doesContainExtra(tx_newspaper_Extra $extra, $exact_extra = false) {
         foreach($this->getExtras() as $tested_extra) {
@@ -873,9 +848,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
     protected $extras = array();        ///< array of tx_newspaper_Extra s
     /** @var tx_newspaper_PageZoneType  */
     protected $pagezonetype = null;
-
-    protected $parent_page_id = 0;    ///< UID of the parent Page
-    protected $parent_page = null;    ///< Parent Page object
 
     /// Default Smarty template for HTML rendering
     static protected $defaultTemplate = 'tx_newspaper_pagezone.tmpl';

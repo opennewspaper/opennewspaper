@@ -96,8 +96,8 @@ class tx_newspaper_PageZone_Factory {
             $pagezone->setAttribute('is_template', 1);
         } else {
             $pagezone = new tx_newspaper_PageZone_Page();
+            $pagezone->setParentPage($page);
         }
-        $pagezone->setParentPage($page);
         $pagezone->setPageZoneType($type);
 
         /*

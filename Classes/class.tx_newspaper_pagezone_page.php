@@ -238,6 +238,37 @@ class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
         $extra->store();
     }
 
+    /**
+     *  @return tx_newspaper_Page on which the PageZone lies.
+     */
+    public function getParentPage() {
+
+        if (!$this->parent_page) {
+            if (!$this->parent_page_id) {
+                $pagezone_record = tx_newspaper::selectOneRow(
+                    'page_id', 'tx_newspaper_pagezone',
+                    'pagezone_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($this->getTable(), 'tx_newspaper_pagezone') .
+                    ' AND pagezone_uid = ' .$this->getUid()
+                );
+                $this->parent_page_id = intval($pagezone_record['page_id']);
+            }
+
+            if ($this->parent_page_id) {
+                $this->parent_page = new tx_newspaper_Page($this->parent_page_id);
+            } else {
+                // that's ok, articles don't have parent pages
+                return null;
+            }
+        }
+        return $this->parent_page;
+    }
+    protected $parent_page_id = 0;    ///< UID of the parent Page
+    protected $parent_page = null;    ///< Parent Page object
+
+    public function setParentPage(tx_newspaper_Page $parent) {
+        $this->parent_page = $parent;
+        $this->parent_page_id = $parent->getUid();
+    }
 
     /**
      *  Get a list of Page Zones to which the inheritance of \p $this can change.

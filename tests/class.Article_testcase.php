@@ -291,8 +291,6 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 		$article = new tx_newspaper_Article();
         $random_string = md5(time());
 
-		if ($this->article->getParentPage()) $article->setParentPage($this->article->getParentPage());
-
 		$article->setAttribute('bodytext', $random_string);
 		$uid = $article->store();
 		$data = tx_newspaper::selectOneRow('*', $article->getTable(), 'uid = ' . $uid);
