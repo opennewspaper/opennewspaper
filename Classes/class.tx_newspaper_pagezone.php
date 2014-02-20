@@ -251,15 +251,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
     abstract public function getParentPage();
 
     /**
-     *  dummy function, soon to be removed (as soon as all refernences to this function from inside this class are cleared up)
-     *  moved to pagezone_page.
-     */
-    public function getParentForPlacement($structure_only = false) {
-        return null;
-    }
-
-
-    /**
      *  Add an extra after the Extra which is on the original page zone as \p $origin_uid
      *  @param tx_newspaper_Extra $insert_extra The new, fully instantiated Extra to insert
      *  @param int $origin_uid UID of \p $insert_extra on the PageZone where it was originally added.
