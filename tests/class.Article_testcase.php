@@ -100,6 +100,39 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
         $this->assertEquals(0, sizeof($this->article->getExtras()));
     }
 
+    public function test_storeHiddenStatusWithHooksComplicatedHideLeavesPublishDate() {
+        try {
+            $temp = $this->createUnpublishedArticle();
+            $saved_attributes = self::createSavedAttributesArray($temp);
+
+            $temp->storeHiddenStatusWithHooksComplicated(true);
+
+            $this->assertEquals(true, $temp->getAttribute('hidden'));
+            $this->compareAllAttributesExceptHiddenAndPublishDate($saved_attributes, $temp);
+            $this->ensureSavedHiddenStatusIs(true, $temp);
+            $this->assertTrue($temp->getAttribute('publish_date') == 0);
+
+        } catch (tx_newspaper_Exception $e) {
+            $this->fail($e->getMessage() . "<br .>\n" . $e->getTraceAsString());
+        }
+    }
+
+    public function test_storeHiddenStatusWithHooksComplicatedShowSetsPublishDate() {
+        try {
+            $temp = $this->createUnpublishedArticle();
+            $saved_attributes = self::createSavedAttributesArray($temp);
+
+            $temp->storeHiddenStatusWithHooksComplicated(false);
+
+            $this->assertEquals(0, $temp->getAttribute('hidden'), "article still hidden");
+            $this->compareAllAttributesExceptHiddenAndPublishDate($saved_attributes, $temp);
+            $this->assertFalse($temp->getAttribute('publish_date') == 0, "publish date is " . $temp->getAttribute('publish_date'));
+
+        } catch (tx_newspaper_Exception $e) {
+            $this->fail($e->getMessage() . "<br .>\n" . $e->getTraceAsString());
+        }
+    }
+
     /**
      *  storeHiddenStatusWithHooks() MUST set the 'hidden' attribute in the
      *  object and the DB.
@@ -107,34 +140,30 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
      *  MUST be set.
      *  it MUST NOT change any other attributes.
      */
-    public function test_storeHiddenStatusWithHooksComplicated() {
-        try{
-        $temp = new tx_newspaper_Article($this->uid);
-        $this->assertTrue($temp->getAttribute('publish_date') == 0);
+    public function test_storeHiddenStatusWithHooksComplicatedShowThenHideSetsPublishDate() {
+        try {
+            $temp = $this->createUnpublishedArticle();
+            $saved_attributes = self::createSavedAttributesArray($temp);
 
-        $saved_attributes = self::createSavedAttributesArray($temp);
+            $temp->storeHiddenStatusWithHooksComplicated(false);
+            $saved_attributes['publish_date'] = $temp->getAttribute('publish_date');
+            $temp->storeHiddenStatusWithHooksComplicated(true);
 
-        $temp->storeHiddenStatusWithHooksComplicated(true);
-        $this->assertEquals(true, $temp->getAttribute('hidden'));
-        $this->compareAllAttributesExceptHiddenAndPublishDate($saved_attributes, $temp);
-        $this->ensureSavedHiddenStatusIs(true, $temp);
-        $this->assertTrue($temp->getAttribute('publish_date') == 0);
-
-        $temp->storeHiddenStatusWithHooksComplicated(false);
-        $this->assertEquals(false, $temp->getAttribute('hidden'));
-        $this->compareAllAttributesExceptHiddenAndPublishDate($saved_attributes, $temp);
-        $this->ensureSavedHiddenStatusIs(false, $temp);
-        $publish_date = $temp->getAttribute('publish_date');
-        $this->assertFalse($publish_date == 0);
-
-        $temp->storeHiddenStatusWithHooksComplicated(true);
-        $this->assertEquals(true, $temp->getAttribute('hidden'));
-        $this->compareAllAttributesExceptHiddenAndPublishDate($saved_attributes, $temp);
-        $this->ensureSavedHiddenStatusIs(true, $temp);
-        $this->assertEquals($publish_date, $temp->getAttribute('publish_date'));
+            $this->assertEquals(true, $temp->getAttribute('hidden'));
+            $this->compareAllAttributesExceptHiddenAndPublishDate($saved_attributes, $temp);
+            $this->assertEquals(
+                $saved_attributes['publish_date'], $temp->getAttribute('publish_date'),
+                "publish date"
+            );
         } catch (tx_newspaper_Exception $e) {
             $this->fail($e->getMessage() . "<br .>\n" . $e->getTraceAsString());
         }
+    }
+
+    private function createUnpublishedArticle() {
+        $temp = new tx_newspaper_Article($this->uid);
+        $this->assertTrue($temp->getAttribute('publish_date') == 0);
+        return $temp;
     }
 
     private static function createSavedAttributesArray(tx_newspaper_Article $temp) {
@@ -149,7 +178,11 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
         foreach ($saved_attributes as $attribute => $value) {
             if ($attribute == 'hidden') continue;
             if ($attribute == 'publish_date') continue;
-            $this->assertEquals($saved_attributes[$attribute], $temp->getAttribute($attribute));
+            if ($attribute == 'tstamp') continue;
+            $this->assertEquals(
+                $saved_attributes[$attribute], $temp->getAttribute($attribute),
+                "$attribute doesn't match"
+            );
         }
     }
 
@@ -640,6 +673,7 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 		array(1, 2),
 		array(-1, 0),
 	);
+
 
 }
 ?>

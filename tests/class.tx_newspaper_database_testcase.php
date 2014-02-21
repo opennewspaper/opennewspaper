@@ -29,6 +29,8 @@ class tx_newspaper_database_testcase extends tx_phpunit_database_testcase {
         if($createFixture) {
             $this->fixture = new tx_newspaper_fixture($this);
         }
+
+         tx_newspaper::clearSaveHooks();
      }
 
     private function getTestDB() {

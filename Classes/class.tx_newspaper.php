@@ -957,6 +957,10 @@ class tx_newspaper  {
         self::$registered_savehooks[] = $class;
     }
 
+    public static function clearSaveHooks() {
+        self::$registered_savehooks = array();
+    }
+
     public static function getRegisteredSaveHooks() {
         return self::$registered_savehooks;
     }
