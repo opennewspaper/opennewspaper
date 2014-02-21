@@ -26,19 +26,78 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
         parent::tearDown();
     }
 
-    public function test_insertExtraAfter() {
-        $extras = $this->article->getExtras();
-        $this->fail("not yet implemented " . print_r($extras, 1));
+    public function test_insertExtraAfterInsertsExtra() {
+        $extra = $this->prepareExtraOnArticle();
+
+        $insert_extra = $this->insertExtraOnArticle($extra->getOriginUid());
+
+        $this->assertEquals(2, sizeof($this->article->getExtras()), "Number of extras on article after insert: " . sizeof($this->article->getExtras()));
+    }
+
+    /**
+     * @return tx_newspaper_Extra
+     */
+    private function prepareExtraOnArticle() {
+        $extra = $this->fixture->createExtraToInherit('tx_newspaper_Extra_Textbox');
+        $this->article->addExtra($extra);
+        $this->assertEquals(1, sizeof($this->article->getExtras()), "Number of extras on article: " . sizeof($this->article->getExtras()));
+        return $extra;
+    }
+
+    private function insertExtraOnArticle($after) {
+        $insert_extra = $this->fixture->createExtraToInherit('tx_newspaper_Extra_Ad');
+        $this->article->insertExtraAfter($insert_extra, $after);
+        return $insert_extra;
+    }
+
+    public function test_insertExtraAfterInsertsCorrectExtra() {
+        $extra = $this->prepareExtraOnArticle();
+
+        $insert_extra = $this->insertExtraOnArticle($extra->getOriginUid());
+
+        $extras = $this->article->getExtrasOf($insert_extra);
+        $this->assertEquals(1, sizeof($extras), "Number of ad extras on article after insert: " . sizeof($extras));
+        $this->assertEquals($insert_extra->getExtraUid(), $extras[0]->getExtraUid());
+    }
+
+    public function test_insertExtraAfterInsertsAfter() {
+        $extra = $this->prepareExtraOnArticle();
+
+        $insert_extra = $this->insertExtraOnArticle($extra->getOriginUid());
+
+        $this->assertTrue(tx_newspaper_fixture::extraComesBefore($extra, $insert_extra, $this->article));
+    }
+
+    public function test_insertExtraAfterAtBeginning() {
+        $extra = $this->prepareExtraOnArticle();
+
+        $insert_extra = $this->insertExtraOnArticle(0);
+
+        $this->assertTrue(tx_newspaper_fixture::extraComesBefore($insert_extra, $extra, $this->article));
     }
 
     public function test_moveExtraAfter() {
-        $extras = $this->article->getExtras();
-        $this->fail("not yet implemented " . print_r($extras, 1));
+        $second = $this->prepareExtraOnArticle();
+        $first = $this->insertExtraOnArticle(0);
+        $this->assertTrue(
+            tx_newspaper_fixture::extraComesBefore($first, $second, $this->article),
+            "Setting up the test failed"
+        );
+
+        $this->article->moveExtraAfter($first, $second->getOriginUid());
+
+        $this->assertTrue(
+            tx_newspaper_fixture::extraComesBefore($second, $first, $this->article),
+            "Moving the extra failed"
+        );
     }
 
     public function test_removeExtra() {
-        $extras = $this->article->getExtras();
-        $this->fail("not yet implemented " . print_r($extras, 1));
+        $extra = $this->prepareExtraOnArticle();
+
+        $this->article->removeExtra($extra);
+
+        $this->assertEquals(0, sizeof($this->article->getExtras()));
     }
 
     /**
@@ -581,6 +640,6 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 		array(1, 2),
 		array(-1, 0),
 	);
-	
+
 }
 ?>

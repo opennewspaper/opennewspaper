@@ -7,6 +7,7 @@
  */
 
 // TODO relative paths so that the IDE can resolve dependencies
+
 require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_pagezone.php');
 require_once('class.fixture.php');
 require_once('class.InheritanceStructure.php');
@@ -47,7 +48,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
         $first = $extras[0];
         $second = $extras[1];
         $this->assertTrue(
-            $this->extraComesBefore($first, $second, $s->parentZ()),
+            tx_newspaper_fixture::extraComesBefore($first, $second, $s->parentZ()),
             "setup wrong: " . print_r(
                 array_map(
                     function(tx_newspaper_Extra $e) { return $e->getDescription() . "@" . $e->getAttribute('position'); },
@@ -63,7 +64,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
         $s->grandchildZ()->rereadExtras();
 
         $this->assertTrue(
-            $this->extraComesBefore($second, $first, $s->parentZ()),
+            tx_newspaper_fixture::extraComesBefore($second, $first, $s->parentZ()),
             "move failed on parent: " .  print_r(
                 array_map(
                     function(tx_newspaper_Extra $e) { return $e->getDescription() . "@" . $e->getAttribute('position'); },
@@ -95,11 +96,11 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
         $this->level3_1->rereadExtras();
 
         $this->assertTrue(
-            $this->extraComesBefore($second, $first, $this->level2),
+            tx_newspaper_fixture::extraComesBefore($second, $first, $this->level2),
             "move failed on child: " . self::printExtrasWithPosition($this->level2) . " expected " . self::printExtrasWithPosition($this->level1)
         );
         $this->assertTrue(
-            $this->extraComesBefore($second, $first, $this->level3_1),
+            tx_newspaper_fixture::extraComesBefore($second, $first, $this->level3_1),
             "move failed on grandchild: " . self::printExtrasWithPosition($this->level3_1) . " expected " . self::printExtrasWithPosition($this->level1)
         );
 
@@ -373,7 +374,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
             "Inserting extra failed"
         );
         $this->assertTrue(
-            $this->extraComesBefore($after, $insert, $s->parentZ()),
+            tx_newspaper_fixture::extraComesBefore($after, $insert, $s->parentZ()),
             "inserted extra before specified place instead of after"
         );
     }
@@ -402,7 +403,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
             "Inserting extra on child zone failed " . self::printExtrasWithPosition($this->level1) . self::printExtrasWithPosition($this->level2) . self::printExtrasWithPosition($this->level3_1) . self::printExtrasWithPosition($this->level3_2)
         );
         $this->assertTrue(
-            $this->extraComesBefore($first, $insert, $this->level2),
+            tx_newspaper_fixture::extraComesBefore($first, $insert, $this->level2),
             "inserted extra on child zone before specified place instead of after " . self::printExtrasWithPosition($this->level2) .
                 " expected " . self::printExtrasWithPosition($this->level1)
         );
@@ -411,7 +412,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
             "Inserting extra on grandchild zone failed " . self::printExtrasWithPosition($this->level3_1)
         );
         $this->assertTrue(
-            $this->extraComesBefore($first, $insert, $this->level3_1),
+            tx_newspaper_fixture::extraComesBefore($first, $insert, $this->level3_1),
             "inserted extra on grandchild zone before specified place instead of after " . self::printExtrasWithPosition($this->level3_1) .
                 " expected " . self::printExtrasWithPosition($this->level1)
         );
@@ -1160,11 +1161,6 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
     private function getAPageZoneType() {
         $pagezonetypes = $this->fixture->getPageZoneTypes();
         return $pagezonetypes[0];
-    }
-
-    private function extraComesBefore(tx_newspaper_Extra $first, tx_newspaper_Extra $second, tx_newspaper_PageZone $zone) {
-        if (!($zone->doesContainExtra($first) && $zone->doesContainExtra($second))) return false;
-        return $first->getAttribute('position') < $second->getAttribute('position');
     }
 
     private function printPageZones(array $zones, $prefix = "") {

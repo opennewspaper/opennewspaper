@@ -49,6 +49,11 @@ class tx_newspaper_fixture {
         $this->createArticles();
     }
 
+    public static function extraComesBefore(tx_newspaper_Extra $first, tx_newspaper_Extra $second, tx_newspaper_PageZone $zone) {
+        if (!($zone->doesContainExtra($first) && $zone->doesContainExtra($second))) return false;
+        return $first->getAttribute('position') < $second->getAttribute('position');
+    }
+
     /** For whatever reason, __destruct is not automatically called when the
      *  unit test is over. This function must be called explicitly to clean up.
      */
