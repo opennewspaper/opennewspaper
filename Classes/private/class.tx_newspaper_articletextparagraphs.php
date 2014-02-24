@@ -121,8 +121,9 @@ class tx_newspaper_ArticleTextParagraphs {
             $sub_paragraphs = explode("\n", $paragraph);
 
             /// Store the pieces in one flat array.
-            foreach ($sub_paragraphs as $sub_paragraph)
+            foreach ($sub_paragraphs as $sub_paragraph) {
                 $paragraphs[] = $sub_paragraph;
+            }
         }
 
         return $paragraphs;

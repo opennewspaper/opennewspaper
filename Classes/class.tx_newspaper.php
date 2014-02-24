@@ -5,17 +5,15 @@ require_once('private/class.tx_newspaper_executiontimer.php');
 require_once('private/class.tx_newspaper_db.php');
 
 /// Utility class which provides static functions. A namespace, so to speak.
-/** Because PHP has introduced namespaces only with PHP 5.3, and we started
- *  development for \c newspaper on 5.2, and also because 5.3 is not yet widely
- *  used, all utility functions for \c newspaper are moved into class tx_newspaper,
- *  which simulates a namespace.
+/** Because PHP has introduced namespaces only with PHP 5.3, and we started development for
+ *  \c newspaper on 5.2, and also because 5.3 is not yet widely used, all utility functions
+ *  for \c newspaper are moved into class tx_newspaper, which simulates a namespace.
  *
- *  \todo Reorder according to functionality (e.g. DB operations, class logic
- * 		etc.)
+ *  \todo Reorder according to functionality (e.g. DB operations, class logic etc.)
  */
 class tx_newspaper  {
 
-    ///	Whether to use Typo3's command- and datamap functions for DB operations
+    /// Whether to use Typo3's command- and datamap functions for DB operations
     /** If this constant is set to true, Typo3 command- or datamap functions are
      *  used wherever appropriate.
      *
@@ -308,7 +306,7 @@ class tx_newspaper  {
 
     /**
      * Get uid to use for internal preview of articles (in production list or placement module)
-     * @return uid of page
+     * @return int uid of page
      */
     public static function getPreviewPageUid() {
         $TSConfig = self::getTSConfig();
@@ -364,11 +362,10 @@ class tx_newspaper  {
     /**
      *  prepends the given absolute path part if path to check is no absolute path
      *
-     *  @param $path2check path to check if it's an absolute path
-     *  @param $absolutePath this path is prepended to $path2check; no
-     * 		check, if this path is absolute
-     *  @return absolute path (either absolute string was prepended or path to
-     * 		check was absolute already); WIN: backslashes are converted to slashes
+     *  @param string $path2check path to check if it's an absolute path
+     *  @param string $absolutePath this path is prepended to $path2check; no check, if this path is absolute
+     *  @return string absolute path (either absolute string was prepended or path to check was absolute already);
+     *      WIN: backslashes are converted to slashes
      *  @todo: throw exception if created path does not exist???
      */
     public static function createAbsolutePath($path2check, $absolutePath) {
@@ -426,7 +423,7 @@ class tx_newspaper  {
             $text = $tidy->repairString($text, array('show-body-only' => true, 'input-encoding' => 'utf8', 'output-encoding' => 'utf8'));
         }
         return $text;
-   	}
+    }
 
 
     /**
@@ -553,10 +550,10 @@ class tx_newspaper  {
      * @return string String with potential XSS stuff removed
      */
     public static function removeXSS($string)	{
-   		require_once(PATH_typo3 . 'contrib/RemoveXSS/RemoveXSS.php');
+        require_once(PATH_typo3 . 'contrib/RemoveXSS/RemoveXSS.php');
         $removeXSS = new RemoveXSS(''); // t3lib_div::makeInstance() can't handle params ...
-   		return $removeXSS->RemoveXSS($string);
-   	}
+        return $removeXSS->RemoveXSS($string);
+    }
 
     /**
      * Let Typo3 convert links in RTE data
@@ -564,16 +561,16 @@ class tx_newspaper  {
      * @return string Converted RTE data
      */
     public static function convertRteField($text) {
-      require_once(PATH_tslib . 'class.tslib_pibase.php');
+        require_once(PATH_tslib . 'class.tslib_pibase.php');
 
-      // prepare some Typo3 frontend object
-      tx_newspaper::buildTSFE();
+        // prepare some Typo3 frontend object
+        tx_newspaper::buildTSFE();
 
-      /** @var $pibase tslib_pibase */
-      $pibase = t3lib_div::makeInstance('tslib_pibase');
-      $pibase->cObj = $GLOBALS['TSFE']->cObj;
+        /** @var $pibase tslib_pibase */
+        $pibase = t3lib_div::makeInstance('tslib_pibase');
+        $pibase->cObj = $GLOBALS['TSFE']->cObj;
 
-      return $pibase->pi_RTEcssText($text);
+        return $pibase->pi_RTEcssText($text);
     }
 
     /**
@@ -624,18 +621,17 @@ class tx_newspaper  {
         // Check session then
         if ($_COOKIE['be_typo_user'] &&
             $row = tx_newspaper_DB::getInstance()->selectZeroOrOneRows(
-                'ses_userid',
-                'be_sessions',
+                'ses_userid', 'be_sessions',
                 'ses_id="' . $_COOKIE['be_typo_user'] . '" AND ses_name="be_typo_user"'
-    )) {
+            )
+        ) {
             // A valid backend session was found
             // So try to read field from DB directly
             tx_newspaper::devlog('sess row', $row);
             if ($row = tx_newspaper_DB::getInstance()->selectZeroOrOneRows(
-                '*',
-                'be_users',
-                'uid=' . intval($row['ses_userid'])
-            ) && isset($row[$field])) {
+                    '*', 'be_users',
+                    'uid=' . intval($row['ses_userid'])
+                ) && isset($row[$field])) {
                 return $row[$field];
             }
         }
@@ -670,40 +666,40 @@ class tx_newspaper  {
    *  \return The lower-cased class name of \p $class (= name of associated
    * 		db table; newspaper convention)
    */
-  public static function getTable($class) {
-    if (is_object($class)) return strtolower(get_class($class));
-    return strtolower($class);
-  }
-
-  /// Get all child classes (but child only, no grand children etc.)
-  /** Basically used to get concrete classes which extend an abstract class
-   *  \param $class_name Name of class to look for child classes
-   *  \return List of child classes
-   */
-  public static function getChildClasses($class_name) {
-      if (!class_exists($class_name)) return array();
-    $class_name = strtolower($class_name);
-    $child_list = array();
-    foreach(get_declared_classes() as $cl) {
-      if (strtolower(get_parent_class($cl)) == $class_name && strtolower($cl) != $class_name)
-        $child_list[] = $cl;
+    public static function getTable($class) {
+        if (is_object($class)) return strtolower(get_class($class));
+        return strtolower($class);
     }
-    return $child_list;
-  }
 
-  /// Check if a given class implements a given interface
-  /** \param $class PHP class to check if it implements \p $interface
-   *  \param $interface PHP interface to check if it is implemented by \p $class
-   *  \return true if given \p $class implentes given \p $interface
-   */
-  public static function classImplementsInterface($class, $interface) {
-    if (!class_exists($class)) return false;
+    /// Get all child classes (but child only, no grand children etc.)
+    /** Basically used to get concrete classes which extend an abstract class
+     *  \param $class_name Name of class to look for child classes
+     *  \return List of child classes
+     */
+    public static function getChildClasses($class_name) {
+        if (!class_exists($class_name)) return array();
+        $class_name = strtolower($class_name);
+        $child_list = array();
+        foreach(get_declared_classes() as $cl) {
+            if (strtolower(get_parent_class($cl)) == $class_name && strtolower($cl) != $class_name)
+                $child_list[] = $cl;
+        }
+        return $child_list;
+    }
 
-    $tmp_impl = class_implements($class);
-    if (isset($tmp_impl[$interface])) return true;
+    /// Check if a given class implements a given interface
+    /** \param $class PHP class to check if it implements \p $interface
+     *  \param $interface PHP interface to check if it is implemented by \p $class
+     *  \return true if given \p $class implentes given \p $interface
+     */
+    public static function classImplementsInterface($class, $interface) {
+        if (!class_exists($class)) return false;
 
-    return false;
-  }
+        $tmp_impl = class_implements($class);
+        if (isset($tmp_impl[$interface])) return true;
+
+        return false;
+    }
 
     ////////////////////////////////////////////////////////////////////////////
 
@@ -725,99 +721,102 @@ class tx_newspaper  {
     }
 
 
-  /// populate \c $GLOBALS['TSFE'] even if we're in the BE
-  /** Thanks to typo3.net user semidark. Function lifted from
-   *  http://www.typo3.net/forum/list/list_post//39975/?tx_mmforum_pi1[page]=&tx_mmforum_pi1[sword]=typolink%20backend%20modules#pid149544
-   */
-  public static function buildTSFE($force = false) {
+    /// populate \c $GLOBALS['TSFE'] even if we're in the BE
+    /** Thanks to typo3.net user semidark. Function lifted from
+     *  http://www.typo3.net/forum/list/list_post//39975/?tx_mmforum_pi1[page]=&tx_mmforum_pi1[sword]=typolink%20backend%20modules#pid149544
+     */
+    public static function buildTSFE($force = false) {
 
-    if (!defined('PATH_tslib')) { // see sysext/cms/tslib/index_ts.php
-      define('PATH_tslib', PATH_typo3 . 'sysext/cms/tslib/');
-    }
-    require_once(PATH_t3lib . 'class.t3lib_timetrack.php');
-    require_once(PATH_t3lib . 'class.t3lib_page.php');
-    require_once(PATH_tslib . 'class.tslib_fe.php');
-    require_once(PATH_tslib . 'class.tslib_content.php');
-    require_once(PATH_tslib . 'class.tslib_pibase.php');
+        /** @var t3lib_timeTrack */
+        global $TT;
+        /** @var tslib_FE */
+        global $TSFE;
 
-    $page_id = self::getPreviewPageUid();
-
-    /* Declare */
-    $temp_TSFEclassName = t3lib_div::makeInstanceClassName('tslib_fe');
-
-      /* Begin */
-    if (!is_object($GLOBALS['TT'])) {
-      $GLOBALS['TT'] = new t3lib_timeTrack;
-      $GLOBALS['TT']->start();
-    }
-
-    if (!is_object($GLOBALS['TSFE']) || $force) {
-      //*** Builds TSFE object
-      $GLOBALS['TSFE'] = new $temp_TSFEclassName($GLOBALS['TYPO3_CONF_VARS'],$page_id,0,0,0,0,0,0);
-
-      //*** Builds sub objects
-      $GLOBALS['TSFE']->tmpl = t3lib_div::makeInstance('t3lib_tsparser_ext');
-      $GLOBALS['TSFE']->sys_page = t3lib_div::makeInstance('t3lib_pageSelect');
-
-      //*** init template
-      $GLOBALS['TSFE']->tmpl->tt_track = 0;// Do not log time-performance information
-      $GLOBALS['TSFE']->tmpl->init();
-
-      $rootLine = $GLOBALS['TSFE']->sys_page->getRootLine($page_id);
-
-      //*** This generates the constants/config + hierarchy info for the template.
-
-      $GLOBALS['TSFE']->tmpl->runThroughTemplates($rootLine,$template_uid);
-      $GLOBALS['TSFE']->tmpl->generateConfig();
-      $GLOBALS['TSFE']->tmpl->loaded=1;
-
-      //*** Get config array and other init from pagegen
-      $GLOBALS['TSFE']->getConfigArray();
-      $GLOBALS['TSFE']->linkVars = ''.$GLOBALS['TSFE']->config['config']['linkVars'];
-
-      if ($GLOBALS['TSFE']->config['config']['simulateStaticDocuments_pEnc_onlyP'])
-      {
-        foreach (t3lib_div::trimExplode(',',$GLOBALS['TSFE']->config['config']['simulateStaticDocuments_pEnc_onlyP'],1) as $temp_p)
-        {
-          $GLOBALS['TSFE']->pEncAllowedParamNames[$temp_p]=1;
+        if (!defined('PATH_tslib')) { // see sysext/cms/tslib/index_ts.php
+            define('PATH_tslib', PATH_typo3 . 'sysext/cms/tslib/');
         }
-      }
-      //*** Builds a cObj
-      $GLOBALS['TSFE']->newCObj();
-    }
-  }
+        require_once(PATH_t3lib . 'class.t3lib_timetrack.php');
+        require_once(PATH_t3lib . 'class.t3lib_page.php');
+        require_once(PATH_tslib . 'class.tslib_fe.php');
+        require_once(PATH_tslib . 'class.tslib_content.php');
+        require_once(PATH_tslib . 'class.tslib_pibase.php');
 
-  /// Get a typolink-compatible URL
-  /** \param  $params Target and optional \c GET parameters. See the TSRef for
-   * 		details, eg. http://typo3.org/documentation/document-library/references/doc_core_tsref/4.1.0/view/5/8/
-   *  \param  $conf Optional TypoScript configuration array, if present. See
-   * 		TSRef.
-   *  \return Generated URL
-   */
-  public static function typolink_url(array $params = array(), array $conf = array()) {
-    $link = self::typolink('', $params, $conf);
-    return $link['href'];
-  }
+        $page_id = self::getPreviewPageUid();
+
+        /* Declare */
+        $temp_TSFEclassName = t3lib_div::makeInstanceClassName('tslib_fe');
+
+          /* Begin */
+        if (!is_object($TT)) {
+            $TT = new t3lib_timeTrack;
+            $TT->start();
+        }
+
+        if (!is_object($TSFE) || $force) {
+            //*** Builds TSFE object
+            $TSFE = new $temp_TSFEclassName($GLOBALS['TYPO3_CONF_VARS'],$page_id,0,0,0,0,0,0);
+
+            //*** Builds sub objects
+            $TSFE->tmpl = t3lib_div::makeInstance('t3lib_tsparser_ext');
+            $TSFE->sys_page = t3lib_div::makeInstance('t3lib_pageSelect');
+
+            //*** init template
+            $TSFE->tmpl->tt_track = 0;// Do not log time-performance information
+            $TSFE->tmpl->init();
+
+            $rootLine = $TSFE->sys_page->getRootLine($page_id);
+
+            //*** This generates the constants/config + hierarchy info for the template.
+
+            $TSFE->tmpl->runThroughTemplates($rootLine,$template_uid);
+            $TSFE->tmpl->generateConfig();
+            $TSFE->tmpl->loaded=1;
+
+            //*** Get config array and other init from pagegen
+            $TSFE->getConfigArray();
+            $TSFE->linkVars = ''.$TSFE->config['config']['linkVars'];
+
+            if ($TSFE->config['config']['simulateStaticDocuments_pEnc_onlyP']) {
+                foreach (t3lib_div::trimExplode(',', $TSFE->config['config']['simulateStaticDocuments_pEnc_onlyP'], 1) as $temp_p) {
+                    $TSFE->pEncAllowedParamNames[$temp_p] = 1;
+                }
+            }
+            //*** Builds a cObj
+            $TSFE->newCObj();
+        }
+    }
+
+    /// Get a typolink-compatible URL
+    /** @param array $params Target and optional \c GET parameters. See the TSRef for
+     *      details, eg. http://typo3.org/documentation/document-library/references/doc_core_tsref/4.1.0/view/5/8/
+     *  @param array $conf Optional TypoScript configuration array, if present. See
+     *        TSRef.
+     *  @return string Generated URL
+     */
+    public static function typolink_url(array $params = array(), array $conf = array()) {
+        $link = self::typolink('', $params, $conf);
+        return $link['href'];
+    }
 
     ////////////////////////////////////////////////////////////////////////////
 
-  /// \return array [key]=value if $key is found in config file, emtpy array else
-  public static function getNewspaperConfig($key) {
+    /// \return array [key]=value if $key is found in config file, emtpy array else
+    public static function getNewspaperConfig($key) {
 
-    if (!self::$newspaperConfig) {
-      $newspaper_config_file = t3lib_extMgm::extPath('newspaper') . '/newspaper.conf';
-          if (is_readable($newspaper_config_file)) {
-              self::$newspaperConfig = parse_ini_file($newspaper_config_file);
-          }
+        if (!self::$newspaperConfig) {
+            $newspaper_config_file = t3lib_extMgm::extPath('newspaper') . '/newspaper.conf';
+            if (is_readable($newspaper_config_file)) {
+                self::$newspaperConfig = parse_ini_file($newspaper_config_file);
+            }
+        }
+
+        if (isset(self::$newspaperConfig[$key])) {
+            return array($key => self::$newspaperConfig[$key]);
+        }
+
+        return array();
+
     }
-
-    if (isset(self::$newspaperConfig[$key])) {
-      return array($key => self::$newspaperConfig[$key]);
-    }
-
-    return array();
-
-  }
 
     /// checks if a string starts with a specific text
     /** @param $haystack string to search
@@ -839,26 +838,26 @@ class tx_newspaper  {
     }
 
 
-  /// Get a list of all the attributes/DB fields an object (or class) has
-  /** \param $object An object of the desired class, or the class name as string
-   *  \return The list of attributes
-   */
-  public static function getAttributes($object) {
-    global $TCA;
-    $object = self::getTable($object);
-    t3lib_div::loadTCA($object);
-    return array_keys($TCA[$object]['columns']);
-  }
+    /// Get a list of all the attributes/DB fields an object (or class) has
+    /** \param $object An object of the desired class, or the class name as string
+     *  \return The list of attributes
+     */
+    public static function getAttributes($object) {
+        global $TCA;
+        $object = self::getTable($object);
+        t3lib_div::loadTCA($object);
+        return array_keys($TCA[$object]['columns']);
+    }
 
-  /// The \c GET parameter which determines the article UID
-  public static function GET_article() {
-    return self::article_get_parameter;
-  }
+    /// The \c GET parameter which determines the article UID
+    public static function GET_article() {
+        return self::article_get_parameter;
+    }
 
-  ///	The \c GET parameter which determines which page type is displayed
-  public static function GET_pagetype() {
-    return self::pagetype_get_parameter;
-  }
+    /// The \c GET parameter which determines which page type is displayed
+    public static function GET_pagetype() {
+        return self::pagetype_get_parameter;
+    }
 
     /// Get the tx_newspaper_Section object of the page currently displayed
     /** Currently, that means it returns the tx_newspaper_Section record which lies on the current Typo3 page.
@@ -1002,34 +1001,32 @@ class tx_newspaper  {
      */
     private function __construct() { }
 
-  /// Create a HTML link with text and URL using the \c typolink() API function
-  /** \param  $text the text to be displayed
-   *  \param  $params target and optional \c GET parameters as parameter => value
-   *  \param  $conf optional TypoScript configuration array
-   *  \return array ['text'], ['href']
-   */
+    /// Create a HTML link with text and URL using the \c typolink() API function
+    /** \param  $text the text to be displayed
+     *  \param  $params target and optional \c GET parameters as parameter => value
+     *  \param  $conf optional TypoScript configuration array
+     *  \return array ['text'], ['href']
+     */
     private static function typolink($text, array $params = array(), array $conf = array()) {
-    if (TYPO3_MODE == 'BE') {
-      self::buildTSFE();
-      if (!is_object($GLOBALS['TSFE']) || !($GLOBALS['TSFE'] instanceof tslib_fe)) {
-        throw new tx_newspaper_Exception('Tried to generate a typolink in the BE. Could not instantiate $GLOBALS[TSFE]. Have to give up, sorry.');
-      }
+        if (TYPO3_MODE == 'BE') {
+            self::buildTSFE();
+            if (!is_object($GLOBALS['TSFE']) || !($GLOBALS['TSFE'] instanceof tslib_fe)) {
+                throw new tx_newspaper_Exception('Tried to generate a typolink in the BE. Could not instantiate $GLOBALS[TSFE]. Have to give up, sorry.');
+            }
+        }
+
+        self::makeLocalCObj();
+
+        self::flattenParamsArray($params);
+
+        $temp_conf = self::makeTSConfForTypolink($params, $conf);
+
+        //  call typolink_URL() and return data
+        return array(
+            'text' => $text,
+            'href' => self::$local_cObj->typolink_URL($temp_conf)
+        );
     }
-
-    self::makeLocalCObj();
-
-    self::flattenParamsArray($params);
-
-    $temp_conf = self::makeTSConfForTypolink($params, $conf);
-
-      //	call typolink_URL() and return data
-      $data = array(
-      'text' => $text,
-        'href' => self::$local_cObj->typolink_URL($temp_conf)
-      );
-
-    return $data;
-  }
 
     ///  A tslib_cObj object is needed to call the typolink_URL() function
     private static function makeLocalCObj() {
