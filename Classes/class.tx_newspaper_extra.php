@@ -634,7 +634,8 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface, tx_newspap
     }
 
     /// Get sorted list of registered tx_newspaper_Extra classes.
-    /** \return Array with (registered) Extra objects (\em not class names).
+    /**
+     *  @return tx_newspaper_Extra[] Array with (registered) Extra objects (\em not class names).
      */
     static public function getRegisteredExtras() {
 
