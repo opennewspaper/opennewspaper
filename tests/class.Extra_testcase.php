@@ -150,7 +150,7 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
     }
 
     public function test_relateExtra2Article() {
-        $article_uid = 1;
+        $article_uid = $this->fixture->getArticleUid();
         $article = new tx_newspaper_Article($article_uid);
         foreach($this->extras_to_test as $extra_class) {
             /// create a new extra, call relateExtra2Article() on a known article
@@ -203,15 +203,28 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
     public function test_getTable() {
         foreach(array_merge($this->extras_to_test,
                             $this->extras_to_test_additionally) as $extra_class) {
-            $temp = new $extra_class(1);
+            $temp = new $extra_class($this->getFirstExtraUid($extra_class));
             $this->assertEquals(strtolower($extra_class), $temp->getTable());
         }
     }
+    private static function getFirstExtraUid($table) {
+        $records = tx_newspaper_DB::getInstance()->selectRows(
+            'extra_uid',  'tx_newspaper_extra',  'NOT hidden AND NOT deleted', 
+            '',  'extra_uid ASC',  '1'
+        );
+        return $records[0]['extra_uid'];
+    }
 
     public function test_createExtraRecord() {
+        
+        $new_extra = new $this->extra_table_to_create_superobject_for;
+        $new_extra->store();
+        $extra_uid_to_create_superobject_for = $new_extra->getUid();
+        $this->assertTrue($extra_uid_to_create_superobject_for > 0,  "UID is zero");
+
         /// test whether the function runs at all
         tx_newspaper_Extra::createExtraRecord(
-            $this->extra_uid_to_create_superobject_for,
+            $extra_uid_to_create_superobject_for,
             $this->extra_table_to_create_superobject_for
         );
 
@@ -220,18 +233,18 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
             'uid',
             $this->extras_table,
             'extra_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($this->extra_table_to_create_superobject_for, $this->extras_table) .
-            ' AND extra_uid = ' . intval($this->extra_uid_to_create_superobject_for)
+            ' AND extra_uid = ' . intval($extra_uid_to_create_superobject_for)
         );
         $this->assertTrue($row['uid'] > 0);
 
         /// delete the record from the extra table and check it it really is created anew
         $GLOBALS['TYPO3_DB']->exec_DELETEquery($this->extras_table,
             'extra_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($this->extra_table_to_create_superobject_for, $this->extras_table) .
-            ' AND extra_uid = ' . intval($this->extra_uid_to_create_superobject_for));
+            ' AND extra_uid = ' . intval($extra_uid_to_create_superobject_for));
         /// \todo if i were pedantic, i'd check wheter deletion has really succeeded...
 
         tx_newspaper_Extra::createExtraRecord(
-            $this->extra_uid_to_create_superobject_for,
+            $extra_uid_to_create_superobject_for,
             $this->extra_table_to_create_superobject_for
         );
 
@@ -240,7 +253,7 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
             'uid',
             $this->extras_table,
             'extra_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($this->extra_table_to_create_superobject_for, $this->extras_table) .
-            ' AND extra_uid = ' . intval($this->extra_uid_to_create_superobject_for)
+            ' AND extra_uid = ' . intval($extra_uid_to_create_superobject_for)
         );
         $this->assertTrue($row['uid'] > 0);
 
