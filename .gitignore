@@ -2,4 +2,7 @@
 .settings
 .buildpath
 .idea
+.kdev4
+*.kdev4
+doc/html
 
