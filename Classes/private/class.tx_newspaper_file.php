@@ -60,6 +60,7 @@ class tx_newspaper_File {
 class tx_newspaper_Debug {
 
     public static function w($text, $filename = '/tmp/debug.out') {
+        if (is_array($text) || is_object($text)) $text = print_r($text, 1);
         $file = new tx_newspaper_File($filename);
         $file->write("$text\n");
     }
