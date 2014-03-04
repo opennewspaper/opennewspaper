@@ -115,8 +115,8 @@ DESC' : 'tx_newspaper_article.tstamp DESC',
     /**
      * Get default filter value for role
      * Either current role (editor or duty editor) of TSConfig setting:
-     * newspaper.productionList.defaultFilterRole = all|editor|dutyeditor|pool|none
-     * newspaper.articleBrowser.defaultFilterRole = all|editor|dutyeditor|pool|none
+     * newspaper.productionList.defaultFilterRole = all|editor|dutyeditor|pool|approval|none
+     * newspaper.articleBrowser.defaultFilterRole = all|editor|dutyeditor|pool|approval|none
      * @return int Role dropdown default value
      */
     private function getDefaultRoleFilter() {
@@ -139,6 +139,9 @@ DESC' : 'tx_newspaper_article.tstamp DESC',
                         break;
                     case 'pool':
                         return 2;
+                        break;
+                    case 'approval':
+                        return 3;
                         break;
                     case 'none':
                         return 1000;
@@ -306,6 +309,7 @@ DESC' : 'tx_newspaper_article.tstamp DESC',
 		$role[NP_ACTIVE_ROLE_EDITORIAL_STAFF] = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_editorialstaff', false);
 		$role[NP_ACTIVE_ROLE_DUTY_EDITOR] = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_dutyeditor', false);
 		$role[NP_ACTIVE_ROLE_POOL] = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_pool', false);
+		$role[NP_ACTIVE_ROLE_APPROVAL] = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_approval', false);
 		$role[NP_ACTIVE_ROLE_NONE] = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_none', false);
 		return $role;
 	}
