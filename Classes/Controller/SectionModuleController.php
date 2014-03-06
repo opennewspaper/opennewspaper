@@ -369,17 +369,35 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
 
         $new_parent = new tx_newspaper_Section($this->module_request['parent_section']);
 
-        $section->setAttribute('parent_section', $new_parent->getUid());
+        tx_newspaper_Section::disableAttributeCache();
+        $section->setParentSection($new_parent);
+        tx_newspaper_PageZone::invalidateParentsCache();
+
+        foreach ($section->getActivePages() as $page) {
+            if ($inheritor_page = $new_parent->getSubPage($page->getPageType())) {
+                foreach ($page->getPageZones() as $pagezone) {
+                    if ($inheritor_pagezone = $inheritor_page->getPageZone($pagezone->getPageZoneType())) {
+                        $pagezone->changeParent(0);
+                    } else {
+                       tx_newspaper_Debug::w('owie, ow, ow: pagezone active in inheriting page not present in new parent. i will deal with that shit later.');
+                    }
+                }
+            } else {
+                tx_newspaper_Debug::w('ow, ow, ow: page active in inheriting section not present in new parent. i will deal with that shit later.');
+            }
+        }
 
         tx_newspaper_DB::getInstance()->updateRows(
             'pages', 'uid = ' . $section->getTypo3PageID(),
             array('pid' => $new_parent->getTypo3PageID())
         );
 
-        $this->flashMessageContainer->add(
-            $old_parent->getFormattedRootline() . ' -> ' . $new_parent->getFormattedRootline(),
-            $GLOBALS['LANG']->sL('LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.parent_section_changed')
-        );
+        if ($this->flashMessageContainer instanceof Tx_Extbase_MVC_Controller_FlashMessages) {
+            $this->flashMessageContainer->add(
+                $old_parent->getFormattedRootline() . ' -> ' . $new_parent->getFormattedRootline(),
+                $GLOBALS['LANG']->sL('LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.parent_section_changed')
+            );
+        }
     }
 
     private function changeArticleListType(tx_newspaper_Section &$section) {
@@ -402,7 +420,7 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
         $section->setAttribute('default_articletype', intval($this->module_request['default_articletype']));
         $old_type = new tx_newspaper_ArticleType($old_article_type_id);
         $new_type = new tx_newspaper_ArticleType($this->module_request['default_articletype']);
-        $this->flashMessageContainer->add(
+        if ($this->flashMessageContainer) $this->flashMessageContainer->add(
             $old_type->getAttribute('title') . ' -> ' . $new_type->getAttribute('title'),
             $GLOBALS['LANG']->sL('LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.default_type_changed')
         );

@@ -45,16 +45,16 @@ require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_articlel
  */
 class tx_newspaper_ArticleList_Manual extends tx_newspaper_ArticleList {
 
-	/// SQL table storing the relations between list and articles
-	const mm_table = 'tx_newspaper_articlelist_manual_articles_mm';
-	const article_table = 'tx_newspaper_article';
+    /// SQL table storing the relations between list and articles
+    const mm_table = 'tx_newspaper_articlelist_manual_articles_mm';
+    const article_table = 'tx_newspaper_article';
 
-	/// Returns a number of tx_newspaper_Article s from the list
-	/** @param $number Number of Articles to return
-	 *  @param $start Index of first Article to return (starts with 0)
-	 *  @return tx_newspaper_Article[] The \p $number Articles starting with \p $start
-	 */
-	public function getArticles($number, $start = 0) {
+    /// Returns a number of tx_newspaper_Article s from the list
+    /** @param $number Number of Articles to return
+     *  @param $start Index of first Article to return (starts with 0)
+     *  @return tx_newspaper_Article[] The \p $number Articles starting with \p $start
+     */
+    public function getArticles($number, $start = 0) {
 /*
 SELECT tx_newspaper_articlelist_manual_articles_mm.uid_foreign
 FROM tx_newspaper_articlelist_manual_articles_mm
@@ -63,41 +63,41 @@ WHERE
 uid_local = ${articlelist_uid} AND hidden = 0
 ORDER BY sorting ASC
 LIMIT 0, 10
- */				
+ */                
 
         $timer = tx_newspaper_ExecutionTimer::create("Manual ArticleList(" . $this->getUid() . ")::getArticles($number)");
 
-		$results = tx_newspaper::selectRows(
-				$this->select_method_strategy->fieldsToSelect(),
-				self::mm_table . 
-					' JOIN ' . self::article_table . 
-					' ON ' . self::mm_table . '.uid_foreign = ' . self::article_table . '.uid',
-				'uid_local = ' . intval($this->getUid()) . 
-					tx_newspaper::enableFields(self::article_table),
-				'',
-				self::mm_table . '.sorting ASC',
-				"$start, $number"
-		);
-		
-		$articles = array();
-		foreach ($results as $row) {
+        $results = tx_newspaper::selectRows(
+            $this->select_method_strategy->fieldsToSelect(),
+            self::mm_table . 
+                ' JOIN ' . self::article_table . 
+                ' ON ' . self::mm_table . '.uid_foreign = ' . self::article_table . '.uid',
+            'uid_local = ' . intval($this->getUid()) . 
+                tx_newspaper::enableFields(self::article_table),
+            '',
+            self::mm_table . '.sorting ASC',
+            "$start, $number"
+        );
+        
+        $articles = array();
+        foreach ($results as $row) {
             $articles[] = $this->select_method_strategy->createArticle($row);
-		}
-		
-		return $articles;
-	}
+        }
+        
+        return $articles;
+    }
 
-	function assembleFromUIDs(array $uids) {
+    function assembleFromUIDs(array $uids) {
 
         $timer = tx_newspaper_ExecutionTimer::create();
 
-		$this->clearList();
+        $this->clearList();
 
         $this->writeArrayOfUIDsToList($uids);
 
         $this->callSaveHooks();
 
-	}
+    }
 
     private function writeArrayOfUIDsToList($uids) {
 
@@ -107,7 +107,7 @@ LIMIT 0, 10
             if (!intval($uids[$i])) {
                 throw new tx_newspaper_InconsistencyException(
                     'Manual article list needs UID array to consist of integers,
-					 but no int was given: ' . $uids[$i]
+                     but no int was given: ' . $uids[$i]
                 );
             }
 
@@ -123,43 +123,43 @@ LIMIT 0, 10
     }
 
     public function insertArticleAtPosition(tx_newspaper_ArticleIface $article, $pos = 0) {
-		$this->deleteArticle ($article);
+        $this->deleteArticle ($article);
 
         $ids = array();
-		foreach ($this->getArticles($this->getAttribute('num_articles')) as $i => $present_article) {
-			if ($i >= $pos) {
+        foreach ($this->getArticles($this->getAttribute('num_articles')) as $i => $present_article) {
+            if ($i >= $pos) {
                 $ids[] = $present_article->getUid();
             }
         }
 
-		tx_newspaper::updateRows(
-		    self::mm_table,
-			'uid_local = ' . intval($this->getUid()) .
-			' AND uid_foreign IN (' . join(', ', $ids) .')',
-			array ('sorting' => 'sorting + 1')
-		);
+        tx_newspaper::updateRows(
+            self::mm_table,
+            'uid_local = ' . intval($this->getUid()) .
+            ' AND uid_foreign IN (' . join(', ', $ids) .')',
+            array ('sorting' => 'sorting + 1')
+        );
 
-		tx_newspaper::insertRows(
-			self::mm_table,
-			array(
-				'uid_local' =>  intval($this->getUid()),
-				'uid_foreign' => $article->getUid(),
-				'sorting' => $pos+1
-			)
-		);
-	}
+        tx_newspaper::insertRows(
+            self::mm_table,
+            array(
+                'uid_local' =>  intval($this->getUid()),
+                'uid_foreign' => $article->getUid(),
+                'sorting' => $pos+1
+            )
+        );
+    }
 
-	public function deleteArticle(tx_newspaper_ArticleIface $article) {
-		tx_newspaper::deleteRows(
-			self::mm_table,
-			'uid_local = ' . intval($this->getUid()) .
-				' AND uid_foreign = ' . $article->getUid()
-		);
-	}
+    public function deleteArticle(tx_newspaper_ArticleIface $article) {
+        tx_newspaper::deleteRows(
+            self::mm_table,
+            'uid_local = ' . intval($this->getUid()) .
+                ' AND uid_foreign = ' . $article->getUid()
+        );
+    }
 
-	public function moveArticle(tx_newspaper_ArticleIface $article, $offset) {
-		$this->insertArticle(max(0, $this->getArticlePosition($article)+$offset));
-	}
+    public function moveArticle(tx_newspaper_ArticleIface $article, $offset) {
+        $this->insertArticle(max(0, $this->getArticlePosition($article)+$offset));
+    }
 
     /**
      *  Find all manual article lists containing a specified article
@@ -174,17 +174,17 @@ LIMIT 0, 10
         return array_map(function(array $record) { return new tx_newspaper_ArticleList_Manual($record['uid_local']); }, $records);
     }
 
-	static public function getModuleName() { return 'np_al_manual'; }
-	
-	///	Remove all articles from the list.
-	protected function clearList() {
+    static public function getModuleName() { return 'np_al_manual'; }
+    
+    ///    Remove all articles from the list.
+    protected function clearList() {
         $timer = tx_newspaper_ExecutionTimer::create();
 
-		tx_newspaper::deleteRows(self::mm_table,
-								 'uid_local = ' . intval($this->getUid()));
-	}
+        tx_newspaper::deleteRows(self::mm_table,
+                                 'uid_local = ' . intval($this->getUid()));
+    }
 
-	static protected $table = 'tx_newspaper_articlelist_manual';	///< SQL table for persistence
+    static protected $table = 'tx_newspaper_articlelist_manual';    ///< SQL table for persistence
 }
 
 tx_newspaper_ArticleList::registerArticleList(new tx_newspaper_ArticleList_Manual());

@@ -38,7 +38,7 @@ class tx_newspaper_Extra_Generic extends tx_newspaper_Extra {
 	}
 
 	public function getDescription() {
-		return $this->getAttribute('short_description');
+		return $this->getAttribute('short_description')? $this->getAttribute('short_description'): "Generic extra";
 	}
 
 	/// title for module

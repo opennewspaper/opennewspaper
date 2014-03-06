@@ -12,6 +12,7 @@ require_once('private/class.tx_newspaper_diff.php');
 define('NP_ACTIVE_ROLE_EDITORIAL_STAFF', 0);
 define('NP_ACTIVE_ROLE_DUTY_EDITOR', 1);
 define('NP_ACTIVE_ROLE_POOL', 2); // German "Halde"
+define('NP_ACTIVE_ROLE_APPROVAL', 3); // German "Abnahme"
 define('NP_ACTIVE_ROLE_NONE', 1000);
 
 
@@ -79,7 +80,7 @@ class tx_newspaper_Workflow {
 function changeWorkflowStatus(role, hidden_status) {
 	role = parseInt(role);
 	hidden_status = parseInt(hidden_status);
-	if (role == ' . NP_ACTIVE_ROLE_EDITORIAL_STAFF . ' || role == ' . NP_ACTIVE_ROLE_DUTY_EDITOR . ' || role == ' . NP_ACTIVE_ROLE_POOL . ' || role == ' . NP_ACTIVE_ROLE_NONE . ') {
+	if (role == ' . NP_ACTIVE_ROLE_EDITORIAL_STAFF . ' || role == ' . NP_ACTIVE_ROLE_DUTY_EDITOR . ' || role == ' . NP_ACTIVE_ROLE_POOL . ' || role == ' . NP_ACTIVE_ROLE_APPROVAL . ' || role == ' . NP_ACTIVE_ROLE_NONE . ') {
 		document.getElementById("workflow_status").value = role; // valid role found
 	}
 	document.getElementById("hidden_status").value = hidden_status;
@@ -97,6 +98,7 @@ function changeWorkflowStatus(role, hidden_status) {
 		$button['revise'] = false;
 		$button['place'] = false; // Not used!
 		$button['pool'] = false;
+		$button['approval'] = false;
 
 		// Hide or publish button is available for every workflow status
 		if (!$hidden) {
@@ -115,6 +117,10 @@ function changeWorkflowStatus(role, hidden_status) {
 //				$button['place'] = tx_newspaper_workflow::isFunctionalityAvailable('place');
                 break;
             case NP_ACTIVE_ROLE_POOL: // Active role: pool (Halde)
+                $button['check'] = true;
+                $button['revise'] = true;
+			break;
+            case NP_ACTIVE_ROLE_APPROVAL: // Active role: approval (Abnahme)
                 $button['check'] = true;
                 $button['revise'] = true;
 			break;
@@ -137,13 +143,19 @@ function changeWorkflowStatus(role, hidden_status) {
         if ($workflow != NP_ACTIVE_ROLE_POOL) {
             $button['pool'] = true;
         }
+        // Always show approval button, if article hasn't been assigned to "approval" already
+        if ($workflow != NP_ACTIVE_ROLE_APPROVAL) {
+            $button['approval'] = true;
+        }
 
 		$html .= self::renderWorkflowButtons($hidden, $button);
 //t3lib_div::devlog('button', 'newspaper', 0, array('hidden' => $hidden, 'workflow' => $workflow, 'button' => $button, 'html' => $html));
 
-        // Add note if article has active role "Pool"
+        // Add note if article has active role "Pool" or "Approval"
         if ($workflow == NP_ACTIVE_ROLE_POOL) {
             $html .= '<span style="text-transform: uppercase;">' . tx_newspaper::getTranslation('label_workflow_pooled_article') . '</span>';
+        } else if ($workflow == NP_ACTIVE_ROLE_APPROVAL) {
+            $html .= '<span style="text-transform: uppercase;">' . tx_newspaper::getTranslation('label_workflow_approval_article') . '</span>';
         }
 
 		return $html;
@@ -197,6 +209,9 @@ function changeWorkflowStatus(role, hidden_status) {
 
         if ($button['pool']) {
       		$content .= self::renderWorkflowButton(NP_ACTIVE_ROLE_POOL, tx_newspaper::getTranslation('label_workflow_pool'), -1, false);
+        }
+        if ($button['approval']) {
+      		$content .= self::renderWorkflowButton(NP_ACTIVE_ROLE_APPROVAL, tx_newspaper::getTranslation('label_workflow_approval'), -1, false);
         }
 
 		return $content;
@@ -477,7 +492,7 @@ function changeWorkflowStatus(role, hidden_status) {
             return true; // Empty setting
         }
 
-        $whiteList = array(NP_ACTIVE_ROLE_EDITORIAL_STAFF, NP_ACTIVE_ROLE_DUTY_EDITOR, NP_ACTIVE_ROLE_POOL, NP_ACTIVE_ROLE_NONE);
+        $whiteList = array(NP_ACTIVE_ROLE_EDITORIAL_STAFF, NP_ACTIVE_ROLE_DUTY_EDITOR, NP_ACTIVE_ROLE_POOL, NP_ACTIVE_ROLE_APPROVAL, NP_ACTIVE_ROLE_NONE);
         for ($i = 0; $i <= sizeof($mayEditSettings); $i++) {
             if (!in_array($mayEditSettings[$i], $whiteList)) {
                 unset($mayEditSettings[$i]);
@@ -541,6 +556,8 @@ function changeWorkflowStatus(role, hidden_status) {
 				return self::canPlaceArticles();
             case 'pool':
                 return true; // Pool is always available
+            case 'approval':
+                return true; // Approval is always available
 		}
 
 		return false;
@@ -568,6 +585,8 @@ function changeWorkflowStatus(role, hidden_status) {
 				return tx_newspaper::getTranslation('label_workflow_role_dutyeditor');
 			case NP_ACTIVE_ROLE_POOL:
 				return tx_newspaper::getTranslation('label_workflow_role_pool');
+			case NP_ACTIVE_ROLE_APPROVAL:
+				return tx_newspaper::getTranslation('label_workflow_role_approval');
 			case NP_ACTIVE_ROLE_NONE:
 				return tx_newspaper::getTranslation('label_workflow_role_none');
 		}

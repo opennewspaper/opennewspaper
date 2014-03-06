@@ -15,38 +15,44 @@ require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_extra.ph
  */
 class tx_newspaper_extra_SectionList extends tx_newspaper_Extra {
 
-	const DEFAULT_NUM_ARTICLES = 10;
+    const DEFAULT_NUM_ARTICLES = 10;
 
-	public function __construct($uid = 0) {
-		if ($uid) {
-			parent::__construct($uid);
-			$this->attributes = $this->readExtraItem($uid, $this->getTable());
-		}
-	}
+    public function __construct($uid = 0) {
+        if ($uid) {
+            parent::__construct($uid);
+            $this->attributes = $this->readExtraItem($uid, $this->getTable());
+        }
+    }
 
-	/** Display articles belonging to the current section.
-	 *
-	 *  Smarty template:
-	 *  \include res/templates/tx_newspaper_extra_sectionlist.tmpl
-	 *
-	 *  \todo make number of articles displayed variable
-	 *  \todo WHat if the current section has no article list? (is this even possible?)
-	 */
+    /** Display articles belonging to the current section.
+     *
+     *  Smarty template:
+     *  \include res/templates/tx_newspaper_extra_sectionlist.tmpl
+     *
+     *  \todo make number of articles displayed variable
+     *  \todo WHat if the current section has no article list? (is this even possible?)
+     */
     public function render($template_set = '') {
 
+        $this->prepare_render($template_set);
+
         try {
-            $this->prepare_render($template_set);
-
             $list = tx_newspaper::getSection()->getArticleList();
-
-            $first = $this->getAttribute('first_article')? $this->getAttribute('first_article')-1: 0;
-            $num = $this->getAttribute('num_articles')? $this->getAttribute('num_articles'): self::DEFAULT_NUM_ARTICLES;
-            $articles = $list->getArticles($num, $first);
         } catch (tx_newspaper_Exception $e) {
             throw new tx_newspaper_ObjectNotFoundException(
                 'tx_newspaper_Section', intval($GLOBALS['TSFE']->page['tx_newspaper_associated_section'])
             );
         }
+
+        $first = $this->getAttribute('first_article')? $this->getAttribute('first_article')-1: 0;
+        $num = $this->getAttribute('num_articles')? $this->getAttribute('num_articles'): self::DEFAULT_NUM_ARTICLES;
+
+        $articles = array_values(
+            array_filter(
+                $list->getArticles($num, $first),
+                function(tx_newspaper_Article $a) { return !($a->getPrimarySection() instanceof tx_newspaper_NullSection); }
+            )
+        );
 
         $this->smarty->assign('articles', $articles);
         $this->smarty->assign('section_id', tx_newspaper::getSection()->getUid());
@@ -57,17 +63,17 @@ class tx_newspaper_extra_SectionList extends tx_newspaper_Extra {
         $rendered = $this->smarty->fetch($this->getSmartyTemplate());
 
         return $rendered;
-	}
+    }
 
-	public function getDescription() {
-		return $this->getAttribute('short_description');
-	}
+    public function getDescription() {
+        return $this->getAttribute('short_description');
+    }
 
-	public static function getModuleName() {
-		return 'np_sect_ls';
-	}
+    public static function getModuleName() {
+        return 'np_sect_ls';
+    }
 
-	public static function dependsOnArticle() { return false; }
+    public static function dependsOnArticle() { return false; }
 
     public static function getRootline() {
         $rootline = tx_newspaper::getSection()->getSectionPath();
