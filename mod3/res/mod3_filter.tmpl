@@ -21,7 +21,7 @@
 		<label>{$LABEL.pagetype}</label>
 
 		<select  onchange="pagezone_type_change(this.value)">
-		{section name=j loop=$ilter}
+        {section name=j loop=$PAGEZONETYPE}
 			{if $PAGEZONETYPE[j]->getUid() == $DATA[i].pagezone_type->getUid()}
 				<option selected="selected"
 			{else}
