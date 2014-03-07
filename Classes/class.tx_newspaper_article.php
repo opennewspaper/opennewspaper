@@ -323,10 +323,24 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     public function setSource(array $source) {
         $this->source = $source;
         foreach ($source as $part) {
-            if ($part instanceof tx_newspaper_Source) {
-                $this->setAttribute('source_object', serialize($part));
-            } else if ($part instanceof tx_newspaper_SourcePath) {
-                $this->setAttribute('source_id', serialize($part));
+            try {
+                if ($part instanceof tx_newspaper_Source) {
+                    $this->setAttribute('source_object', serialize($part));
+                } else if ($part instanceof tx_newspaper_SourcePath) {
+                    $this->setAttribute('source_id', serialize($part));
+                }
+            } catch (Exception $e) {
+                tx_newspaper::devlog(
+                    "exception when setting source",
+                    array(
+                        'Exception' => get_class($e),
+                        'Message' => $e->getMessage(),
+                        'File' => $e->getFile(),
+                        'Line' => $e->getLine()
+                    )
+                );
+                $this->setAttribute('source_object', '');
+                $this->setAttribute('source_id', '');
             }
         }
     }
