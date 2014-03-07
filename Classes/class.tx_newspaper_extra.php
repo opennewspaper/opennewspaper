@@ -269,7 +269,6 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface, tx_newspap
 
     private function setSmartyContext() {
         $pagezone = $this->getPageZone();
-tx_newspaper::devlog('page zone for extra ' . $this->getUid(), $pagezone);
         if ($pagezone instanceof tx_newspaper_PageZone) {
 
             $this->smarty->setPageZoneType($pagezone);

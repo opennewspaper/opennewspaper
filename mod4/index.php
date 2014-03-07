@@ -1368,7 +1368,7 @@ class  tx_newspaper_module4 extends t3lib_SCbase {
         $msg = '';
         $count = 0;
 
-        $role_ids = NP_ACTIVE_ROLE_EDITORIAL_STAFF . ',' . NP_ACTIVE_ROLE_DUTY_EDITOR . ',' . NP_ACTIVE_ROLE_POOL . ',' . NP_ACTIVE_ROLE_NONE;
+        $role_ids = NP_ACTIVE_ROLE_EDITORIAL_STAFF . ',' . NP_ACTIVE_ROLE_DUTY_EDITOR . ',' . NP_ACTIVE_ROLE_POOL . ',' . NP_ACTIVE_ROLE_APPROVAL . ',' . NP_ACTIVE_ROLE_NONE;
 
         $row = tx_newspaper::selectRows(
             'uid,workflow_status',

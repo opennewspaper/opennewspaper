@@ -42,94 +42,100 @@ require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_article.
  *  This class is implemented as a Singleton.
  */
 class tx_newspaper_PageZone_Factory {
-	
-	/** @return tx_newspaper_PageZone_Factory the only instance of the
+    
+    /** @return tx_newspaper_PageZone_Factory the only instance of the
      *  tx_newspaper_PageZone_Factory Singleton
      */
-	public static function getInstance() {
-		if (self::$instance == null) {
-			self::$instance = new tx_newspaper_PageZone_Factory();
-		}
-		return self::$instance;
-	}
-	
-	/// Create a tx_newspaper_PageZone given a UID
-	/** \param $uid UID of the abstract tx_newspaper_PageZone record in DB
-	 *  @return tx_newspaper_PageZone A concrete object of a class derived from tx_newspaper_PageZone
-	 */
-	public function create($uid) {
-		/// Read actual type and UID of the PageZone to instantiate from DB
-		$row = tx_newspaper::selectOneRow(
-			'pagezone_table, pagezone_uid', 'tx_newspaper_pagezone', "uid = $uid"
-		);
-        
-        if (!$row['pagezone_table']) {
-        	throw new tx_newspaper_DBException('No pagezone_table in result', 
-											   $row);
+    public static function getInstance() {
+        if (self::$instance == null) {
+            self::$instance = new tx_newspaper_PageZone_Factory();
         }
-		
-		if (!class_exists($row['pagezone_table'])) {
-        	throw new tx_newspaper_WrongClassException($row['pagezone_table']);
-		}
+        return self::$instance;
+    }
+    
+    /// Create a tx_newspaper_PageZone given a UID
+    /** \param $uid UID of the abstract tx_newspaper_PageZone record in DB
+     *  @return tx_newspaper_PageZone A concrete object of a class derived from tx_newspaper_PageZone
+     */
+    public function &create($uid) {
 
-        if (!$row['pagezone_uid']) {
-        	throw new tx_newspaper_DBException('No pagezone_uid in result', 
-        									   $row);
+        if (!isset(self::$registry[$uid])) {
+            /// Read actual type and UID of the PageZone to instantiate from DB
+            $row = tx_newspaper::selectOneRow(
+                'pagezone_table, pagezone_uid', 'tx_newspaper_pagezone', "uid = $uid"
+            );
+
+            if (!$row['pagezone_table']) {
+                throw new tx_newspaper_DBException('No pagezone_table in result', $row);
+            }
+
+            if (!class_exists($row['pagezone_table'])) {
+                throw new tx_newspaper_WrongClassException($row['pagezone_table']);
+            }
+
+            if (!$row['pagezone_uid']) {
+                throw new tx_newspaper_DBException('No pagezone_uid in result', $row);
+            }
+
+            self::$registry[$uid] = new $row['pagezone_table']($row['pagezone_uid']);
         }
-		
-		return new $row['pagezone_table']($row['pagezone_uid']);
-	}
 
-	///	Create a new PageZone instead reading one from DB
-	/** \todo Check whether a PageZone of type \p $type is already present on
-	 *  page \p $page
-	 */
-	public function createNew(tx_newspaper_Page $page, tx_newspaper_PageZoneType $type) {
-		$pagezone = null;
-		if ($type->getAttribute('is_article')) {
-			$pagezone = new tx_newspaper_Article();
-			$pagezone->setAttribute('is_template', 1);
-		} else {
-			$pagezone = new tx_newspaper_PageZone_Page();
-		}
-		$pagezone->setParentPage($page);
-		$pagezone->setPageZoneType($type);
+        return self::$registry[$uid];
+    }
 
-		/*	store the pagezone and read it from DB again. this is the easiest
-		 *  way to ensure the attributes are consistent in memory.
-		 */
-		$uid = $pagezone->store();
+    public static function clear() { self::$registry = array(); }
 
-		if ($type->getAttribute('is_article')) {
-			$pagezone_reborn = new tx_newspaper_Article($uid);
-		} else {
-			$pagezone_reborn = new tx_newspaper_PageZone_Page($uid);
-		}
+    ///    Create a new PageZone instead reading one from DB
+    /** \todo Check whether a PageZone of type \p $type is already present on
+     *  page \p $page
+     */
+    public function createNew(tx_newspaper_Page $page, tx_newspaper_PageZoneType $type) {
+        $pagezone = null;
+        if ($type->getAttribute('is_article')) {
+            $pagezone = new tx_newspaper_Article();
+            $pagezone->setAttribute('is_template', 1);
+        } else {
+            $pagezone = new tx_newspaper_PageZone_Page();
+        }
+        $pagezone->setParentPage($page);
+        $pagezone->setPageZoneType($type);
 
-		///	copy Extras from appropriate page zone
-		$parent = $pagezone_reborn->getParentForPlacement();
+        /*    store the pagezone and read it from DB again. this is the easiest
+         *  way to ensure the attributes are consistent in memory.
+         */
+        $uid = $pagezone->store();
 
-		if ($parent) {
-			/// copy if parent section exists
-			$pagezone_reborn->copyExtrasFrom($parent);
-		}
+        if ($type->getAttribute('is_article')) {
+            $pagezone_reborn = new tx_newspaper_Article($uid);
+        } else {
+            $pagezone_reborn = new tx_newspaper_PageZone_Page($uid);
+        }
 
-		$pagezone_reborn->store();
+        ///    copy Extras from appropriate page zone
+        $parent = $pagezone_reborn->getParentForPlacement();
 
-		return $pagezone_reborn;
-	}
+        if ($parent) {
+            /// copy if parent section exists
+            $pagezone_reborn->copyExtrasFrom($parent);
+        }
 
-	/// Protected constructor, tx_newspaper_PageZone_Factory cannot be created freely
-	protected function __construct() { }
-	
-	/// Cloning tx_newspaper_PageZone_Factory is prohibited by making __clone private
-	private function __clone() {}
-	
-	// attributes
-	
-	/// The only instance of the tx_newspaper_PageZone_Factory Singleton
-	private static $instance = null;
- 	
+        $pagezone_reborn->store();
+
+        return $pagezone_reborn;
+    }
+
+    /// Protected constructor, tx_newspaper_PageZone_Factory cannot be created freely
+    protected function __construct() { }
+    
+    /// Cloning tx_newspaper_PageZone_Factory is prohibited by making __clone private
+    private function __clone() {}
+    
+    // attributes
+    
+    /// The only instance of the tx_newspaper_PageZone_Factory Singleton
+    private static $instance = null;
+
+    private static $registry = array();
 }
  
 ?>

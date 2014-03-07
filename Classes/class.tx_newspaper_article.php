@@ -773,15 +773,12 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     /**
      *  Get the primary tx_newspaper_Section of a tx_newspaper_Article.
      *
-     *  @return tx_newspaper_Section in which \p $this is displayed by
-     *  	default, if no Section context is given, or \c null.
+     *  @return tx_newspaper_Section in which \p $this is displayed by default, if no Section context is given
      */
     public function getPrimarySection() {
         $sections = $this->getSections(1);
-        if (sizeof($sections) == 0) {
-            return null; // no section found
-        }
-        return $sections[0];
+        if (sizeof($sections)) return $sections[0];
+        return new tx_newspaper_NullSection();
     }
 
     /** @return bool Whether the article is in section $section. */

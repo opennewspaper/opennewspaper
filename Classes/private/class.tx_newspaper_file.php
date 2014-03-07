@@ -44,8 +44,8 @@ class tx_newspaper_File {
 
     private static function checkModeValid($mode) {
         if (strlen($mode) > 2 ||
-            array_search($mode[0], array('r', 'w', 'a', 'x', 'c') === false ||
-            (strlen($mode) == 2) && $mode[1] != '+')) {
+            (array_search($mode[0], array('r', 'w', 'a', 'x', 'c')) === false) ||
+            (strlen($mode) == 2 && $mode[1] != '+')) {
             throw new tx_newspaper_IllegalUsageException(
                 'Unsupported mode for opening a file: ' . $mode
             );
