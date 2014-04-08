@@ -63,6 +63,7 @@ class tx_newspaper_Debug {
     private function __destruct() {
         $file = new tx_newspaper_File($this->filename);
         foreach ($this->lines as $line) $file->write("$line\n");
+        $file->write("\n");
     }
 
     private function write($text) {
