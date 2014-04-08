@@ -235,15 +235,19 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 	private function processExtraMoveAfter($origin_uid, $pz_uid, $extra_uid) {
 		$e = tx_newspaper_Extra_Factory::getInstance()->create(intval($extra_uid));
 		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
-		$pz->moveExtraAfter($e, $origin_uid);
 
-		if ($pz->isConcreteArticle()) {
-			// \todo: Lene, if I don't re-read the pagezone, the new position for the moved extra is not correct (see #564)
+        if ($pz->isConcreteArticle()) {
+            $pz->moveExtraAfter($e, $origin_uid, false); // No inheritance in articles
+            $pz->moveExtraAfter($e, $origin_uid, false); // @todo: Lene, why do I have to call $pz->moveExtraAfter() twice in order to re-sort extra in articles?
+
+			// @todo: Lene, if I don't re-read the pagezone, the new position for the moved extra is not correct (see #564)
 			$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid)); // re-reading the pagezone ...
 			echo tx_newspaper_be::renderBackendPageZone($pz, false, true);
-		}
+        } else {
+            $pz->moveExtraAfter($e, $origin_uid, true); // Inherit recursively
+        }
 
-        tx_newspaper_PageZone::updateDependencyTree($pz);
+//        tx_newspaper_PageZone::updateDependencyTree($pz);
 
         if (!$pz->isConcreteArticle()) {
 	        tx_newspaper_workflow::logPlacement('tx_newspaper_pagezone', $pz_uid, array('origin uid' => $origin_uid, 'extra uid' => $extra_uid), NP_WORKLFOW_LOG_PLACEMENT_MOVE_AFTER);
