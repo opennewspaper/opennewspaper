@@ -6,6 +6,8 @@
  * Time: 1:40 PM
  * To change this template use File | Settings | File Templates.
  */
+
+require_once('class.tx_newspaper_debug.php');
  
 class tx_newspaper_File {
 
@@ -54,27 +56,5 @@ class tx_newspaper_File {
 
     private $filename = '';
     private $handle = null;
-
-}
-
-class tx_newspaper_Debug {
-
-    public static function w($text, $filename = '/tmp/debug.out') {
-        $file = new tx_newspaper_File($filename);
-        $file->write("$text\n");
-    }
-
-    public static function backtrace($length = 5) {
-        $lines = array_slice(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS), 0, $length+1);
-        for ($i = 1; $i <= $length; $i++) {
-            self::w(
-                $lines[$i]['class'] . "::" . $lines[$i]['function'] . "() - " . self::file($lines[$i-1]['file']) . " line " . $lines[$i-1]['line']
-            );
-        }
-    }
-
-    private static function file($file, $num_path_segments = 3) {
-        return implode('/', array_slice(explode('/', $file), -$num_path_segments-1));
-    }
 
 }
