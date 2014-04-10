@@ -214,6 +214,7 @@ tx_newspaper_Debug::w('tx_newspaper_DependencyTree::generateFromArticle('.$artic
 
     /// Returns all article pages on which the affected article is shown.
     public function getArticlePages() {
+tx_newspaper_Debug::w("tx_newspaper_DependencyTree::getArticlePages()", tx_newspaper_taz_Savehooks::deptree_debug_log);
 
         if (!$this->article instanceof tx_newspaper_Article) return $this->article_pages;
 
@@ -226,6 +227,7 @@ tx_newspaper_Debug::w('tx_newspaper_DependencyTree::generateFromArticle('.$artic
 
     /// Returns all section pages on which the affected article is shown.
     public function getSectionPages() {
+tx_newspaper_Debug::w("tx_newspaper_DependencyTree::getSectionPages()", tx_newspaper_taz_Savehooks::deptree_debug_log);
 
         if (!$this->article instanceof tx_newspaper_Article) return $this->section_pages;
 
@@ -239,6 +241,7 @@ tx_newspaper_Debug::w('tx_newspaper_DependencyTree::generateFromArticle('.$artic
 
     /// Returns all article pages on which articles related to the affected article are shown.
     public function getRelatedArticlePages() {
+tx_newspaper_Debug::w("tx_newspaper_DependencyTree::getRelatedArticlePages()", tx_newspaper_taz_Savehooks::deptree_debug_log);
 
         if (!$this->article instanceof tx_newspaper_Article) return $this->related_article_pages;
 
@@ -251,6 +254,7 @@ tx_newspaper_Debug::w('tx_newspaper_DependencyTree::generateFromArticle('.$artic
 
     /// Returns all pages which feature an article list displaying the affected article.
     public function getArticlelistPages() {
+tx_newspaper_Debug::w("tx_newspaper_DependencyTree::getArticlelistPages()", tx_newspaper_taz_Savehooks::deptree_debug_log);
 
         if (!$this->article instanceof tx_newspaper_Article) return $this->articlelist_pages;
 
@@ -263,6 +267,7 @@ tx_newspaper_Debug::w('tx_newspaper_DependencyTree::generateFromArticle('.$artic
 
     /// Returns all dossier pages which display a dossier containing the affected article.
     public function getDossierPages() {
+tx_newspaper_Debug::w("tx_newspaper_DependencyTree::getDossierPages()", tx_newspaper_taz_Savehooks::deptree_debug_log);
 
         if (!$this->article instanceof tx_newspaper_Article) return $this->dossier_pages;
 
@@ -363,7 +368,7 @@ tx_newspaper_Debug::w('tx_newspaper_DependencyTree::generateFromArticle('.$artic
         $function = $action['function'];
         $when = $action['when'];
         $debug_function = is_array($function)? implode('::', $function): $function;
-        tx_newspaper_Debug::w("tx_newspaper_DependencyTree::executeActionOnPages($debug_function, $when)", tx_newspaper_taz_Savehooks::deptree_debug_log);
+tx_newspaper_Debug::w("tx_newspaper_DependencyTree::executeActionOnPages($debug_function, $when)", tx_newspaper_taz_Savehooks::deptree_debug_log);
         $pages = array();
 
         if ($when & self::ACT_ON_ARTICLES) $pages = array_merge($pages, $this->getArticlePages());
