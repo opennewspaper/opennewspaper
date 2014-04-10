@@ -1570,8 +1570,7 @@ tx_newspaper_Debug::w('tx_newspaper_article::updateDependencyTree', tx_newspaper
     private static function addPublishDateIfNotSet($id, &$fieldArray) {
         if (!self::articleWasUnhidden($fieldArray)) return;
 
-        $publish_date = self::getAttributeFromFieldArrayOrArticle($fieldArray, $id, 'publish_date');
-        if ($publish_date > 0) {
+        if (self::getAttributeFromFieldArrayOrArticle($fieldArray, $id, 'publish_date') > 0) {
             return; // publish date has been set already
         }
 
