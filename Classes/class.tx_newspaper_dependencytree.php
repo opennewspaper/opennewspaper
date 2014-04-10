@@ -92,6 +92,7 @@ class tx_newspaper_DependencyTree {
      *    called "the affected article".
      */
     static public function generateFromArticle(tx_newspaper_Article $article, array $removed_tags = array(), array $new_attributes = array()) {
+tx_newspaper_Debug::w('tx_newspaper_DependencyTree::generateFromArticle('.$article->getUid().')', tx_newspaper_taz_Savehooks::deptree_debug_log);
 
         $tree = self::create();
         $tree->setArticle($article);
@@ -199,6 +200,7 @@ class tx_newspaper_DependencyTree {
 
     /// Executes the registered actions on all pages in the tree for which they are registered.
     public function executeActionsOnPages($key = '') {
+        tx_newspaper_Debug::w("tx_newspaper_DependencyTree::executeActionsOnPages($key)", tx_newspaper_taz_Savehooks::deptree_debug_log);
         if ($key) {
             if (isset(self::$registered_actions[$key])) {
                 $this->executeActionOnPages(self::$registered_actions[$key]);
@@ -360,6 +362,8 @@ class tx_newspaper_DependencyTree {
 
         $function = $action['function'];
         $when = $action['when'];
+        $debug_function = is_array($function)? implode('::', $function): $function;
+        tx_newspaper_Debug::w("tx_newspaper_DependencyTree::executeActionOnPages($debug_function, $when)", tx_newspaper_taz_Savehooks::deptree_debug_log);
         $pages = array();
 
         if ($when & self::ACT_ON_ARTICLES) $pages = array_merge($pages, $this->getArticlePages());

@@ -84,6 +84,7 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook, t3lib
 
 	/** \todo some documentation would be nice ;-) */
 	function processDatamap_postProcessFieldArray($status, $table, $id, array &$fieldArray, t3lib_TCEmain $that) {
+tx_newspaper_Debug::w('tx_newspaper_Typo3Hook::processDatamap_postProcessFieldArray', tx_newspaper_taz_Savehooks::deptree_debug_log);
 
         $timer = tx_newspaper_ExecutionTimer::create();
 

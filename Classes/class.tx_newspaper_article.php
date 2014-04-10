@@ -1022,6 +1022,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
     public static function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $that) {
         $timer = tx_newspaper_ExecutionTimer::create();
+tx_newspaper_Debug::w('tx_newspaper_article::processDatamap_postProcessFieldArray', tx_newspaper_taz_Savehooks::deptree_debug_log);
 
         if (!self::isValidForSavehook($table, $id)) return;
 
@@ -1191,6 +1192,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
     public static function updateDependencyTree(tx_newspaper_Article $article, array $field_array = array()) {
         if (tx_newspaper_DependencyTree::useDependencyTree()) {
+tx_newspaper_Debug::w('tx_newspaper_article::updateDependencyTree', tx_newspaper_taz_Savehooks::deptree_debug_log);
             $tags = self::getRemovedTags($article);
             $tree = tx_newspaper_DependencyTree::generateFromArticle($article, $tags, $field_array);
             $tree_proxy = new tx_newspaper_DependencyTreeProxy($tree);
