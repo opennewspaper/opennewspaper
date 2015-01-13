@@ -384,8 +384,13 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 		$e = tx_newspaper_Extra_Factory::getInstance()->create(intval($extra_uid));
 		switch(strtolower($type)) {
 			case 'para':
-				$e->setAttribute('position', 0); // move as first element to new paragraph
-				$pz->changeExtraParagraph($e, intval($value)); // change paragraph (and inherit the change); this function stores the extra (so the position change is stored there)
+                // para = paragraph is defined for articles only
+                if ($e->getAttribute('paragraph') != intval($value)) {
+				    $e->setAttribute('position', 0); // move as first element to new paragraph
+                    $e->setAttribute('paragraph', intval($value));
+//				$pz->changeExtraParagraph($e, intval($value)); // change paragraph (and inherit the change); this function stores the extra (so the position change is stored there)
+                    $e->store();
+                }
 			break;
 			case 'notes':
 				$e->setAttribute('notes', $value);
@@ -395,7 +400,7 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 				die('Unknown type when saving field: ' + $type);
 		}
 
-		// re-read pagezone, changeExtraParagraph() does NOT modify the extra paragraph in the pagezone_article object; see correspoding todo
+		// Re-read pagezone, so the changes in to extra are accissible
 		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
 
 		if ($pz->isConcreteArticle()) {
