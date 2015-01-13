@@ -375,31 +375,36 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 		die();
 	}
 
-	private function processSaveExtraField($pz_uid, $extra_uid, $value, $type) {
-		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
-		$e = tx_newspaper_Extra_Factory::getInstance()->create(intval($extra_uid));
-		switch(strtolower($type)) {
-			case 'para':
-				$e->setAttribute('position', 0); // move as first element to new paragraph
-				$pz->changeExtraParagraph($e, intval($value)); // change paragraph (and inherit the change); this function stores the extra (so the position change is stored there)
-			break;
-			case 'notes':
-				$e->setAttribute('notes', $value);
-				$e->store();
-			break;
-			default:
-				die('Unknown type when saving field: ' + $type);
-		}
+    private function processSaveExtraField($pz_uid, $extra_uid, $value, $type) {
+        $pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
+        $e = tx_newspaper_Extra_Factory::getInstance()->create(intval($extra_uid));
+        switch(strtolower($type)) {
+            case 'para':
+                // para = paragraph is defined for articles only
+                if ($e->getAttribute('paragraph') != intval($value)) {
+                    $e->setAttribute('position', 0); // move as first element to new paragraph
+                    $e->setAttribute('paragraph', intval($value));
+//				$pz->changeExtraParagraph($e, intval($value)); // change paragraph (and inherit the change); this function stores the extra (so the position change is stored there)
+                    $e->store();
+                }
+                break;
+            case 'notes':
+                $e->setAttribute('notes', $value);
+                $e->store();
+                break;
+            default:
+                die('Unknown type when saving field: ' + $type);
+        }
 
-		// re-read pagezone, changeExtraParagraph() does NOT modify the extra paragraph in the pagezone_article object; see correspoding todo
-		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
+        // Re-read pagezone, so the changes in to extra are accissible
+        $pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
 
-		if ($pz->isConcreteArticle()) {
-			echo tx_newspaper_be::renderBackendPageZone($pz, false);
-		}
+        if ($pz->isConcreteArticle()) {
+            echo tx_newspaper_be::renderBackendPageZone($pz, false);
+        }
 
-		die();
-	}
+        die();
+    }
 
 	private function processTemplateSetDropdownStore($table, $uid, $value) {
 		$uid = intval($uid);
