@@ -169,7 +169,9 @@ LIMIT 0, 10
      */
     static public function getListsWhichContain(tx_newspaper_Article $article) {
         $records = tx_newspaper_DB::getInstance()->selectRows(
-            'uid_local', 'tx_newspaper_articlelist_manual_articles_mm', 'uid_foreign = ' . $article->getUid()
+            'uid_local',
+            'tx_newspaper_articlelist_manual_articles_mm JOIN tx_newspaper_articlelist_manual ON tx_newspaper_articlelist_manual_articles_mm.uid_local = tx_newspaper_articlelist_manual.uid',
+            'uid_foreign = ' . $article->getUid() . ' AND NOT deleted'
         );
         return array_map(function(array $record) { return new tx_newspaper_ArticleList_Manual($record['uid_local']); }, $records);
     }
