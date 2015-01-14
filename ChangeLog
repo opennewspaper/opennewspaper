@@ -1,3 +1,9 @@
+Version 1.5.2 2015-1-14 Oliver <oliver@schroederbros.de>, Lene <lene.preuss@gmail.com>
+
+	* Oliver: Dropdown "Seitenbereich" in der Seitengestaltung geht wieder - Issue #2175 <https://taz.schroederbros.eu/view.php?id=2175>  - Commit   - Commit 938eb332bf841aca0711366f4b8fb515f6b499d3
+	* Lene: Beim Speichern mancher Artikel erscheint Fehlermeldung Serialization of 'Closure' is not allowed - Commit (Artikel, die in geloeschten ALs enthalten sind) - Issue #2174 <https://taz.schroederbros.eu/view.php?id=2174>  - Commit   - Commit 449397fcb8c0362e8e52178f84b09b11ec515d25
+	* Oliver: Speicherbug bei Extras im Artikel behoben - Issue #2177 <https://taz.schroederbros.eu/view.php?id=2177>  - Commit 489d8f3
+
 (add new changes on top of this file)
 
 08-11-19 Lene Preuss, Oliver Schröder, Samuel Talleux  <lene.preuss@gmail.com, oliver@schroederbros.de, samuel@talleux.de>
