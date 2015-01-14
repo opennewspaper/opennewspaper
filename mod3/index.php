@@ -238,16 +238,11 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 
         if ($pz->isConcreteArticle()) {
             $pz->moveExtraAfter($e, $origin_uid, false); // No inheritance in articles
-            $pz->moveExtraAfter($e, $origin_uid, false); // @todo: Lene, why do I have to call $pz->moveExtraAfter() twice in order to re-sort extra in articles?
-
-			// @todo: Lene, if I don't re-read the pagezone, the new position for the moved extra is not correct (see #564)
-			$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid)); // re-reading the pagezone ...
+            $pz->rereadExtras(); // So modified extras are available for rendering
 			echo tx_newspaper_be::renderBackendPageZone($pz, false, true);
         } else {
             $pz->moveExtraAfter($e, $origin_uid, true); // Inherit recursively
         }
-
-//        tx_newspaper_PageZone::updateDependencyTree($pz);
 
         if (!$pz->isConcreteArticle()) {
 	        tx_newspaper_workflow::logPlacement('tx_newspaper_pagezone', $pz_uid, array('origin uid' => $origin_uid, 'extra uid' => $extra_uid), NP_WORKLFOW_LOG_PLACEMENT_MOVE_AFTER);
@@ -400,8 +395,7 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 				die('Unknown type when saving field: ' + $type);
 		}
 
-		// Re-read pagezone, so the changes in to extra are accissible
-		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
+        $pz->rereadExtras(); // So modified extras are available for rendering
 
 		if ($pz->isConcreteArticle()) {
 			echo tx_newspaper_be::renderBackendPageZone($pz, false);
