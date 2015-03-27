@@ -484,7 +484,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
             $inherit_mode = intval($this->getAttribute('inherits_from'));
             if ($inherit_mode < 0) return null;
             if ($inherit_mode > 0 && self::isHorizontalInheritanceEnabled()) {
-                return tx_newspaper_PageZone_Factory::getInstance()->create($inherit_mode);
+                return new tx_newspaper_PageZone_Page($inherit_mode);
             }
         }
 
