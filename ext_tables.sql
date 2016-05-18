@@ -70,7 +70,7 @@ CREATE TABLE tx_newspaper_article (
     FULLTEXT KEY author_text (author),
     INDEX author (author(64)),
     KEY publish_date(publish_date)
-);
+) ENGINE = MyISAM;
 
 #
 # Table structure for table 'tx_newspaper_article_extras_mm'
@@ -425,7 +425,7 @@ CREATE TABLE tx_newspaper_extra_bio (
     PRIMARY KEY (uid),
     KEY parent (pid),
     FULLTEXT KEY title (author_name,bio_text)
-);
+) ENGINE = MyISAM;
 
 #
 # Table structure for table 'tx_newspaper_extra_combolinkbox'
@@ -647,7 +647,7 @@ CREATE TABLE tx_newspaper_extra_image (
     PRIMARY KEY (uid),
     KEY parent (pid),
     FULLTEXT KEY title (title,kicker,caption)
-);
+) ENGINE = MyISAM;
 
 #
 # Table structure for table 'tx_newspaper_extra_image_tags_mm'
@@ -814,7 +814,7 @@ CREATE TABLE tx_newspaper_extra_textbox (
     PRIMARY KEY (uid),
     KEY parent (pid),
     FULLTEXT KEY title (title,bodytext)
-);
+) ENGINE = MyISAM;
 
 #
 # Table structure for table 'tx_newspaper_extra_typo3_ce'
