@@ -1022,7 +1022,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
     public static function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $that) {
         $timer = tx_newspaper_ExecutionTimer::create();
-tx_newspaper_Debug::w('tx_newspaper_article::processDatamap_postProcessFieldArray', tx_newspaper_taz_Savehooks::deptree_debug_log);
+//tx_newspaper_Debug::w('tx_newspaper_article::processDatamap_postProcessFieldArray', tx_newspaper_taz_Savehooks::deptree_debug_log);
 
         if (!self::isValidForSavehook($table, $id)) return;
 
