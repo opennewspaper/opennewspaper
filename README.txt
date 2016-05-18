@@ -1,2 +1,2 @@
 
-Feel free to add some documentation or simply add a link to the online manual.
+This extension requires Typo3 version 4.5.x
