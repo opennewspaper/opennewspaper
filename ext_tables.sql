@@ -69,7 +69,7 @@ CREATE TABLE tx_newspaper_article (
     KEY articletype_id (articletype_id),
     FULLTEXT KEY author_text (author),
     INDEX author (author(64)),
-    KEY publish_date(publish_date)
+    KEY publish_date (publish_date)
 ) ENGINE = MyISAM;
 
 #
