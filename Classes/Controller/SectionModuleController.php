@@ -206,7 +206,7 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
             $parent_page = $parent->getTypo3PageID();
         } catch (tx_newspaper_IllegalUsageException $e) {
             $this->addError(
-                self::getSectionMessage('error.multiple_section_pages', $request['section_name'], $parent->getSectionName()),
+                self::getSectionMessage('error.multiple_or_no_section_pages', $request['section_name'], $parent->getSectionName()),
                 'system_error'
             );
             throw $e;
