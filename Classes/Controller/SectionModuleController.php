@@ -230,6 +230,9 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
         $section->setAttribute('parent_section', $request['parent_section']);
         if ($parent = $section->getParentSection()) {
             $section->setAttribute('template_set', $parent->getAttribute('template_set'));
+        } else {
+            // @todo: Well, maybe there's a better solution than throwing an expection ;-)
+            throw new Exception("The section wizard cannot create root sections. Please create the root section manually.");
         }
         $section->setAttribute('default_articletype', $request['default_articletype']);
         $section->setAttribute('description', $request['description']);
