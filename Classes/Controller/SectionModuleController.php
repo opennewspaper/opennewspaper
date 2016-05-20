@@ -228,8 +228,9 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
         $section->setAttribute('show_in_list', 1);
         $section->setAttribute('section_name', $request['section_name']);
         $section->setAttribute('parent_section', $request['parent_section']);
-        $parent = $section->getParentSection();
-        $section->setAttribute('template_set', $parent->getAttribute('template_set'));
+        if ($parent = $section->getParentSection()) {
+            $section->setAttribute('template_set', $parent->getAttribute('template_set'));
+        }
         $section->setAttribute('default_articletype', $request['default_articletype']);
         $section->setAttribute('description', $request['description']);
         $section->store();
